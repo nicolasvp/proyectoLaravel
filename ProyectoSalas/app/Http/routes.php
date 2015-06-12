@@ -11,10 +11,15 @@
 
 |
 */
+/*
 
-Route::get('/', 'LoginController@index');
+*/
 
 Route::get('home', 'HomeController@index');
+
+Route::get('Administrador/search','AdministradorController@getSearch');
+
+Route::post('Administrador/postProfile','AdministradorController@postProfile');
 
 Route::resource('Administrador', 'AdministradorController');
 
@@ -32,6 +37,9 @@ Route::get('Docente/HorarioDocente','HorarioController@getHorarioDocente');
 Route::get('Docente/consultaDocente','ConsultaController@getconsultaDocente');
 
 Route::get('Encargado','EncargadoController@getIndex');
+
+Route::controller('/','loginController');
+Route::controller('/login','loginController');
 
 
 Route::controllers([

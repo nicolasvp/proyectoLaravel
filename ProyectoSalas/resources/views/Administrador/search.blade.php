@@ -43,49 +43,31 @@
 </div>
 
 
-   <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
-
-      @if(Session::has('message'))
-
-          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
 
 
-      @endif
+
+
+<div class="col-sm-9" >
+  <p> <h2>Buscar usuario </h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
-       <div class="form-group">
 
-          <table class="table table-striped">
-            <tr> 
-              <th>#</th>
-              <th>Campus</th>
-              <th>Dirección</th>
-              <th>Acciones</th>
-            </tr>
 
-            @foreach($campus as $campu)
-
-            <tr>
-               <td>{{ $campu->id}}</td>
-               <td>{{ $campu->nombre}}</td>
-               <td>{{ $campu->direccion}}</td>
-               <td>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Editar</a>
-                  <a href="{{ route('Administrador.edit', $campu) }}">Eliminar</a>
-               </td>
-            </tr>
-             @endforeach
-
-          </table>
-          {!! $campus->render() !!}
-     
+{!! Form::open(['route' => 'Administrador.show', 'method' => 'GET', 'class' => 'navbar-form navbar-left', 'role' => 'search']) !!}
+  <div class="form-group">
+    {!! Form::text('rut', null, ['class' => 'form-control', 'placeholder' => 'Ingresa el rut']) !!}
   </div>
+  <button type="submit" class="btn btn-default">Buscar</button>
+{!! Form::close() !!}
 
-                    
+
+      
 </div>
+
 </div>
+
+
 </div>
 
                     
@@ -94,6 +76,5 @@
 
       </div>
     </div>
-
 
 @stop

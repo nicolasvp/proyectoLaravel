@@ -9,6 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
+
     <title>Sistema de Salas :: Universidad Tecnológica Metropolitana</title>
 
     <!-- Bootstrap core CSS -->
@@ -48,16 +49,15 @@
         
 
          <form class="Inicio de sesion">
-        <label for="rut" class="sr-only">Rut</label>
-        <input type="rut" id="rut" class="form-control" placeholder="Rut" required autofocus>
-        <label for="inputPassword" class="sr-only">Contraseña</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="recordarme"> Recordame
-          </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesión</button>
+        <input name="rut" type="text" class="form-control" placeholder="Rut" id="rut" style="margin-top:10px;" required rut>
+        <input name="password" type="password" class="form-control" placeholder="Contrase&#xF1;a" style="margin-top: 10px;" required>
+        
+
+        @if (Session::has('login_errors'))
+                    <b class="text-danger" >Usuario o contraseña incorrecto/a.</b>
+        @endif
+
+        <button class="btn btn-lg btn-primary btn-block" style="margin-top:10px;" type="submit">Iniciar Sesión</button>
       </form>
 
     </div> <!-- /container -->

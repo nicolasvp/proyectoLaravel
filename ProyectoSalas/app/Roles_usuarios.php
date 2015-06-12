@@ -6,7 +6,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Roles extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class Roles_usuarios extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
 	use Authenticatable, CanResetPassword;
 
@@ -15,7 +15,7 @@ class Roles extends Model implements AuthenticatableContract, CanResetPasswordCo
 	 *
 	 * @var string
 	 */
-	protected $table = 'roles';
+	protected $table = 'roles_usuarios';
 
 	/**
 	 * The attributes that are mass assignable.
@@ -30,5 +30,14 @@ class Roles extends Model implements AuthenticatableContract, CanResetPasswordCo
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+
+
+	public function scopeUsuario($query, $rut)
+	{
+
+
+		$query->whereRut($rut);
+
+	}
 
 }

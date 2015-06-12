@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 //use Request;
 
 use Illuminate\Support\Facades\Session;
-use App\User;
+
+use App\Administrador;
+use App\Roles_usuarios;
 use App\Roles;
 
 
@@ -28,7 +30,7 @@ class AdministradorController extends Controller {
 
 	public function index()
 	{
-		$campus = User::paginate();
+		$campus = Administrador::paginate();
 
 		return view('Administrador/indexAdministrador',compact('campus'));
 	}
@@ -51,11 +53,11 @@ class AdministradorController extends Controller {
 	public function store()
 	{
 	
-		$user = new User();
-		$user->fill(Request::all());
-		$user->save();
+		$campus = new Administrador();
+		$campus->fill(\Request::all());
+		$campus->save();
 
-		Session::flash('message', $user->nombre.' fue creado');
+		Session::flash('message', $campus->nombre.' fue creado');
 
 		return redirect()->route('Administrador.index');
 	}
@@ -70,13 +72,26 @@ class AdministradorController extends Controller {
 	{
 			
 
-		$usuarios = Roles::usuario($request->get('rut'))->paginate();
-			
-		return view('Administrador.show',compact('usuarios'));
-	
-	}
+			//$usuarios = Roles_usuarios::usuario($request->get('rut'))->paginate();
 
-	/**
+		$datos_usuario = \DB::table('roles_usuarios')
+				->join('roles', 'roles_usuarios.rol_id', '=','roles.id')
+				->where('roles_usuarios.rut', '=', $request->get('rut'))
+				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre')
+				->get();
+
+		$rut = $request->get('rut');
+
+				$rol_usuario = \DB::table('roles')->lists('nombre', 'id');
+
+		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
+
+
+				return view('Administrador.show',compact('datos_usuario','rol_usuario','rut'));
+			
+	}
+		
+			/**)
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
@@ -85,7 +100,7 @@ class AdministradorController extends Controller {
 	public function edit($id)
 	{
 	
-		$campusEditable = User::findOrFail($id);
+		$campusEditable = Administrador::findOrFail($id);
 
 		return view('Administrador.edit', compact('campusEditable'));
 	
@@ -99,9 +114,9 @@ class AdministradorController extends Controller {
 	 */
 	public function update($id)
 	{
-		$campusEditable = User::findOrFail($id);
+		$campusEditable = Administrador::findOrFail($id);
 
-		$campusEditable->fill(Request::all());
+		$campusEditable->fill(\Request::all());
 		$campusEditable->save();
 		
 		return redirect()->route('Administrador.index');
@@ -115,7 +130,7 @@ class AdministradorController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$campusEditable = User::findOrFail($id);
+		$campusEditable = Administrador::findOrFail($id);
 
 		$campusEditable->delete();
 
@@ -125,12 +140,24 @@ class AdministradorController extends Controller {
 	}
 
 
-	public function getBuscar()
+	public function getSearch()
 	{
-
-		return view('Administrador/buscar');
+			
+		return view('Administrador.search');
 	}
 
+
+	public function postProfile(Request $request)
+	{
+	
+
+		\DB::table('roles_usuarios')->insert(
+    	['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]
+   		);
+		Session::flash('message', 'El Perfil fue asignado exitosamente!, por favor vuelva al menú');
+
+		return redirect()->route('Administrador.show');
+	}
 
 	
 }

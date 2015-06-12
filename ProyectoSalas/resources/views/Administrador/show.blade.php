@@ -33,7 +33,7 @@
             <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
             <li><a href="">Archivar Campus</a></li>
-            <li><a href="">Asignar Perfil</a></li>               
+            <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
 
        
 </li>
@@ -48,18 +48,10 @@
 
 
 <div class="col-sm-9" >
-  <p> <h2>Perfiles de usuarios </h2></p>
+  <p> <h2>Perfiles del usuario </h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
-
-
-{!! Form::open(['route' => 'Administrador.show', 'method' => 'GET', 'class' => 'navbar-form navbar-left pull-right', 'role' => 'search']) !!}
-  <div class="form-group">
-    {!! Form::text('rut', null, ['class' => 'form-control', 'placeholder' => 'Ingresa el rut']) !!}
-  </div>
-  <button type="submit" class="btn btn-default">Buscar</button>
-{!! Form::close() !!}
 
 
        <div class="form-group">
@@ -68,39 +60,57 @@
             <tr> 
               <th>#</th>
               <th>Rut</th>
-              <th>Rol_ID</th>
-              <th>Acción</th>
+              <th>Rol</th>
+              
             </tr>
 
-            @foreach($usuarios as $users)
-
+            @foreach($datos_usuario as $users)
+            
             <tr>
                <td>{{ $users->id}}</td>
                <td>{{ $users->rut}}</td>
-               <td>{{ $users->rol_id}}</td>
-               <td>
-                  <a href="{{ route('Administrador.show', $users)}}">Editar</a>
-               </td>
+               <td>{{ $users->nombre}}</td>
             </tr>
              @endforeach
 
           </table>
 
-          {!! $usuarios->render() !!}
 
   </div>
-
-  {!! Form::open(['route' => 'Administrador.store', 'method' => 'POST']) !!}
-
-     <b>Usuario: "algo"</b>         Seleccione perfil {!! Form::select('size', array('L' => 'Large', 'S' => 'Small')) !!}
-
-           <div align=center><button type="submit" class="btn btn-primary">Asignar nuevo perfil</button></div>
-
-
-  {!! Form::close() !!}
                     
 </div>
+</div>
+<p> <h2>Asignar perfil</h2></p>
+<div class="panel panel-default">
+    <div class="panel-body">
+      @if(Session::has('message'))
 
+          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
+
+
+      @endif
+       <table class="table table-striped">
+
+
+     <div class="form-group">
+   {!! Form::open(['action' => 'AdministradorController@postProfile']) !!}
+
+    <div class="form-group">
+    {!! Form::hidden('rut', $rut)!!}
+    </div>
+
+    <div class="form-group">
+   {!! Form::select('rol_asig', (['0' => 'Selecciona un Perfil'] + $rol_usuario), null, ['class' => 'form-control']) !!}
+    </div>
+
+      <div align="center"<th><button type="submit" onclick="return confirm('¿Seguro que desea asignar este perfil?')" class="btn btn-primary ">Asignar perfil</button></th></div>
+      {!! Form::close() !!}
+
+      </div>
+
+      </table>
+
+    </div>
 </div>
 
 
