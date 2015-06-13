@@ -130,6 +130,7 @@ class AdministradorController extends Controller {
 	 */
 	public function destroy($id)
 	{
+
 		$campusEditable = Administrador::findOrFail($id);
 
 		$campusEditable->delete();
@@ -137,6 +138,7 @@ class AdministradorController extends Controller {
 		Session::flash('message', $campusEditable->nombre. ' fue eliminado');
 
 		return redirect()->route('Administrador.index');
+		
 	}
 
 
@@ -157,6 +159,20 @@ class AdministradorController extends Controller {
 		Session::flash('message', 'El Perfil fue asignado exitosamente!, por favor vuelva al menú');
 
 		return redirect()->route('Administrador.show');
+	}
+
+	public function deleteRol(Request $request)
+	{
+
+		
+		$profile = Roles_usuarios::findOrFail($request->get('id'));
+
+		$profile->delete();
+
+		Session::flash('message', 'El Perfil fue removido exitosamente');
+
+		return redirect()->route('Administrador.show');
+
 	}
 
 	

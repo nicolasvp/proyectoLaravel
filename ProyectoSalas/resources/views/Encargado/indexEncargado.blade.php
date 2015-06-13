@@ -29,6 +29,7 @@ Gestión de salas - UTEM
                         <li>
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
 </li>
+
             <li> <a href="">Asignar Salas</a></li>
             <li><a href="">Modificar Salas</a></li> 
             <li><a href="">Ingresar Datos</a></li>             

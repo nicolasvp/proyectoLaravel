@@ -32,8 +32,9 @@
 </li>
             <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
+             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>    
             <li><a href="">Archivar Campus</a></li>
-            <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
+                      
 
        
 </li>
@@ -61,6 +62,7 @@
               <th>#</th>
               <th>Rut</th>
               <th>Rol</th>
+              <th>Acción</th>
               
             </tr>
 
@@ -70,6 +72,13 @@
                <td>{{ $users->id}}</td>
                <td>{{ $users->rut}}</td>
                <td>{{ $users->nombre}}</td>
+                <td> 
+      {!! Form::open(['action' => ['AdministradorController@deleteRol'], 'method' => 'DELETE']) !!}
+      {!! Form::hidden('id', $users->id)!!}
+       <button type="submit" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-danger btn-sm">Eliminar</button>
+      {!! Form::close() !!}
+
+               </td>
             </tr>
              @endforeach
 

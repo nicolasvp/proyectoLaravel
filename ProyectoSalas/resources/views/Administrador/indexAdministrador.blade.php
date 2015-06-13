@@ -32,9 +32,8 @@
 </li>
             <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
-            <li><a href="">Archivar Campus</a></li>
             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
-
+            <li><a href="">Archivar Campus</a></li>
        
 </li>
 
@@ -62,7 +61,7 @@
               <th>#</th>
               <th>Campus</th>
               <th>Dirección</th>
-              <th>Acciones</th>
+              <th>Acción</th>
             </tr>
 
             @foreach($campus as $campu)
@@ -73,7 +72,7 @@
                <td>{{ $campu->direccion}}</td>
                <td>
                   <a href="{{ route('Administrador.edit', $campu)}}">Editar</a>
-                  <a href="{{ route('Administrador.edit', $campu) }}">Eliminar</a>
+                  <a href="{{ route('Administrador.edit', $campu)}}">Eliminar</a>
                </td>
             </tr>
              @endforeach

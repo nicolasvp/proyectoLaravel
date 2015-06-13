@@ -15,7 +15,8 @@
 
 */
 
-Route::get('home', 'HomeController@index');
+//Route::get('home', 'HomeController@index');
+Route::delete('Administrador/deleteProfile','AdministradorController@deleteRol');
 
 Route::get('Administrador/search','AdministradorController@getSearch');
 
