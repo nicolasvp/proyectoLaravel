@@ -33,7 +33,8 @@
             <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>         
-            <li><a href="">Archivar Campus</a></li>               
+            <li><a href="{{URL::to('/Administrador/campus_list')}}">Archivar Campus</a></li>    
+             <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>           
 
        
 </li>

@@ -133,7 +133,7 @@ class AdministradorController extends Controller {
 
 		$campusEditable = Administrador::findOrFail($id);
 
-		$campusEditable->delete();
+		$campusEditable->forceDelete();
 
 		Session::flash('message', $campusEditable->nombre. ' fue eliminado');
 
@@ -174,6 +174,48 @@ class AdministradorController extends Controller {
 		return redirect()->route('Administrador.show');
 
 	}
+
+
+	public function getCampus_list()
+	{
+
+		$campus = Administrador::paginate();
+
+
+		return view('Administrador/deleteCampus',compact('campus'));
+
+	}
+
+	public function deleteCampus(Request $request)
+	{
+		$file_campus = Administrador::findOrFail($request->get('id'));
+
+		$file_campus->delete();	
+
+		Session::flash('message', 'El campus fue archivado exitosamente!');
+
+		return redirect()->route('Administrador.index');
+
+	}
+
+
+	public function getFiled_list()
+	{
+
+		$filed_campus = Administrador::onlyTrashed()->paginate();
+
+		return view('Administrador/deletedCampus',compact('filed_campus'));
+	}
+
+	public function postRestore_campus(Request $request)
+	{
+		$restore_campus = Administrador::onlyTrashed()->where('id', $request->get('id'))->restore();
+	
+		Session::flash('message', 'El campus fue recuperado exitosamente!');
+
+		return redirect()->route('Administrador.index');
+	}
+
 
 	
 }

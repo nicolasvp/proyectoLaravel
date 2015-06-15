@@ -34,7 +34,7 @@
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
             <li><a href="{{URL::to('/Administrador/campus_list')}}">Archivar Campus</a></li>
-            <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>
+             <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>
        
 </li>
 
@@ -44,7 +44,7 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+   <p> <h2>Lista de campus archivados</h2></p>
 
       @if(Session::has('message'))
 
@@ -65,21 +65,25 @@
               <th>Acción</th>
             </tr>
 
-            @foreach($campus as $campu)
+            @foreach($filed_campus as $campu)
 
             <tr>
                <td>{{ $campu->id}}</td>
                <td>{{ $campu->nombre}}</td>
                <td>{{ $campu->direccion}}</td>
                <td>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Editar</a>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Eliminar</a>
+
+
+      {!! Form::open(['action' => ['AdministradorController@postRestore_campus'], 'method' => 'POST']) !!}
+      {!! Form::hidden('id', $campu->id)!!}
+       <button type="submit"  class="btn btn-success">Recuperar</button>
+      {!! Form::close() !!}
                </td>
             </tr>
              @endforeach
 
           </table>
-          {!! $campus->render() !!}
+          {!! $filed_campus->render() !!}
      
   </div>
 

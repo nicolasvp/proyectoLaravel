@@ -5,10 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Administrador extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
 	use Authenticatable, CanResetPassword;
+
+	use SoftDeletes;
 
 	/**
 	 * The database table used by the model.
@@ -16,6 +19,9 @@ class Administrador extends Model implements AuthenticatableContract, CanResetPa
 	 * @var string
 	 */
 	protected $table = 'campus';
+
+	protected $dates = ['deleted_at'];
+
 
 	/**
 	 * The attributes that are mass assignable.

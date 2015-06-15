@@ -34,7 +34,7 @@
             <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
             <li><a href="{{URL::to('/Administrador/campus_list')}}">Archivar Campus</a></li>
-            <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>
+             <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>
        
 </li>
 
@@ -44,7 +44,7 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+   <p> <h2>Lista de campus para archivar</h2></p>
 
       @if(Session::has('message'))
 
@@ -72,8 +72,12 @@
                <td>{{ $campu->nombre}}</td>
                <td>{{ $campu->direccion}}</td>
                <td>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Editar</a>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Eliminar</a>
+
+
+      {!! Form::open(['action' => ['AdministradorController@deleteCampus'], 'method' => 'DELETE']) !!}
+      {!! Form::hidden('id', $campu->id)!!}
+       <button type="submit" onclick="return confirm('¿Seguro que desea archivar este campus?')" class="btn btn-danger btn-sm">Archivar</button>
+      {!! Form::close() !!}
                </td>
             </tr>
              @endforeach
