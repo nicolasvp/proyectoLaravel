@@ -17,6 +17,7 @@
 
 //Route::get('home', 'HomeController@index');
 
+
 Route::get('Administrador/campus_list','AdministradorController@getCampus_list');
 
 Route::get('Administrador/filed_list','AdministradorController@getFiled_list');
@@ -33,7 +34,7 @@ Route::post('Administrador/postProfile','AdministradorController@postProfile');
 
 Route::resource('Administrador', 'AdministradorController');
 
-
+Route::controller('Encargado','EncargadoController');
 
 Route::get('Alumno','AlumnoController@getIndex');
 
@@ -48,7 +49,7 @@ Route::get('Docente/HorarioDocente','HorarioController@getHorarioDocente');
 
 Route::get('Docente/consultaDocente','ConsultaController@getconsultaDocente');
 
-Route::get('Encargado','EncargadoController@getIndex');
+
 
 Route::controller('/','loginController');
 Route::controller('/login','loginController');

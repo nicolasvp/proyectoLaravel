@@ -30,7 +30,7 @@ Gestión de salas - UTEM
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
 </li>
 
-            <li> <a href="">Asignar Salas</a></li>
+            <li> <a href="{{URL::to('/Encargado/cursos')}}">Asignar Salas</a></li>
             <li><a href="">Modificar Salas</a></li> 
             <li><a href="">Ingresar Datos</a></li>             
 
@@ -49,8 +49,12 @@ Gestión de salas - UTEM
 <div class="panel-body">
   <div class="form-group">
   <div class="jumbotron">
-      <h2>Aca van las opciones</h2>
-      <p>1111</p>
+       @if(Session::has('message'))
+
+          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
+
+
+      @endif
      
     </div>
   </div>
