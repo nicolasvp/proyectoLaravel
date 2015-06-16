@@ -30,11 +30,11 @@
                         <li>
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 </li>
-            <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
-            <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
-            <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>         
-            <li><a href="{{URL::to('/Administrador/campus_list')}}">Archivar Campus</a></li>  
-             <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>s              
+            <li> <a href="{{URL::to('/Administrador/create')}}">Crear Campus</a></li>
+            <li><a href="{{URL::to('/Administrador/')}}">Modificar Campus</a></li>
+            <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
+            <li><a href="{{URL::to('/Administrador/campus')}}">Archivar Campus</a></li>
+            <li><a href="{{URL::to('/Administrador/filed')}}">Campus Archivados</a></li>           
 
        
 </li>
@@ -55,7 +55,7 @@
    <div class="panel-body">
        <div class="form-group">
   
-      {!! Form::model($campusEditable, ['route' => ['Administrador.update', $campusEditable], 'method' => 'PUT']) !!}
+      {!! Form::model($campusEditable, ['action' => ['AdministradorController@put_update', $campusEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
        {!! Form::label('nombre', 'Nombre') !!}
@@ -88,6 +88,8 @@
        {!! Form::text('rut_encargado', null,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
       </div>
 
+        {!! Form::hidden('id', $id)!!}
+
       <div align=center><button type="submit" class="btn btn-info">Actualizar campus</button></div>
 
       {!! Form::close() !!}
@@ -99,14 +101,6 @@
 </div>
 
 </div>
-
-      <!-- Opcion Eliminar -->
-
-
-       {!! Form::model($campusEditable, ['route' => ['Administrador.destroy', $campusEditable], 'method' => 'DELETE']) !!}
-       <div align=center><button type="submit" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-danger">Eliminar campus</button></div>
-
-      {!! Form::close() !!}
 
 
 </div>

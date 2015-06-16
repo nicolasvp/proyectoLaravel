@@ -20,7 +20,7 @@ class AdministradorController extends Controller {
 	protected $layout='layouts.master';
 
 
-	public function index()
+	public function getIndex()
 	{
 		$campus = Administrador::paginate();
 
@@ -28,26 +28,26 @@ class AdministradorController extends Controller {
 	}
 
 	
-	public function create()
+	public function get_create()
 	{
-		return view('Administrador.create');
+		return view('Administrador/create');
 	}
 
 	
-	public function store()
+	public function post_store()
 	{
 	
 		$campus = new Administrador();
 		$campus->fill(\Request::all());
 		$campus->save();
 
-		Session::flash('message', $campus->nombre.' fue creado');
+		Session::flash('message', 'El campus ' .$campus->nombre.' fue creado');
 
-		return redirect()->route('Administrador.index');
+		return redirect()->action('AdministradorController@getIndex');
 	}
 
 	
-	public function show(Request $request)
+	public function get_show(Request $request)
 	{
 			
 
@@ -71,48 +71,48 @@ class AdministradorController extends Controller {
 	}
 		
 	
-	public function edit($id)
+	public function get_edit(Request $request)
 	{
-	
-		$campusEditable = Administrador::findOrFail($id);
-
-		return view('Administrador.edit', compact('campusEditable'));
+		
+		$campusEditable = Administrador::findOrFail($request->get('id'));
+		$id = $request->get('id');
+		return view('Administrador/edit', compact('campusEditable','id'));
 	
 	}
 
-	public function update($id)
+	public function put_update(Request $request)
 	{
-		$campusEditable = Administrador::findOrFail($id);
-
+	
+		$campusEditable = Administrador::findOrFail($request->get('id'));
 		$campusEditable->fill(\Request::all());
 		$campusEditable->save();
 		
-		return redirect()->route('Administrador.index');
+		return redirect()->action('AdministradorController@getIndex');
 	}
 
 
-	public function destroy($id)
+	public function delete_destroy(Request $request)
 	{
 
-		$campusEditable = Administrador::findOrFail($id);
+		$campusEditable = Administrador::findOrFail($request->get('id'));
 
 		$campusEditable->forceDelete();
 
-		Session::flash('message', $campusEditable->nombre. ' fue eliminado');
+		Session::flash('message','El campus '. $campusEditable->nombre. ' fue eliminado');
 
-		return redirect()->route('Administrador.index');
+		return redirect()->action('AdministradorController@getIndex');
 		
 	}
 
 
-	public function getSearch()
+	public function get_search()
 	{
 			
 		return view('Administrador.search');
 	}
 
 
-	public function postProfile(Request $request)
+	public function post_profile(Request $request)
 	{
 	
 
@@ -121,10 +121,10 @@ class AdministradorController extends Controller {
    		);
 		Session::flash('message', 'El Perfil fue asignado exitosamente!, por favor vuelva al menú');
 
-		return redirect()->route('Administrador.show');
+		return redirect()->action('AdministradorController@get_show');
 	}
 
-	public function deleteRol(Request $request)
+	public function delete_rol(Request $request)
 	{
 
 		
@@ -134,22 +134,24 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El Perfil fue removido exitosamente');
 
-		return redirect()->route('Administrador.show');
+		return redirect()->action('AdministradorController@get_show');
 
 	}
 
 
-	public function getCampus_list()
+	public function get_campus()
 	{
 
 		$campus = Administrador::paginate();
 
 
-		return view('Administrador/deleteCampus',compact('campus'));
+		return view('Administrador/campus_file',compact('campus'));
 
 	}
 
-	public function deleteCampus(Request $request)
+
+
+	public function delete_campus(Request $request)
 	{
 		$file_campus = Administrador::findOrFail($request->get('id'));
 
@@ -157,26 +159,27 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El campus fue archivado exitosamente!');
 
-		return redirect()->route('Administrador.index');
+		return redirect()->action('AdministradorController@getIndex');
 
 	}
 
 
-	public function getFiled_list()
+	public function get_filed()
 	{
 
 		$filed_campus = Administrador::onlyTrashed()->paginate();
 
-		return view('Administrador/deletedCampus',compact('filed_campus'));
+		return view('Administrador/campus_filed',compact('filed_campus'));
 	}
 
-	public function postRestore_campus(Request $request)
+
+	public function post_restore_campus(Request $request)
 	{
 		$restore_campus = Administrador::onlyTrashed()->where('id', $request->get('id'))->restore();
 	
 		Session::flash('message', 'El campus fue recuperado exitosamente!');
 
-		return redirect()->route('Administrador.index');
+		return redirect()->action('AdministradorController@getIndex');
 	}
 
 

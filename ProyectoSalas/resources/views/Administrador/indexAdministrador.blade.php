@@ -30,11 +30,11 @@
                         <li>
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 </li>
-            <li> <a href="{{ route('Administrador.create') }}">Crear Campus</a></li>
-            <li><a href="{{ route('Administrador.index') }}">Modificar Campus</a></li>
+            <li> <a href="{{URL::to('/Administrador/create')}}">Crear Campus</a></li>
+            <li><a href="{{URL::to('/Administrador/')}}">Modificar Campus</a></li>
             <li><a href="{{URL::to('/Administrador/search')}}">Asignar Perfil</a></li>               
-            <li><a href="{{URL::to('/Administrador/campus_list')}}">Archivar Campus</a></li>
-            <li><a href="{{URL::to('/Administrador/filed_list')}}">Campus Archivados</a></li>
+            <li><a href="{{URL::to('/Administrador/campus')}}">Archivar Campus</a></li>
+            <li><a href="{{URL::to('/Administrador/filed')}}">Campus Archivados</a></li>
        
 </li>
 
@@ -62,7 +62,8 @@
               <th>#</th>
               <th>Campus</th>
               <th>Dirección</th>
-              <th>Acción</th>
+              <th>Editar</th>
+              <th>Eliminar</th>
             </tr>
 
             @foreach($campus as $campu)
@@ -72,8 +73,20 @@
                <td>{{ $campu->nombre}}</td>
                <td>{{ $campu->direccion}}</td>
                <td>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Editar</a>
-                  <a href="{{ route('Administrador.edit', $campu)}}">Eliminar</a>
+    
+                  {!! Form::open(['action' => ['AdministradorController@get_edit'], 'method' => 'GET']) !!}
+                  {!! Form::hidden('id', $campu->id)!!}
+                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
+                  {!! Form::close() !!}
+
+              </td>
+              <td>
+                  {!! Form::open(['action' => ['AdministradorController@delete_destroy'], 'method' => 'DELETE']) !!}
+                  {!! Form::hidden('id', $campu->id)!!}
+                   <button type="submit"  class="btn btn-danger btn-sm ">Eliminar</button>
+                  {!! Form::close() !!}
+
+
                </td>
             </tr>
              @endforeach

@@ -17,24 +17,10 @@
 
 //Route::get('home', 'HomeController@index');
 
-
-Route::get('Administrador/campus_list','AdministradorController@getCampus_list');
-
-Route::get('Administrador/filed_list','AdministradorController@getFiled_list');
-
-Route::post('Administrador/restore_campus','AdministradorController@postRestore_campus');
-
-Route::delete('Administrador/deleteCampus','AdministradorController@deleteCampus');
-
-Route::delete('Administrador/deleteProfile','AdministradorController@deleteRol');
-
-Route::get('Administrador/search','AdministradorController@getSearch');
-
-Route::post('Administrador/postProfile','AdministradorController@postProfile');
-
-Route::resource('Administrador', 'AdministradorController');
+Route::controller('Administrador','AdministradorController');
 
 Route::controller('Encargado','EncargadoController');
+
 
 Route::get('Alumno','AlumnoController@getIndex');
 
