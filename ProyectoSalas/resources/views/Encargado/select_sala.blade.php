@@ -42,7 +42,7 @@ Gestión de salas - UTEM
 
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de período y sala</h2></p>
+   <p> <h2>Selecciona la sala</h2></p>
 
       @if(Session::has('message'))
 
@@ -54,72 +54,24 @@ Gestión de salas - UTEM
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-
-          <table class="table table-striped">
-            <tr> 
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Docente</th>
-              <th>Sección</th>  
-            </tr>
-
-            @foreach($datos_curso as $cur)
-
-            <tr>
-               <td>{{ $cur->id}}</td>
-               <td>{{ $cur->nombre}}</td>
-               <td>{{ $cur->nombres}} {{$cur->apellidos}} - {{$cur->rut}}</td>
-               <td>{{ $cur->seccion}}</td>
-            </tr>
-             @endforeach
-
-          </table>
-          {!! $datos_curso->render() !!}
-    
- </div>
-                    
-</div>
-</div>
+  
 
 
+ {!! Form::open(['action' => 'EncargadoController@get_edit', 'method' => 'GET']) !!}
 
-
-<div class="panel panel-default">
-    <div class="panel-body">
-       <table class="table table-striped">
-
-<p> <h2>Selección de período</h2></p>
-
-     <div class="form-group">
-   {!! Form::open(['action' => 'EncargadoController@post_add']) !!}
 
     <div class="form-group">
-    {!! Form::hidden('curso_id', $curso_id)!!}
+   {!! Form::select('id_sala', ( $salas), null, ['class' => 'form-control'])!!}
     </div>
 
-    <div class="form-group">
-   {!! Form::select('asig_periodo', (['-1' => 'Selecciona un Período'] + $periodos), null, ['class' => 'form-control']) !!}
-    </div>
+     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
 
 
-
-<p> <h2>Selección de sala</h2></p>
-        <div class="form-group">
-   {!! Form::select('asig_sala', (['0' => 'Selecciona una sala'] + $salas), null, ['class' => 'form-control']) !!}
-    </div>
-
-      <div align="center"<th><button type="submit" class="btn btn-primary ">Asignar</button></th></div>
-      {!! Form::close() !!}
+    {!! Form::close() !!}
 
 
-      </div>
-
-      </table>
-
-    </div>
 </div>
-
-
+</div>
 </div>
 
                     
@@ -129,4 +81,17 @@ Gestión de salas - UTEM
       </div>
     </div>
 
+
+<!--
+ <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
+      <script type="text/javascript">
+      jQuery(document).ready(function($) {
+                 $('.btn').click(function (){
+                    alert("kjsdkajsdakj");
+                 });
+       });
+      </script>
+
+-->
+                    
 @stop

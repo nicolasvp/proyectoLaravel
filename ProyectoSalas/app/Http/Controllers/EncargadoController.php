@@ -5,7 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Cursos;
-
+use App\Administrador;
+use App\Salas;
 
 
 class EncargadoController extends Controller {
@@ -101,6 +102,70 @@ class EncargadoController extends Controller {
 		return view('Encargado/indexEncargado');
 
 	}
+
+
+
+
+
+	public function get_campus()
+	{
+
+
+		$salas_campus = Administrador::paginate()->lists('nombre','id');
+			
+		return view('Encargado/select_campus',compact('salas_campus'));
+	
+
+	}
+
+
+	public function get_salas(Request $request)
+	{
+		
+		$salas = \DB::table('salas')
+				->where('campus_id','=',$request->get('select_campus'))
+				->lists('nombre','id');
+	
+
+
+		return view('Encargado/select_sala',compact('salas'));
+
+	}
+
+	public function get_edit(Request $request)
+	{
+		//dd($request->get('id_sala'));
+		/*$datos_sala = \DB::table('salas')
+					->where('id', '=' ,$request->get('id_sala'))
+					->select('nombre','capacidad');
+					*/
+		$datos_sala = Salas::findOrFail($request->get('id_sala'));
+
+		$id = $request->get('id_sala');
+
+		return view('Encargado/edit_sala',compact('datos_sala','id'));
+	}
+
+
+	public function put_update(Request $request)
+	{
+	
+		$sala = Salas::findOrFail($request->get('id'));
+		$sala->fill(\Request::all());
+		$sala->save();
+		Session::flash('message', 'La sala fue modificada exitosamente!');
+		return view('Encargado/indexEncargado');
+	}
+
+
+
+	public function get_ingreso()
+	{
+
+		return view('Encargado/ingreso_index');
+	}
+
+
 
 
 }

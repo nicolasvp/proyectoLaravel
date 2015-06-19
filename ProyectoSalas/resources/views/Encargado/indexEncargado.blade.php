@@ -31,8 +31,8 @@ Gestión de salas - UTEM
 </li>
 
             <li> <a href="{{URL::to('/Encargado/cursos')}}">Asignar Salas</a></li>
-            <li><a href="">Modificar Salas</a></li> 
-            <li><a href="">Ingresar Datos</a></li>             
+            <li><a href="{{URL::to('/Encargado/campus')}}">Modificar Salas</a></li> 
+            <li><a href="{{URL::to('/Encargado/ingreso')}}">Ingresar Datos</a></li>             
 
 </li>
 
@@ -67,8 +67,5 @@ Gestión de salas - UTEM
                     
 </div>
 
-
-      </div>
-    </div>
 
 @stop

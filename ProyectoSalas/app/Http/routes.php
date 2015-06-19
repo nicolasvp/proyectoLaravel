@@ -21,7 +21,6 @@ Route::controller('Administrador','AdministradorController');
 
 Route::controller('Encargado','EncargadoController');
 
-
 Route::get('Alumno','AlumnoController@getIndex');
 
 Route::get('Alumno/Horario','HorarioController@getHorario');

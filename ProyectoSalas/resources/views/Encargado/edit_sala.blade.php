@@ -32,7 +32,7 @@ Gestión de salas - UTEM
 
             <li> <a href="{{URL::to('/Encargado/cursos')}}">Asignar Salas</a></li>
             <li><a href="{{URL::to('/Encargado/campus')}}">Modificar Salas</a></li> 
-            <li><a href="{{URL::to('/Encargado/ingreso')}}">Ingresar Datos</a></li>             
+            <li><a href="">Ingresar Datos</a></li>             
 
 </li>
 
@@ -42,7 +42,7 @@ Gestión de salas - UTEM
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de cursos</h2></p>
+   <p> <h2>Modificar la sala</h2></p>
 
       @if(Session::has('message'))
 
@@ -54,50 +54,29 @@ Gestión de salas - UTEM
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-          {!! Form::open(['action' => ['EncargadoController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
-            <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura']) !!}
-          </div>
-          <button type="submit" class="btn btn-info">Buscar</button>
-          {!! Form::close() !!}
+  
 
 
-</form>
+   
+      {!! Form::model($datos_sala, ['action' => ['EncargadoController@put_update', $datos_sala], 'method' => 'PUT']) !!}
 
+      <div class="form-group">
+       {!! Form::label('nombre', 'Nombre') !!}
+       {!! Form::text('nombre', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
+      </div>
 
-          <table class="table table-striped">
-            <tr> 
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Docente</th>
-              <th>Sección</th>
-              <th>Acción</th>
-            </tr>
+      <div class="form-group">
+        {!! Form::label('capacidad', 'Capacidad') !!}
+       {!! Form::text('capacidad', null,['class' => 'form-control', 'placeholder' => 'Ingresa capacidad']) !!}
+      </div>
 
-            @foreach($datos_cursos as $cur)
+       {!! Form::hidden('id', $id)!!}
 
-            <tr>
-               <td>{{ $cur->id }}</td>
-               <td>{{ $cur->nombre}}</td>
-               <td>{{ $cur->nombres}} {{$cur->apellidos}} - {{$cur->rut}}</td>
-               <td>{{ $cur->seccion}}</td>
-               <td>
+      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
 
-      {!! Form::open(['action' => ['EncargadoController@post_curso'], 'method' => 'POST']) !!}
-      {!! Form::hidden('id_curso', $cur->id)!!}
-       <button type="submit" class="btn btn-success btn-sm">Seleccionar</button>
       {!! Form::close() !!}
 
-               </td>
-            </tr>
-             @endforeach
 
-          </table>
-          {!! $datos_cursos->render() !!}
-     
-  </div>
-
-                    
 </div>
 </div>
 </div>
@@ -110,4 +89,16 @@ Gestión de salas - UTEM
     </div>
 
 
+<!--
+ <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
+      <script type="text/javascript">
+      jQuery(document).ready(function($) {
+                 $('.btn').click(function (){
+                    alert("kjsdkajsdakj");
+                 });
+       });
+      </script>
+
+-->
+                    
 @stop
