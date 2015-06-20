@@ -12,6 +12,7 @@ use App\Docentes;
 use App\Departamentos;
 use App\Carreras;
 use App\Estudiantes;
+use App\Escuelas;
 
 
 class EncargadoController extends Controller {
@@ -173,13 +174,33 @@ class EncargadoController extends Controller {
 	}
 
 
+
+	public function get_departamento(Request $request)
+	{
+		$departamentos = Departamentos::paginate()->lists('nombre','id');
+		$id = $request->get('id');
+		return view('Encargado/select_departamento',compact('departamentos','id'));
+	}
+
+
+	public function get_escuela(Request $request)
+	{
+
+		$escuela = Escuelas::paginate()->lists('nombre','id');
+		$id = $request->get('id');
+		return view('Encargado/select_escuela',compact('escuela','id'));
+	}
+
+
+
 	public function get_create(Request $request)
 	{
 	
 		if($request->get('id')==1)
 		{
-			$asignaturas = Asignaturas::paginate()->lists('nombre','id');
-			$docentes = Docentes::paginate()->lists('nombres','id');
+			$asignaturas = Asignaturas::where('departamento_id', '=', $request->get('departamentos'))->lists('nombre','id');
+			
+			$docentes = Docentes::where('departamento_id', '=', $request->get('departamentos'))->lists('apellidos','id');
 
 			return view('Encargado/create_curso',compact('asignaturas','docentes'));
 		}
@@ -190,7 +211,7 @@ class EncargadoController extends Controller {
 		}	
 		if($request->get('id')==3)
 		{
-			$carreras = Carreras::paginate()->lists('nombre','id');
+			$carreras = Carreras::where('escuela_id', '=', $request->get('escuela'))->lists('nombre','id');
 			return view('Encargado/create_estudiante',compact('carreras'));
 		}
 

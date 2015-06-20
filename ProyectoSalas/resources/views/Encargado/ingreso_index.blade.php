@@ -56,41 +56,79 @@ Gestión de salas - UTEM
        <div class="form-group">
 
 
+          <table class="table table-striped table-hover ">
+  <thead>
+    <tr>
+      
+      <th> </th>
+      <th> </th>
+    
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    
+      <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Curso</b></h3></td>
+      <td>             
+                     {!! Form::open(['action' => 'EncargadoController@get_departamento', 'method' => 'GET']) !!}
 
- {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
+                      <div class="form-group">
+                      {!! Form::hidden('id', $id_c)!!}
+                      </div>
 
-    <div class="form-group">
-    {!! Form::hidden('id', $id_c)!!}
-    </div>
+                  <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
+                    {!! Form::close() !!}
 
-<div align="center"<th><button type="submit" class="btn btn-primary ">CURSOS</button></th></div>
-  {!! Form::close() !!}
+      </td>
+     
+    </tr>
+    <tr>
+     
+      <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignatura</b></h3></td>
+      <td>                     {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
+
+                        <div class="form-group">
+                        {!! Form::hidden('id', $id_a)!!}
+                        </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
+                      {!! Form::close() !!}
+          
+      </td>
+      
+    </tr>
+    <tr>
+     
+      <td> <h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Estudiante </b></h3></td>
+      <td>         
+                       {!! Form::open(['action' => 'EncargadoController@get_escuela', 'method' => 'GET']) !!}
+
+                        <div class="form-group">
+                        {!! Form::hidden('id', $id_e)!!}
+                        </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
+                      {!! Form::close() !!}
+      </td>
+
+  </tbody>
+</table> 
 
 
 
 
- {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
-
-    <div class="form-group">
-    {!! Form::hidden('id', $id_a)!!}
-    </div>
-
-<div align="center"<th><button type="submit" class="btn btn-primary ">ASIGNATURA</button></th></div>
-  {!! Form::close() !!}
 
 
+      
 
 
-   {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
-
-    <div class="form-group">
-    {!! Form::hidden('id', $id_e)!!}
-    </div>
-
-<div align="center"<th><button type="submit" class="btn btn-primary ">ESTUDIANTE</button></th></div>
-  {!! Form::close() !!}
+   
+                     
 
 
+           
+           
+                  
 
    
   </div>
