@@ -41,73 +41,45 @@ Gestión de salas - UTEM
 </div>
 
 
-   <div class="col-sm-9" >
-   <p> <h2>Ingreso de datos académicos</h2></p>
-
-      @if(Session::has('message'))
-
-          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
-
-
-      @endif
+         <div class="col-sm-9" >
+   <p> <h2>Ingrese los datos para la asignatura</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
+  
+      {!! Form::open(['action' => ['EncargadoController@post_storeAsignatura'], 'method' => 'POST']) !!}
+
+      <div class="form-group">
+       {!! Form::label('departamento_id', 'Departamento') !!}
+       {!! Form::select('departamento_id', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
+      </div>
+
+
+      <div class="form-group">
+        {!! Form::label('codigo', 'Código') !!}
+       {!! Form::text('codigo', '',['class' => 'form-control', 'placeholder' => 'Ingresa código']) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('nombre', 'Nombre') !!}
+       {!! Form::text('nombre', '',['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('descripcion', 'Descripción') !!}
+       {!! Form::text('descripcion', '',['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+      </div>
 
 
 
- {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
+      <div align=center><button type="submit" class="btn btn-primary">Aceptar</button></div>
 
-    <div class="form-group">
-    {!! Form::hidden('id', $id_c)!!}
-    </div>
-
-<div align="center"<th><button type="submit" class="btn btn-primary ">CURSOS</button></th></div>
-  {!! Form::close() !!}
-
-
-
-
- {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
-
-    <div class="form-group">
-    {!! Form::hidden('id', $id_a)!!}
-    </div>
-
-<div align="center"<th><button type="submit" class="btn btn-primary ">ASIGNATURA</button></th></div>
-  {!! Form::close() !!}
-
-
-
-
-   {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
-
-    <div class="form-group">
-    {!! Form::hidden('id', $id_e)!!}
-    </div>
-
-<div align="center"<th><button type="submit" class="btn btn-primary ">ESTUDIANTE</button></th></div>
-  {!! Form::close() !!}
-
-
-
-   
+      {!! Form::close() !!}
+     
   </div>
-</div>
 
-
-
-
-
-
-
-
-
-</div>
-
-
-
+                    
 </div>
 </div>
 </div>
@@ -116,17 +88,7 @@ Gestión de salas - UTEM
 </div>
 
 
+      </div>
+    </div>
 
-<!--
- <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
-      <script type="text/javascript">
-      jQuery(document).ready(function($) {
-                 $('.btn').click(function (){
-                    alert("kjsdkajsdakj");
-                 });
-       });
-      </script>
-
--->
-                    
 @stop

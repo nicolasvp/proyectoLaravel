@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Session;
 use App\Cursos;
 use App\Administrador;
 use App\Salas;
+use App\Asignaturas;
+use App\Docentes;
+use App\Departamentos;
+use App\Carreras;
+use App\Estudiantes;
 
 
 class EncargadoController extends Controller {
@@ -161,8 +166,73 @@ class EncargadoController extends Controller {
 
 	public function get_ingreso()
 	{
+		$id_c= 1;
+		$id_a= 2;
+		$id_e= 3;
+		return view('Encargado/ingreso_index',compact('id_c','id_a','id_e'));
+	}
 
-		return view('Encargado/ingreso_index');
+
+	public function get_create(Request $request)
+	{
+	
+		if($request->get('id')==1)
+		{
+			$asignaturas = Asignaturas::paginate()->lists('nombre','id');
+			$docentes = Docentes::paginate()->lists('nombres','id');
+
+			return view('Encargado/create_curso',compact('asignaturas','docentes'));
+		}
+		if($request->get('id')==2)
+		{
+			$departamentos = Departamentos::paginate()->lists('nombre','id');
+			return view('Encargado/create_asignatura',compact('departamentos'));
+		}	
+		if($request->get('id')==3)
+		{
+			$carreras = Carreras::paginate()->lists('nombre','id');
+			return view('Encargado/create_estudiante',compact('carreras'));
+		}
+
+		
+	}
+
+
+	public function post_store()
+	{
+		//dd(\Request::get('docente_id'));
+		$curso = new Cursos();
+		$curso->fill(\Request::all());
+		$curso->save();
+
+		Session::flash('message', 'El curso fue creado exitosamente!');
+		return redirect()->action('EncargadoController@getIndex');
+	
+	}
+
+		public function post_storeAsignatura()
+	{
+		//dd(\Request::get('departamento_id'));
+		$asignatura = new Asignaturas();
+		$asignatura->fill(\Request::all());
+		$asignatura->save();
+
+		Session::flash('message', 'La asignatura fue creada exitosamente!');
+		return redirect()->action('EncargadoController@getIndex');
+	
+	}
+
+
+		public function post_storeEstudiante()
+	{
+		//dd(\Request::get('departamento_id'));
+		$estudiante = new Estudiantes();
+		$estudiante->fill(\Request::all());
+		$estudiante->save();
+
+		Session::flash('message', 'El estudiante fue creado exitosamente!');
+		return redirect()->action('EncargadoController@getIndex');
+	
 	}
 
 
