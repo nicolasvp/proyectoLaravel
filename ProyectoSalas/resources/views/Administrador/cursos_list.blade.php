@@ -57,51 +57,71 @@
 </div>
 
 
+   <div class="col-sm-9" >
+ 
+   <p> <h2>Lista de cursos</h2></p>
+
+         <p>
+                         {!! Form::open(['action' => 'AdministradorController@get_departamento', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-primary btn-sm">Ingresar curso</button>
+
+                         {!! Form::close() !!}
+         </p>
 
 
-         <div class="col-sm-9" >
-   <p> <h2>Ingrese los datos para crear un campus</h2></p>
+      @if(Session::has('message'))
+
+          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
+
+
+      @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-  
-      {!! Form::open(['action' => ['AdministradorController@post_store'], 'method' => 'POST']) !!}
 
-      <div class="form-group">
-       {!! Form::label('nombre', 'Nombre') !!}
-       {!! Form::text('nombre', '',['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
-         
-      </div>
+          <table class="table table-striped">
+            <tr> 
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Docente</th>
+              <th>Semestre</th>
+              <th>Sección</th>
+               <th>Editar</th>
+              <th>Eliminar</th>
+            </tr>
 
-      <div class="form-group">
-        {!! Form::label('direccion', 'Dirección') !!}
-       {!! Form::text('direccion', '',['class' => 'form-control', 'placeholder' => 'Ingresa dirección']) !!}
-      </div>
+            @foreach($datos_cursos as $curso)
 
-      <div class="form-group">
-        {!! Form::label('latitud', 'Latitud') !!}
-       {!! Form::text('latitud', '',['class' => 'form-control', 'placeholder' => 'Ingresa latitud']) !!}
-      </div>
+            <tr>
+               <td>{{ $curso->id}}</td>
+               <td>{{ $curso->nombre}}</td>
+               <td>{{ $curso->nombres}} {{ $curso->apellidos}} - {{ $curso->rut}}</td>
+               <td>{{ $curso->semestre}}</td>
+               <td>{{ $curso->seccion}}</td>
+              <td>
+    
+                  {!! Form::open(['action' => ['AdministradorController@get_editCurso'], 'method' => 'GET']) !!}
+                  {!! Form::hidden('id', $curso->id)!!}
+                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
+                  {!! Form::close() !!}
 
-      <div class="form-group">
-        {!! Form::label('longitud', 'Longitud') !!}
-       {!! Form::text('longitud', '',['class' => 'form-control', 'placeholder' => 'Ingresa longitud']) !!}
-      </div>
+              </td>
+              <td>
+                  {!! Form::open(['action' => ['AdministradorController@delete_destroyCurso'], 'method' => 'DELETE']) !!}
+                  {!! Form::hidden('id', $curso->id)!!}
+                   <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este curso?')" class="btn btn-danger btn-sm ">Eliminar</button>
+                  {!! Form::close() !!}
 
-      <div class="form-group">
-        {!! Form::label('descripcion', 'Descripción') !!}
-       {!! Form::text('descripcion', '',['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
-      </div>
 
-      <div class="form-group">
-        {!! Form::label('rut_encargado', 'Rut Encargado') !!}
-       {!! Form::text('rut_encargado', '',['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
-      </div>
-      
-      <div align=center><button type="submit" class="btn btn-primary">Crear campus</button></div>
+               </td>
 
-      {!! Form::close() !!}
+            </tr>
+             @endforeach
+
+          </table>
+          {!! $datos_cursos->render() !!}
      
   </div>
 
@@ -116,5 +136,6 @@
 
       </div>
     </div>
+
 
 @stop

@@ -11,7 +11,12 @@ use Illuminate\Support\Facades\Session;
 use App\Administrador;
 use App\Roles_usuarios;
 use App\Roles;
-
+use App\Cursos;
+use App\Asignaturas;
+use App\Docentes;
+use App\Carreras;
+use App\Escuelas;
+use App\Departamentos;
 
 
 class AdministradorController extends Controller {
@@ -50,8 +55,6 @@ class AdministradorController extends Controller {
 	public function get_show(Request $request)
 	{
 			
-
-			//$usuarios = Roles_usuarios::usuario($request->get('rut'))->paginate();
 
 		$datos_usuario = \DB::table('roles_usuarios')
 				->join('roles', 'roles_usuarios.rol_id', '=','roles.id')
@@ -138,7 +141,7 @@ class AdministradorController extends Controller {
 
 	}
 
-
+    //ARCHIVAR CAMPUS
 	public function get_campus()
 	{
 
@@ -182,6 +185,197 @@ class AdministradorController extends Controller {
 		return redirect()->action('AdministradorController@getIndex');
 	}
 
+	/* --------------------------------- C U R S O S -------------------------------------------*/
+	public function get_carreras()
+	{
+
+		$carrera = Carreras::paginate()->lists('nombre','id');
+		return view('Administrador/select_carrera_cursos',compact('carrera'));
+	}
+
+	public function get_cursos(Request $request)
+	{
+		/* FILTRAR LOS CURSOS POR CARRERAS
+		$carrera = Carreras::findOrFail($request->get('carrera'));
+
+		$escuela = Escuelas::findOrFail($carrera->escuela_id);
+
+		$departamento = Departamentos::findOrFail($escuela->departamento_id);
+*/ 
+		$datos_cursos = \DB::table('cursos')
+				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
+				->paginate();
+
+		return view('Administrador/cursos_list',compact('datos_cursos'));
+	}
+
+
+	public function get_departamento()
+	{
+		$departamentos = Departamentos::paginate()->lists('nombre','id');
+		return view('Administrador/select_departamento',compact('departamentos'));
+	}
+
+
+	public function get_createCurso(Request $request)
+	{
+
+		    $asignaturas = Asignaturas::where('departamento_id', '=', $request->get('departamentos'))->lists('nombre','id');
+			
+			$docentes = Docentes::where('departamento_id', '=', $request->get('departamentos'))->lists('apellidos','id');
+
+			return view('Administrador/create_curso',compact('asignaturas','docentes'));
+	}
+	
+
+	public function post_storeCurso()
+	{
+	
+		$curso = new Cursos();
+		$curso->fill(\Request::all());
+		$curso->save();
+
+		Session::flash('message', 'El curso fue creado exitosamente!');
+		return redirect()->action('AdministradorController@getIndex');
+	}
+
+
+
+		public function get_editCurso(Request $request)
+	{
+		
+		$cursoEditable = Cursos::findOrFail($request->get('id'));
+
+		$id = $request->get('id');
+
+		$asignaturas = Asignaturas::paginate()->lists('nombre','id');
+
+		$docentes = Docentes::paginate()->lists('apellidos','id');
+
+		return view('Administrador/edit_curso', compact('cursoEditable','id','asignaturas','docentes'));
+	
+	}
+
+
+
+	public function put_updateCurso(Request $request)
+	{
+	
+		$curso = Cursos::findOrFail($request->get('id'));
+		$curso->fill(\Request::all());
+		$curso->save();
+		
+		return redirect()->action('AdministradorController@get_cursos');
+	}
+
+	public function delete_destroyCurso(Request $request)
+	{
+
+		$curso = Cursos::findOrFail($request->get('id'));
+
+		//$curso_nombre = Asignaturas::where('id','=',$curso->asignatura_id)->select('nombre')->get();
+
+		$curso->delete();
+
+
+		Session::flash('message','El curso fue eliminado');
+
+		return redirect()->action('AdministradorController@get_cursos');
+		
+	}
+
+	/*---------------------------------------A S I G N A T U R A S---------------------------------------_*/
+
+	public function get_carrera()
+	{
+		$carrera = Carreras::paginate()->lists('nombre','id');
+		return view('Administrador/select_carrera',compact('carrera'));
+	}
+
+
+
+	public function get_asignaturas(Request $request)
+	{
+		$carrera = Carreras::findOrFail($request->get('carrera'));
+
+		$escuela = Escuelas::findOrFail($carrera->escuela_id);
+
+		$departamento = Departamentos::findOrFail($escuela->departamento_id);
+
+		$datos_asignaturas = Asignaturas::where('departamento_id','=', $escuela->departamento_id)->paginate();
+		
+
+
+		return view('Administrador/asignaturas_list',compact('datos_asignaturas','departamento'));
+	}
+
+
+	public function get_createAsignatura()
+	{
+
+		$departamentos = Departamentos::paginate()->lists('nombre','id');
+
+		return view('Administrador/create_asignatura',compact('departamentos'));
+	}
+
+
+	public function post_storeAsignatura()
+	{
+		
+		$asignatura = new Asignaturas();
+		$asignatura->fill(\Request::all());
+		$asignatura->save();
+
+		Session::flash('message', 'La asignatura fue creada exitosamente!');
+		return redirect()->action('AdministradorController@getIndex');
+	
+	}
+
+
+
+		public function get_editAsignatura(Request $request)
+	{
+		
+		$asignaturaEditable = Asignaturas::findOrFail($request->get('id'));
+
+		$id = $request->get('id');
+
+		$departamentos = Departamentos::paginate()->lists('nombre','id');
+
+		return view('Administrador/edit_asignatura', compact('asignaturaEditable','id','departamentos'));
+	
+	}
+
+
+
+	public function put_updateAsignatura(Request $request)
+	{
+	
+		$asignatura = Asignaturas::findOrFail($request->get('id'));
+		$asignatura->fill(\Request::all());
+		$asignatura->save();
+		
+		return redirect()->action('AdministradorController@get_carrera');
+	}
+
+
+	public function delete_destroyAsignatura(Request $request)
+	{
+
+		$asignatura = Asignaturas::findOrFail($request->get('id'));
+
+		$asignatura->delete();
+
+
+		Session::flash('message','La asignatura fue eliminada');
+
+		return redirect()->action('AdministradorController@get_carrera');
+		
+	}
+
+	/*------------------------ E S T U D I A N T E S ---------------------------------*/
 
 	
 }

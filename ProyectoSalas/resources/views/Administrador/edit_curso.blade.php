@@ -59,55 +59,60 @@
 
 
 
-         <div class="col-sm-9" >
-   <p> <h2>Ingrese los datos para crear un campus</h2></p>
+
+
+<div class="col-sm-9" >
+  <p> <h2>Editar los datos del curso: {{ $cursoEditable->nombre }}</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
   
-      {!! Form::open(['action' => ['AdministradorController@post_store'], 'method' => 'POST']) !!}
+      {!! Form::model($cursoEditable, ['action' => ['AdministradorController@put_updateCurso', $cursoEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
-       {!! Form::label('nombre', 'Nombre') !!}
-       {!! Form::text('nombre', '',['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
+       {!! Form::label('asignatura_id', 'Asignatura') !!}
+       {!! Form::select('asignatura_id', (['0' => '-- Seleccionar una asignatura --'] +$asignaturas), null, ['class' => 'form-control'])!!}
+      </div>
+
+
+      <div class="form-group">
+        {!! Form::label('docente_id', 'Docente') !!}
+       {!! Form::select('docente_id', (['0' => '-- Seleccionar un docente --'] +  $docentes), null, ['class' => 'form-control'])!!}
+      </div>
+
+
+      <div class="form-group">
+       {!! Form::label('semestre', 'Semestre') !!}
+       {!! Form::text('semestre', null,['class' => 'form-control', 'placeholder' => 'Ingresa semestre']) !!}
          
       </div>
 
       <div class="form-group">
-        {!! Form::label('direccion', 'Dirección') !!}
-       {!! Form::text('direccion', '',['class' => 'form-control', 'placeholder' => 'Ingresa dirección']) !!}
+        {!! Form::label('año', 'Año') !!}
+       {!! Form::text('anio', null,['class' => 'form-control', 'placeholder' => 'Ingresa año']) !!}
       </div>
 
       <div class="form-group">
-        {!! Form::label('latitud', 'Latitud') !!}
-       {!! Form::text('latitud', '',['class' => 'form-control', 'placeholder' => 'Ingresa latitud']) !!}
+        {!! Form::label('seccion', 'Sección') !!}
+       {!! Form::text('seccion', null,['class' => 'form-control', 'placeholder' => 'Ingresa sección']) !!}
       </div>
 
-      <div class="form-group">
-        {!! Form::label('longitud', 'Longitud') !!}
-       {!! Form::text('longitud', '',['class' => 'form-control', 'placeholder' => 'Ingresa longitud']) !!}
-      </div>
+        {!! Form::hidden('id', $id)!!}
 
-      <div class="form-group">
-        {!! Form::label('descripcion', 'Descripción') !!}
-       {!! Form::text('descripcion', '',['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
-      </div>
-
-      <div class="form-group">
-        {!! Form::label('rut_encargado', 'Rut Encargado') !!}
-       {!! Form::text('rut_encargado', '',['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
-      </div>
-      
-      <div align=center><button type="submit" class="btn btn-primary">Crear campus</button></div>
+      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
 
       {!! Form::close() !!}
-     
+
+  
   </div>
 
                     
 </div>
+
 </div>
+
+
 </div>
 
                     

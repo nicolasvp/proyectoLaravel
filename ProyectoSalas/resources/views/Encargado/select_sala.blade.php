@@ -24,21 +24,21 @@ Gestión de salas - UTEM
                           <div class="col-sm-3">
                                           
                 <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
+                    <ul class="list-group" id="side-menu">
                     
-                        <li>
+                        
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
+
+           <li class="list-group-item"> <a href="{{URL::to('/Encargado/cursos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Salas</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/Encargado/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Salas</a></li> 
+            <li class="list-group-item"><a href="{{URL::to('/Encargado/ingreso')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Ingresar Datos</a></li>             
+
 </li>
-
-            <li> <a href="{{URL::to('/Encargado/cursos')}}">Asignar Salas</a></li>
-            <li><a href="{{URL::to('/Encargado/campus')}}">Modificar Salas</a></li> 
-            <li><a href="{{URL::to('/Encargado/ingreso')}}">Ingresar Datos</a></li>             
-
-</li>
-
+</ul>
 </div>
 
 </div>
+
 
 
    <div class="col-sm-9" >
