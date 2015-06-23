@@ -28,7 +28,7 @@ class Docentes extends Model implements AuthenticatableContract, CanResetPasswor
 	 *
 	 * @var array
 	 */
-		protected $fillable = ['rut','nombres', 'apellidos'];
+		protected $fillable = ['departamento_id','rut','nombres', 'apellidos'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

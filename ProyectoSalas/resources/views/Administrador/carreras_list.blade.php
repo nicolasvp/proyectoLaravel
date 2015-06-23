@@ -32,7 +32,7 @@
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 
 
-             <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
+           <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/Administrador/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Archivar Campus</a></li>
@@ -57,15 +57,25 @@
 </div>
 
 
-
    <div class="col-sm-9" >
-   <p> <h2>Seleccion de departamento</h2></p>
+ 
+   <p> <h2>Lista de carreras</h2></p>
+
+         <p>
+                         {!! Form::open(['action' => 'AdministradorController@get_createCarrera', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-primary btn-sm">Ingresar carrera</button>
+
+                         {!! Form::close() !!}
+         </p>
+
 
       @if(Session::has('message'))
 
-           <div class="alert alert-dismissible alert-success">
-           <strong>{{ Session::get('message') }}</strong>
-          </div>
+<div class="alert alert-dismissible alert-success">
+  <strong>{{ Session::get('message') }}</strong>
+</div>
+       
 
 
       @endif
@@ -73,23 +83,50 @@
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-  
+
+          <table class="table table-striped">
+            <tr> 
+              <th>#</th>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Escuela</th>
+               <th>Editar</th>
+              <th>Eliminar</th>
+            </tr>
+
+            @foreach($datos_carreras as $carrera)
+
+            <tr>
+               <td>{{ $carrera->id}}</td>
+                <td>{{ $carrera->codigo}}</td>
+               <td>{{ $carrera->nombre}}</td>
+               <td>{{ $carrera->escuela_id}}</td>
+      
+              <td>
+                  {!! Form::open(['action' => ['AdministradorController@get_editCarrera'], 'method' => 'GET']) !!}
+                  {!! Form::hidden('id', $carrera->id)!!}
+                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
+                  {!! Form::close() !!}
+                
+              </td>
+              <td>
+                  {!! Form::open(['action' => ['AdministradorController@delete_destroyCarrera'], 'method' => 'DELETE']) !!}
+                  {!! Form::hidden('id', $carrera->id)!!}
+                   <button type="submit" onclick="return confirm('¿Seguro que desea eliminar esta carrera?')" class="btn btn-danger btn-sm ">Eliminar</button>
+                  {!! Form::close() !!}
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+               </td>
 
+            </tr>
+             @endforeach
 
-    <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
-    </div>
+          </table>
+          {!! $datos_carreras->render() !!}
+     
+  </div>
 
-
-     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
-
-
-    {!! Form::close() !!}
-
-
+                    
 </div>
 </div>
 </div>
@@ -102,6 +139,4 @@
     </div>
 
 
-
-                    
 @stop

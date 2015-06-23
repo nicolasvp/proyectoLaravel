@@ -58,40 +58,49 @@
 
 
 
-   <div class="col-sm-9" >
-   <p> <h2>Seleccion de departamento</h2></p>
-
-      @if(Session::has('message'))
-
-           <div class="alert alert-dismissible alert-success">
-           <strong>{{ Session::get('message') }}</strong>
-          </div>
 
 
-      @endif
+
+<div class="col-sm-9" >
+  <p> <h2>Editar los datos de la facultad: {{ $facultadEditable->nombre }}</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
   
+      {!! Form::model($facultadEditable, ['action' => ['AdministradorController@put_updateFacultad', $facultadEditable], 'method' => 'PUT']) !!}
+
+      <div class="form-group">
+       {!! Form::label('campus_id', 'Campus') !!}
+       {!! Form::select('campus_id', (['0' => '-- Seleccionar un campus --'] +$campus), null, ['class' => 'form-control'])!!}
+      </div>
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+     <div class="form-group">
+        {!! Form::label('nombre', 'Nombre') !!}
+       {!! Form::text('nombre', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
+      </div>
 
+        <div class="form-group">
+        {!! Form::label('descripcion', 'Descripción') !!}
+       {!! Form::text('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+      </div>
 
-    <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
-    </div>
+        {!! Form::hidden('id', $id)!!}
 
+      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
 
-     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
+      {!! Form::close() !!}
 
+  
+  </div>
 
-    {!! Form::close() !!}
-
+                    
+</div>
 
 </div>
-</div>
+
+
 </div>
 
                     
@@ -101,7 +110,4 @@
       </div>
     </div>
 
-
-
-                    
 @stop

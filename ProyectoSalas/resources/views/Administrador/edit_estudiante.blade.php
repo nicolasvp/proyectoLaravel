@@ -58,40 +58,62 @@
 
 
 
-   <div class="col-sm-9" >
-   <p> <h2>Seleccion de departamento</h2></p>
-
-      @if(Session::has('message'))
-
-           <div class="alert alert-dismissible alert-success">
-           <strong>{{ Session::get('message') }}</strong>
-          </div>
 
 
-      @endif
+
+
+<div class="col-sm-9" >
+  <p> <h2>Editar los datos del estudiante: {{ $estudianteEditable->nombres }} {{$estudianteEditable->apellidos}}</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
   
+      {!! Form::model($estudianteEditable, ['action' => ['AdministradorController@put_updateEstudiante', $estudianteEditable], 'method' => 'PUT']) !!}
+
+      <div class="form-group">
+       {!! Form::label('carrera_id', 'Carrera') !!}
+       {!! Form::select('carrera_id', (['0' => '-- Seleccionar una carrera --'] +$carreras), null, ['class' => 'form-control'])!!}
+      </div>
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+      <div class="form-group">
+       {!! Form::label('rut', 'Rut') !!}
+       {!! Form::text('rut', null,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
+         
+      </div>
 
+      <div class="form-group">
+        {!! Form::label('nombres', 'Nombres') !!}
+       {!! Form::text('nombres', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombres']) !!}
+      </div>
 
-    <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
-    </div>
+        <div class="form-group">
+        {!! Form::label('apellidos', 'Apellidos') !!}
+       {!! Form::text('apellidos', null,['class' => 'form-control', 'placeholder' => 'Ingresa apellidos']) !!}
+      </div>
 
+        <div class="form-group">
+        {!! Form::label('email', 'Email') !!}
+       {!! Form::text('email', null,['class' => 'form-control', 'placeholder' => 'Ingresa email']) !!}
+      </div>
 
-     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
+        {!! Form::hidden('id', $id)!!}
+    
 
+      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
 
-    {!! Form::close() !!}
+      {!! Form::close() !!}
 
+  
+  </div>
+
+                    
+</div>
 
 </div>
-</div>
+
+
 </div>
 
                     
@@ -101,7 +123,4 @@
       </div>
     </div>
 
-
-
-                    
 @stop

@@ -32,7 +32,7 @@
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 
 
-             <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
+          <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/Administrador/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Archivar Campus</a></li>
@@ -57,39 +57,72 @@
 </div>
 
 
-
    <div class="col-sm-9" >
-   <p> <h2>Seleccion de departamento</h2></p>
+ 
+   <p> <h2>Lista de los departamentos</h2></p>
+
+         <p>
+                         {!! Form::open(['action' => 'AdministradorController@get_createDepartamento', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-primary btn-sm">Ingresar departamento</button>
+
+                         {!! Form::close() !!}
+         </p>
+
 
       @if(Session::has('message'))
 
-           <div class="alert alert-dismissible alert-success">
+          <div class="alert alert-dismissible alert-success">
            <strong>{{ Session::get('message') }}</strong>
           </div>
-
 
       @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-  
+
+          <table class="table table-striped">
+            <tr> 
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Facultad</th>
+               <th>Editar</th>
+              <th>Eliminar</th>
+            </tr>
+
+            @foreach($datos_departamentos as $departamento)
+
+            <tr>
+               <td>{{ $departamento->id}}</td>
+               <td>{{ $departamento->nombre}}</td>
+               <td>{{ $departamento->facultad_id}}</td>
+              <td>
+    
+                  {!! Form::open(['action' => ['AdministradorController@get_editDepartamento'], 'method' => 'GET']) !!}
+                  {!! Form::hidden('id', $departamento->id)!!}
+                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
+                  {!! Form::close() !!}
+
+              </td>
+              <td>
+                  {!! Form::open(['action' => ['AdministradorController@delete_destroyDepartamento'], 'method' => 'DELETE']) !!}
+                  {!! Form::hidden('id', $departamento->id)!!}
+                   <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este departamento?')" class="btn btn-danger btn-sm ">Eliminar</button>
+                  {!! Form::close() !!}
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+               </td>
 
+            </tr>
+             @endforeach
 
-    <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
-    </div>
+          </table>
+          {!! $datos_departamentos->render() !!}
+     
+  </div>
 
-
-     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
-
-
-    {!! Form::close() !!}
-
-
+                    
 </div>
 </div>
 </div>
@@ -102,6 +135,4 @@
     </div>
 
 
-
-                    
 @stop
