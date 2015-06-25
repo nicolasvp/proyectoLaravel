@@ -29,10 +29,11 @@ Gestión de salas - UTEM
                         
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
 
+          
            <li class="list-group-item"> <a href="{{URL::to('/Encargado/cursos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Salas</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/Encargado/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Salas</a></li> 
-            <li class="list-group-item"><a href="{{URL::to('/Encargado/ingreso')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Ingresar Datos</a></li>             
-
+            <li class="list-group-item"><a href="{{URL::to('/Encargado/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Salas</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/Encargado/horarios')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Lista de horarios</a></li>                      
+            <li class="list-group-item"><a href="{{URL::to('/Encargado/ingreso')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Ingresar Datos</a></li>    
 </li>
 </ul>
 </div>
@@ -46,8 +47,10 @@ Gestión de salas - UTEM
 
       @if(Session::has('message'))
 
-          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
-
+        
+          <div class="alert alert-dismissible alert-success">
+           <strong>{{ Session::get('message') }}</strong>
+          </div>
 
       @endif
 <div class="bs-docs-section">                

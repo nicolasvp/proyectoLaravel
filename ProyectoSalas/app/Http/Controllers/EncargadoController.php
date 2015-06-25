@@ -4,15 +4,16 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use App\Cursos;
-use App\Administrador;
-use App\Salas;
-use App\Asignaturas;
-use App\Docentes;
-use App\Departamentos;
-use App\Carreras;
-use App\Estudiantes;
-use App\Escuelas;
+use App\Models\Cursos;
+use App\Models\Campus;
+use App\Models\Salas;
+use App\Models\Asignaturas;
+use App\Models\Docentes;
+use App\Models\Departamentos;
+use App\Models\Carreras;
+use App\Models\Estudiantes;
+use App\Models\Escuelas;
+use App\Models\Horarios;
 
 
 class EncargadoController extends Controller {
@@ -98,14 +99,13 @@ class EncargadoController extends Controller {
 
 	public function post_add(Request $request)
 	{
-
-
+	
 		\DB::table('horarios')->insert(
     	['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
     	'curso_id' => $request->get('curso_id')]);
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 
-		return view('Encargado/indexEncargado');
+		return view('Encargado/horarios_list');
 
 	}
 
@@ -117,7 +117,7 @@ class EncargadoController extends Controller {
 	{
 
 
-		$salas_campus = Administrador::paginate()->lists('nombre','id');
+		$salas_campus = Campus::paginate()->lists('nombre','id');
 			
 		return view('Encargado/select_campus',compact('salas_campus'));
 	
@@ -127,24 +127,16 @@ class EncargadoController extends Controller {
 
 	public function get_salas(Request $request)
 	{
-		
-		$salas = \DB::table('salas')
-				->where('campus_id','=',$request->get('select_campus'))
-				->lists('nombre','id');
+		$salas = Salas::where('campus_id','=',$request->get('select_campus'))->lists('nombre','id');
+
 	
-
-
 		return view('Encargado/select_sala',compact('salas'));
 
 	}
 
 	public function get_edit(Request $request)
 	{
-		//dd($request->get('id_sala'));
-		/*$datos_sala = \DB::table('salas')
-					->where('id', '=' ,$request->get('id_sala'))
-					->select('nombre','capacidad');
-					*/
+
 		$datos_sala = Salas::findOrFail($request->get('id_sala'));
 
 		$id = $request->get('id_sala');
@@ -221,7 +213,7 @@ class EncargadoController extends Controller {
 
 	public function post_store()
 	{
-		//dd(\Request::get('docente_id'));
+	
 		$curso = new Cursos();
 		$curso->fill(\Request::all());
 		$curso->save();
@@ -233,7 +225,7 @@ class EncargadoController extends Controller {
 
 		public function post_storeAsignatura()
 	{
-		//dd(\Request::get('departamento_id'));
+		
 		$asignatura = new Asignaturas();
 		$asignatura->fill(\Request::all());
 		$asignatura->save();
@@ -246,7 +238,7 @@ class EncargadoController extends Controller {
 
 		public function post_storeEstudiante()
 	{
-		//dd(\Request::get('departamento_id'));
+		
 		$estudiante = new Estudiantes();
 		$estudiante->fill(\Request::all());
 		$estudiante->save();
@@ -254,6 +246,19 @@ class EncargadoController extends Controller {
 		Session::flash('message', 'El estudiante fue creado exitosamente!');
 		return redirect()->action('EncargadoController@getIndex');
 	
+	}
+
+
+
+
+	public function get_horarios()
+	{
+
+
+		$datos_horarios = Horarios::paginate();
+
+
+		return view('Encargado/horarios_list',compact('datos_horarios'));
 	}
 
 

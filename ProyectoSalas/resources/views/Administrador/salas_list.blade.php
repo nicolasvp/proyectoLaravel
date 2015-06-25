@@ -32,7 +32,7 @@
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 
 
-            <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
+             <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/Administrador/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Archivar Campus</a></li>
@@ -58,15 +58,23 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+ 
+   <p> <h2>Lista de salas</h2></p>
+
+         <p>
+                         {!! Form::open(['action' => 'AdministradorController@get_createSala', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-primary btn-sm">Ingresar sala</button>
+
+                         {!! Form::close() !!}
+         </p>
+
 
       @if(Session::has('message'))
 
           <div class="alert alert-dismissible alert-success">
            <strong>{{ Session::get('message') }}</strong>
           </div>
-       
-
 
       @endif
 <div class="bs-docs-section">                
@@ -77,39 +85,44 @@
           <table class="table table-striped">
             <tr> 
               <th>#</th>
+              <th>Nombre</th>
               <th>Campus</th>
-              <th>Dirección</th>
-              <th>Editar</th>
+              <th>Tipo</th>
+              <th>Capacidad</th>
+               <th>Editar</th>
               <th>Eliminar</th>
             </tr>
 
-            @foreach($campus as $campu)
+            @foreach($datos_salas as $sala)
 
             <tr>
-               <td>{{ $campu->id}}</td>
-               <td>{{ $campu->nombre}}</td>
-               <td>{{ $campu->direccion}}</td>
-               <td>
+               <td>{{ $sala->id}}</td>
+               <td>{{ $sala->nombre}}</td>
+               <td>{{ $sala->campus_id}}</td>
+               <td>{{ $sala->tipo_sala_id}}</td>
+               <td>{{ $sala->capacidad}}</td>
+              <td>
     
-                  {!! Form::open(['action' => ['AdministradorController@get_edit'], 'method' => 'GET']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
+                  {!! Form::open(['action' => ['AdministradorController@get_editSala'], 'method' => 'GET']) !!}
+                  {!! Form::hidden('id_sala', $sala->id)!!}
                    <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
                   {!! Form::close() !!}
 
               </td>
               <td>
-                  {!! Form::open(['action' => ['AdministradorController@delete_destroy'], 'method' => 'DELETE']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este campus?')" class="btn btn-danger btn-sm ">Eliminar</button>
+                  {!! Form::open(['action' => ['AdministradorController@delete_destroySala'], 'method' => 'DELETE']) !!}
+                  {!! Form::hidden('id_sala', $sala->id)!!}
+                   <button type="submit" onclick="return confirm('¿Seguro que desea eliminar esta sala?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}
 
 
                </td>
+
             </tr>
              @endforeach
 
           </table>
-          {!! $campus->render() !!}
+          {!! $datos_salas->render() !!}
      
   </div>
 

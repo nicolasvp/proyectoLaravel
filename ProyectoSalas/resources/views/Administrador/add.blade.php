@@ -57,16 +57,16 @@
 </div>
 
 
+
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+   <p> <h2>Selección de período y sala</h2></p>
 
       @if(Session::has('message'))
 
+          
           <div class="alert alert-dismissible alert-success">
            <strong>{{ Session::get('message') }}</strong>
           </div>
-       
-
 
       @endif
 <div class="bs-docs-section">                
@@ -77,45 +77,68 @@
           <table class="table table-striped">
             <tr> 
               <th>#</th>
-              <th>Campus</th>
-              <th>Dirección</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
+              <th>Nombre</th>
+              <th>Docente</th>
+              <th>Sección</th>  
             </tr>
 
-            @foreach($campus as $campu)
+            @foreach($datos_curso as $cur)
 
             <tr>
-               <td>{{ $campu->id}}</td>
-               <td>{{ $campu->nombre}}</td>
-               <td>{{ $campu->direccion}}</td>
-               <td>
-    
-                  {!! Form::open(['action' => ['AdministradorController@get_edit'], 'method' => 'GET']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
-                  {!! Form::close() !!}
-
-              </td>
-              <td>
-                  {!! Form::open(['action' => ['AdministradorController@delete_destroy'], 'method' => 'DELETE']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este campus?')" class="btn btn-danger btn-sm ">Eliminar</button>
-                  {!! Form::close() !!}
-
-
-               </td>
+               <td>{{ $cur->id}}</td>
+               <td>{{ $cur->nombre}}</td>
+               <td>{{ $cur->nombres}} {{$cur->apellidos}} - {{$cur->rut}}</td>
+               <td>{{ $cur->seccion}}</td>
             </tr>
              @endforeach
 
           </table>
-          {!! $campus->render() !!}
-     
-  </div>
-
+          {!! $datos_curso->render() !!}
+    
+ </div>
                     
 </div>
 </div>
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+       <table class="table table-striped">
+
+<p> <h2>Selección de período</h2></p>
+
+     <div class="form-group">
+   {!! Form::open(['action' => 'AdministradorController@post_add']) !!}
+
+    <div class="form-group">
+    {!! Form::hidden('curso_id', $curso_id)!!}
+    </div>
+
+    <div class="form-group">
+   {!! Form::select('asig_periodo', (['-1' => 'Selecciona un Período'] + $periodos), null, ['class' => 'form-control']) !!}
+    </div>
+
+
+
+<p> <h2>Selección de sala</h2></p>
+        <div class="form-group">
+   {!! Form::select('asig_sala', (['0' => 'Selecciona una sala'] + $salas), null, ['class' => 'form-control']) !!}
+    </div>
+
+      <div align="center"<th><button type="submit" class="btn btn-primary ">Asignar</button></th></div>
+      {!! Form::close() !!}
+
+
+      </div>
+
+      </table>
+
+    </div>
+</div>
+
+
 </div>
 
                     
@@ -124,6 +147,5 @@
 
       </div>
     </div>
-
 
 @stop

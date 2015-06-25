@@ -32,7 +32,7 @@
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 
 
-            <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
+          <li class="list-group-item"> <a href="{{URL::to('/Administrador/create')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Crear Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Administrador/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/Administrador/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Archivar Campus</a></li>
@@ -57,63 +57,62 @@
 </div>
 
 
+
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+   <p> <h2>Modificar la sala</h2></p>
 
       @if(Session::has('message'))
 
+         
           <div class="alert alert-dismissible alert-success">
            <strong>{{ Session::get('message') }}</strong>
           </div>
-       
-
 
       @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-
-          <table class="table table-striped">
-            <tr> 
-              <th>#</th>
-              <th>Campus</th>
-              <th>Dirección</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
-            </tr>
-
-            @foreach($campus as $campu)
-
-            <tr>
-               <td>{{ $campu->id}}</td>
-               <td>{{ $campu->nombre}}</td>
-               <td>{{ $campu->direccion}}</td>
-               <td>
-    
-                  {!! Form::open(['action' => ['AdministradorController@get_edit'], 'method' => 'GET']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
-                  {!! Form::close() !!}
-
-              </td>
-              <td>
-                  {!! Form::open(['action' => ['AdministradorController@delete_destroy'], 'method' => 'DELETE']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este campus?')" class="btn btn-danger btn-sm ">Eliminar</button>
-                  {!! Form::close() !!}
+  
 
 
-               </td>
-            </tr>
-             @endforeach
+   
+      {!! Form::model($datos_sala, ['action' => ['AdministradorController@put_updateSala', $datos_sala], 'method' => 'PUT']) !!}
 
-          </table>
-          {!! $campus->render() !!}
-     
-  </div>
+      <div class="form-group">
+       {!! Form::label('nombre', 'Nombre') !!}
+       {!! Form::text('nombre', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombre']) !!}
+      </div>
 
-                    
+      <div class="form-group">
+        {!! Form::label('capacidad', 'Capacidad') !!}
+       {!! Form::text('capacidad', null,['class' => 'form-control', 'placeholder' => 'Ingresa capacidad']) !!}
+      </div>
+
+      <div class="form-group">
+         {!! Form::label('campus', 'Campus') !!}
+       {!! Form::select('campus_id', ( $campus), null, ['class' => 'form-control'])!!}
+      </div>
+
+
+      <div class="form-group">
+         {!! Form::label('tipo', 'Tipo') !!}
+       {!! Form::select('tipo_sala_id', ( $tipos_salas), null, ['class' => 'form-control'])!!}
+      </div>
+
+      <div class="form-group">
+       {!! Form::label('descripcion', 'Descripción') !!}
+       {!! Form::text('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+      </div>
+
+
+       {!! Form::hidden('id', $id)!!}
+
+      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+
+      {!! Form::close() !!}
+
+
 </div>
 </div>
 </div>
@@ -126,4 +125,5 @@
     </div>
 
 
+                    
 @stop

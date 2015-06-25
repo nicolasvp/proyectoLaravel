@@ -57,59 +57,62 @@
 </div>
 
 
+
    <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
+   <p> <h2>Lista de horarios</h2></p>
 
       @if(Session::has('message'))
 
+         
           <div class="alert alert-dismissible alert-success">
            <strong>{{ Session::get('message') }}</strong>
           </div>
-       
-
 
       @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
+          {!! Form::open(['action' => ['AdministradorController@get_searchCurso'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+            <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura']) !!}
+          </div>
+          <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
+
+
+</form>
+
 
           <table class="table table-striped">
             <tr> 
               <th>#</th>
-              <th>Campus</th>
-              <th>Dirección</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
+              <th>Curso</th>
+              <th>Período</th>
+              <th>Sala</th>
+              <th>Fecha</th>
             </tr>
 
-            @foreach($campus as $campu)
+            
+            @foreach($datos_horarios as $horario)
 
             <tr>
-               <td>{{ $campu->id}}</td>
-               <td>{{ $campu->nombre}}</td>
-               <td>{{ $campu->direccion}}</td>
+               <td>{{ $horario->id }}</td>
+               <td>{{ $horario->curso_id}}</td>
+               <td>{{ $horario->periodo_id}}</td>
+               <td>{{ $horario->sala_id}}</td>
+               <td>{{ $horario->fecha}}
                <td>
-    
-                  {!! Form::open(['action' => ['AdministradorController@get_edit'], 'method' => 'GET']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
-                  {!! Form::close() !!}
 
-              </td>
-              <td>
-                  {!! Form::open(['action' => ['AdministradorController@delete_destroy'], 'method' => 'DELETE']) !!}
-                  {!! Form::hidden('id', $campu->id)!!}
-                   <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este campus?')" class="btn btn-danger btn-sm ">Eliminar</button>
-                  {!! Form::close() !!}
-
+     
+       <button type="submit" class="btn btn-success btn-sm">Editar</button>
 
                </td>
             </tr>
              @endforeach
 
           </table>
-          {!! $campus->render() !!}
+          {!! $datos_horarios->render() !!}
      
   </div>
 

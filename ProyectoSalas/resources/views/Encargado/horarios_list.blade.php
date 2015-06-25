@@ -24,16 +24,17 @@ Gestión de salas - UTEM
                           <div class="col-sm-3">
                                           
                 <div class="sidebar-nav navbar-collapse">
-                    <ul class="list-group" id="side-menu">
+                   <ul class="list-group" id="side-menu">
                     
                         
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
 
-         
            <li class="list-group-item"> <a href="{{URL::to('/Encargado/cursos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Salas</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Encargado/campus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Modificar Salas</a></li>
             <li class="list-group-item"><a href="{{URL::to('/Encargado/horarios')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Lista de horarios</a></li>                      
             <li class="list-group-item"><a href="{{URL::to('/Encargado/ingreso')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Ingresar Datos</a></li>    
+
+
 </li>
 </ul>
 </div>
@@ -43,7 +44,7 @@ Gestión de salas - UTEM
 
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de Escuela</h2></p>
+   <p> <h2>Lista de horarios</h2></p>
 
       @if(Session::has('message'))
 
@@ -57,27 +58,50 @@ Gestión de salas - UTEM
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-  
+          {!! Form::open(['action' => ['EncargadoController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+            <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura']) !!}
+          </div>
+          <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
 
 
- {!! Form::open(['action' => 'EncargadoController@get_create', 'method' => 'GET']) !!}
+</form>
 
 
-    <div class="form-group">
-   {!! Form::select('escuela', ( $escuela), null, ['class' => 'form-control'])!!}
-    </div>
+          <table class="table table-striped">
+            <tr> 
+              <th>#</th>
+              <th>Curso</th>
+              <th>Período</th>
+              <th>Sala</th>
+              <th>Fecha</th>
+            </tr>
 
-      <div class="form-group">
-    {!! Form::hidden('id', $id)!!}
-    </div>
+            
+            @foreach($datos_horarios as $horario)
 
+            <tr>
+               <td>{{ $horario->id }}</td>
+               <td>{{ $horario->curso_id}}</td>
+               <td>{{ $horario->periodo_id}}</td>
+               <td>{{ $horario->sala_id}}</td>
+               <td>{{ $horario->fecha}}
+               <td>
 
-     <div align="center"<th><button type="submit" class="btn btn-primary">Siguiente</button></th></div>
+     
+       <button type="submit" class="btn btn-success btn-sm">Editar</button>
 
+               </td>
+            </tr>
+             @endforeach
 
-    {!! Form::close() !!}
+          </table>
+          {!! $datos_horarios->render() !!}
+     
+  </div>
 
-
+                    
 </div>
 </div>
 </div>
@@ -90,16 +114,4 @@ Gestión de salas - UTEM
     </div>
 
 
-<!--
- <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
-      <script type="text/javascript">
-      jQuery(document).ready(function($) {
-                 $('.btn').click(function (){
-                    alert("kjsdkajsdakj");
-                 });
-       });
-      </script>
-
--->
-                    
 @stop
