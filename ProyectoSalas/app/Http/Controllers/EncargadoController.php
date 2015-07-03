@@ -14,6 +14,8 @@ use App\Models\Carreras;
 use App\Models\Estudiantes;
 use App\Models\Escuelas;
 use App\Models\Horarios;
+use App\Models\Dias;
+use App\Models\Periodos;
 
 
 class EncargadoController extends Controller {
@@ -88,24 +90,34 @@ class EncargadoController extends Controller {
 				->paginate();
 
 
-		$periodos = \DB::table('periodos')->lists('bloque','id');
+		$periodos = Periodos::paginate()->lists('bloque','id');
 		
-		$salas = \DB::table('salas')->lists('nombre','id');
+		$salas = Salas::paginate()->lists('nombre','id');
 
 		$curso_id = $request->get('id_curso');
 
-		return view('Encargado/add',compact('datos_curso','periodos','salas','curso_id'));
+		$dias = Dias::paginate()->lists('nombre','id');
+
+		return view('Encargado/add',compact('datos_curso','periodos','salas','curso_id','dias'));
 	}
 
 	public function post_add(Request $request)
 	{
 	
+
 		\DB::table('horarios')->insert(
     	['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
-    	'curso_id' => $request->get('curso_id')]);
+    	'curso_id' => $request->get('curso_id'),'dia_id' => $request->get('dia_id')]);
+
+/*
+		$horario = new Horarios();
+		$horario->fill(\Request::all());
+		$horario->save();
+*/
+
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 
-		return view('Encargado/horarios_list');
+		return redirect()->action('EncargadoController@get_horarios');
 
 	}
 
@@ -255,7 +267,17 @@ class EncargadoController extends Controller {
 	{
 
 
-		$datos_horarios = Horarios::paginate();
+		//$datos_horarios = Horarios::paginate();
+
+		$datos_horarios = \DB::table('horarios')
+				
+				->join('salas', 'horarios.sala_id', '=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->select('horarios.*','dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->paginate();
 
 
 		return view('Encargado/horarios_list',compact('datos_horarios'));

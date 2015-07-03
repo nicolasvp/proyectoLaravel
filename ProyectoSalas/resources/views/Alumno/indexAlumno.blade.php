@@ -31,8 +31,8 @@ Gestión de salas - UTEM
                         <li>
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Alumno</a>
 </li>
-            <li> <a href="{{URL::to('/Alumno/Horario')}}">Horario</a></li>
-             <li><a href="{{URL::to('/Alumno/consultaAlumno')}}">Consultar</a></li>           
+            <li> <a href="{{URL::to('/Alumno/horario')}}">Horario</a></li>
+             <li><a href="{{URL::to('/Alumno/consulta')}}">Consultar</a></li>           
 
 </li>
 
@@ -51,6 +51,8 @@ Gestión de salas - UTEM
   <div class="jumbotron">
       <h2>Aca van las opciones</h2>
       <p>1111</p>
+
+   
      
     </div>
   </div>

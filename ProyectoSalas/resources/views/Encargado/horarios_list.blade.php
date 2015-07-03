@@ -83,10 +83,10 @@ Gestión de salas - UTEM
 
             <tr>
                <td>{{ $horario->id }}</td>
-               <td>{{ $horario->curso_id}}</td>
-               <td>{{ $horario->periodo_id}}</td>
-               <td>{{ $horario->sala_id}}</td>
-               <td>{{ $horario->fecha}}
+               <td>{{ $horario->nombre}}</td>
+               <td>{{ $horario->bloque}}</td>
+               <td>{{ $horario->sala}}</td>
+               <td>{{ $horario->dia}}
                <td>
 
      

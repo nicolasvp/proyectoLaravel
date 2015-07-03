@@ -22,6 +22,8 @@ use App\Models\Funcionarios;
 use App\Models\Horarios;
 use App\Models\Salas;
 use App\Models\Tipos_salas;
+use App\Models\Dias;
+use App\Models\Asignaturas_cursadas;
 
 
 
@@ -33,15 +35,27 @@ class AdministradorController extends Controller {
 
 	public function getIndex()
 	{
-		$campus = Campus::paginate();
 
-		return view('Administrador/indexAdministrador',compact('campus'));
+		return view('Administrador/indexAdministrador');
 	}
 
-	
+
+	public function get_menus()
+	{
+		return view('Administrador/campus/campus_index');
+	}
+
+	public function get_campusList()
+	{
+
+		$campus = Campus::paginate();
+		return view('Administrador/campus/campus_list',compact('campus'));
+	}
+
+
 	public function get_create()
 	{
-		return view('Administrador/create');
+		return view('Administrador/campus/create');
 	}
 
 	
@@ -54,7 +68,7 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El campus ' .$campus->nombre.' fue creado');
 
-		return redirect()->action('AdministradorController@getIndex');
+		return redirect()->action('AdministradorController@get_campusList');
 	}
 
 	
@@ -70,11 +84,11 @@ class AdministradorController extends Controller {
 
 		$rut = $request->get('rut');
 
-				$rol_usuario = \DB::table('roles')->lists('nombre', 'id');
+		$rol_usuario = \DB::table('roles')->lists('nombre', 'id');
 
 		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
 
-				return view('Administrador.show',compact('datos_usuario','rol_usuario','rut'));
+		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut'));
 			
 	}
 		
@@ -84,7 +98,8 @@ class AdministradorController extends Controller {
 		
 		$campusEditable = Campus::findOrFail($request->get('id'));
 		$id = $request->get('id');
-		return view('Administrador/edit', compact('campusEditable','id'));
+
+		return view('Administrador/campus/edit', compact('campusEditable','id'));
 	
 	}
 
@@ -95,7 +110,9 @@ class AdministradorController extends Controller {
 		$campusEditable->fill(\Request::all());
 		$campusEditable->save();
 		
-		return redirect()->action('AdministradorController@getIndex');
+		Session::flash('message','El campus '. $campusEditable->nombre. ' fue editado');
+
+		return redirect()->action('AdministradorController@get_campusList');
 	}
 
 
@@ -108,7 +125,7 @@ class AdministradorController extends Controller {
 
 		Session::flash('message','El campus '. $campusEditable->nombre. ' fue eliminado');
 
-		return redirect()->action('AdministradorController@getIndex');
+		return redirect()->action('AdministradorController@get_campusList');
 		
 	}
 
@@ -116,7 +133,7 @@ class AdministradorController extends Controller {
 	public function get_search()
 	{
 			
-		return view('Administrador.search');
+		return view('Administrador/perfiles/search');
 	}
 
 
@@ -127,9 +144,9 @@ class AdministradorController extends Controller {
 		\DB::table('roles_usuarios')->insert(
     	['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]
    		);
-		Session::flash('message', 'El Perfil fue asignado exitosamente!, por favor vuelva al menú');
+		Session::flash('message', 'El Perfil fue asignado exitosamente!');
 
-		return redirect()->action('AdministradorController@get_show');
+		return redirect()->action('AdministradorController@getIndex');
 	}
 
 	public function delete_rol(Request $request)
@@ -142,22 +159,11 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El Perfil fue removido exitosamente');
 
-		return redirect()->action('AdministradorController@get_show');
+		return redirect()->action('AdministradorController@getIndex');
 
 	}
 
     //ARCHIVAR CAMPUS
-	public function get_campus()
-	{
-
-		$campus = Campus::paginate();
-
-
-		return view('Administrador/campus_file',compact('campus'));
-
-	}
-
-
 
 	public function delete_campus(Request $request)
 	{
@@ -167,7 +173,7 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El campus fue archivado exitosamente!');
 
-		return redirect()->action('AdministradorController@getIndex');
+		return redirect()->action('AdministradorController@get_campusList');
 
 	}
 
@@ -177,7 +183,7 @@ class AdministradorController extends Controller {
 
 		$filed_campus = Campus::onlyTrashed()->paginate();
 
-		return view('Administrador/campus_filed',compact('filed_campus'));
+		return view('Administrador/campus/campus_filed',compact('filed_campus'));
 	}
 
 
@@ -195,20 +201,19 @@ class AdministradorController extends Controller {
 	public function get_menu()
 	{
 		
-		return view('Administrador/salas_index');
+		return view('Administrador/salas/salas_index');
 	}
 
 
 	public function get_cursosList()
 	{
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
 
 
-		return view('Administrador/curso_list',compact('datos_cursos'));
+		return view('Administrador/salas/curso_list',compact('datos_cursos'));
 	}
 
 
@@ -216,28 +221,30 @@ class AdministradorController extends Controller {
 	public function get_searchCurso(Request $request)
 	{
 	
+
 		if(trim($request->get('name')) != "")
 		{
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
-				->where('asignaturas.nombre', '=' , $request->get('name'))
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('docentes.nombres','like', '%'.$request->get('name').'%')
+				->orWhere('docentes.apellidos','like', '%'.$request->get('name').'%')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
 
-		return view('Administrador/curso_list',compact('datos_cursos'));
+		return view('Administrador/salas/curso_list',compact('datos_cursos'));
 		}
 
 		else
 		{
 
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
 
-		return view('Administrador/curso_list',compact('datos_cursos'));
+		return view('Administrador/salas/curso_list',compact('datos_cursos'));
+
 		}
 	}
 
@@ -250,35 +257,155 @@ class AdministradorController extends Controller {
 	public function post_curso(Request $request)
 	{
 
-		$datos_curso = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_curso = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->where('cursos.id', '=', $request->get('id_curso'))
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
 
 
-		$periodos = \DB::table('periodos')->lists('bloque','id');
+		$periodos = Periodos::paginate()->lists('bloque','id');
 		
-		$salas = \DB::table('salas')->lists('nombre','id');
+		$salas = Salas::paginate()->lists('nombre','id');
 
 		$curso_id = $request->get('id_curso');
 
-		return view('Administrador/add',compact('datos_curso','periodos','salas','curso_id'));
+		$dias = Dias::paginate()->lists('nombre','id');
+
+		return view('Administrador/salas/add',compact('datos_curso','periodos','salas','curso_id','dias'));
 	}
+
+
 
 	public function post_add(Request $request)
 	{
 	
 		\DB::table('horarios')->insert(
     	['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
-    	'curso_id' => $request->get('curso_id')]);
+    	'curso_id' => $request->get('curso_id'), 'dia_id' => $request->get('dia_id')]);
+
+
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 
-		$datos_horarios = Horarios::paginate();
+		
+		return redirect()->action('AdministradorController@get_horarios');
+		
 
-		return view('Administrador/horarios_list',compact('datos_horarios'));
+	}
 
+
+
+	public function get_horarios()
+	{
+
+				$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->paginate();
+				
+
+		return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+
+
+	}
+
+
+	public function get_editHorario(Request $request)
+	{
+
+		$horarioEditable = Horarios::findOrFail($request->get('id'));
+
+		$periodos = Periodos::paginate()->lists('bloque','id');
+
+		$dias = Dias::paginate()->lists('nombre','id');
+
+		$salas = Salas::paginate()->lists('nombre','id');
+
+		
+		$curso = Cursos::join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+		->where('cursos.id','=',$horarioEditable->curso_id)
+		->select('asignaturas.nombre')
+		->paginate();
+
+
+		$id = $request->get('id');
+
+		$curso_id = $horarioEditable->curso_id;
+
+		return view('Administrador/salas/edit_horario', compact('horarioEditable','periodos','dias','salas','curso','curso_id','id'));
+
+	}
+
+
+	public function put_updateHorario(Request $request)
+	{
+
+		$horario = Horarios::findOrFail($request->get('id'));
+		//dd($horario);
+		$horario->fill(\Request::all());
+		$horario->save();
+		
+		Session::flash('message', 'El horario fue editado exitosamente!');
+
+		return redirect()->action('AdministradorController@get_horarios');
+	}
+
+
+
+	public function delete_destroyHorario(Request $request)
+	{
+		$horario = Horarios::findOrFail($request->get('id'));
+
+		$horario->delete();
+
+
+		Session::flash('message', 'El horario fue eliminado exitosamente!');
+
+		return redirect()->action('AdministradorController@get_horarios');
+	}
+
+
+	public function get_searchHorario(Request $request)
+	{
+	
+
+		if(trim($request->get('name')) != "")
+		{
+
+			$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('docentes.nombres','like', '%'.$request->get('name').'%')
+				->orWhere('docentes.apellidos','like', '%'.$request->get('name').'%')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->paginate();
+
+				return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+		}
+
+		else
+		{
+
+			$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->paginate();	
+
+		return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+
+		}
 	}
 
 
@@ -289,7 +416,7 @@ class AdministradorController extends Controller {
 
 		$salas_campus = Campus::paginate()->lists('nombre','id');
 			
-		return view('Administrador/select_campus',compact('salas_campus'));
+		return view('Administrador/salas/select_campus',compact('salas_campus'));
 	
 
 	}
@@ -300,7 +427,7 @@ class AdministradorController extends Controller {
 		$salas = Salas::where('campus_id','=',$request->get('select_campus'))->lists('nombre','id');
 
 	
-		return view('Administrador/select_sala',compact('salas'));
+		return view('Administrador/salas/select_sala',compact('salas'));
 
 	}
 
@@ -316,7 +443,7 @@ class AdministradorController extends Controller {
 		$tipos_salas = Tipos_salas::paginate()->lists('nombre','id');
 				
 	
-		return view('Administrador/edit_sala',compact('datos_sala','id','campus','tipos_salas'));
+		return view('Administrador/salas/edit_sala',compact('datos_sala','id','campus','tipos_salas'));
 	}
 
 
@@ -337,8 +464,13 @@ class AdministradorController extends Controller {
 
 	public function get_salasList()
 	{
-		$datos_salas = Salas::paginate();
-		return view('Administrador/salas_list',compact('datos_salas'));
+		$datos_salas = Salas::join('campus','salas.campus_id','=','campus.id')
+							->join('tipos_salas','salas.tipo_sala_id','=','tipos_salas.id')
+							->select('salas.*','tipos_salas.nombre as tipo_sala','campus.nombre as campus')
+							->paginate();
+
+		return view('Administrador/salas/salas_list',compact('datos_salas'));
+
 	}
 
 
@@ -347,7 +479,7 @@ class AdministradorController extends Controller {
 
 		$campus = Campus::paginate()->lists('nombre','id');
 		$tipos_salas = Tipos_salas::paginate()->lists('nombre','id');
-		return view('Administrador/create_sala',compact('campus','tipos_salas'));
+		return view('Administrador/salas/create_sala',compact('campus','tipos_salas'));
 	}
 
 
@@ -384,13 +516,13 @@ class AdministradorController extends Controller {
 	{
 
 		$datos_tipos = Tipos_salas::paginate();
-		return view('Administrador/tipos_list',compact('datos_tipos'));
+		return view('Administrador/tipos_sala/tipos_list',compact('datos_tipos'));
 	}
 
 	public function get_createTipoSala()
 	{
 		
-		return view('Administrador/create_tipoSala');
+		return view('Administrador/tipos_sala/create_tipoSala');
 	}
 
 
@@ -417,7 +549,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_tipoSala', compact('tipoEditable','id'));
+		return view('Administrador/tipos_sala/edit_tipoSala', compact('tipoEditable','id'));
 	
 	}
 
@@ -455,7 +587,7 @@ class AdministradorController extends Controller {
 	{
 
 		$carrera = Carreras::paginate()->lists('nombre','id');
-		return view('Administrador/select_carrera_cursos',compact('carrera'));
+		return view('Administrador/cursos/select_carrera_cursos',compact('carrera'));
 	}
 
 
@@ -468,20 +600,19 @@ class AdministradorController extends Controller {
 
 		$departamento = Departamentos::findOrFail($escuela->departamento_id);
 */ 
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
 
-		return view('Administrador/cursos_list',compact('datos_cursos'));
+		return view('Administrador/cursos/cursos_list',compact('datos_cursos'));
 	}
 
 
 	public function get_departamento()
 	{
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
-		return view('Administrador/select_departamento',compact('departamentos'));
+		return view('Administrador/cursos/select_departamento',compact('departamentos'));
 	}
 
 
@@ -492,7 +623,7 @@ class AdministradorController extends Controller {
 			
 			$docentes = Docentes::where('departamento_id', '=', $request->get('departamentos'))->lists('apellidos','id');
 
-			return view('Administrador/create_curso',compact('asignaturas','docentes'));
+			return view('Administrador/cursos/create_curso',compact('asignaturas','docentes'));
 	}
 	
 
@@ -521,7 +652,7 @@ class AdministradorController extends Controller {
 
 		$docentes = Docentes::paginate()->lists('apellidos','id');
 
-		return view('Administrador/edit_curso', compact('cursoEditable','id','asignaturas','docentes'));
+		return view('Administrador/cursos/edit_curso', compact('cursoEditable','id','asignaturas','docentes'));
 	
 	}
 
@@ -558,7 +689,7 @@ class AdministradorController extends Controller {
 	public function get_carrera()
 	{
 		$carrera = Carreras::paginate()->lists('nombre','id');
-		return view('Administrador/select_carrera',compact('carrera'));
+		return view('Administrador/asignaturas/select_carrera',compact('carrera'));
 	}
 
 
@@ -575,7 +706,7 @@ class AdministradorController extends Controller {
 		
 
 
-		return view('Administrador/asignaturas_list',compact('datos_asignaturas','departamento'));
+		return view('Administrador/asignaturas/asignaturas_list',compact('datos_asignaturas','departamento'));
 	}
 
 
@@ -584,7 +715,7 @@ class AdministradorController extends Controller {
 
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_asignatura',compact('departamentos'));
+		return view('Administrador/asignaturas/create_asignatura',compact('departamentos'));
 	}
 
 
@@ -611,7 +742,7 @@ class AdministradorController extends Controller {
 
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
 
-		return view('Administrador/edit_asignatura', compact('asignaturaEditable','id','departamentos'));
+		return view('Administrador/asignaturas/edit_asignatura', compact('asignaturaEditable','id','departamentos'));
 	
 	}
 
@@ -647,7 +778,7 @@ class AdministradorController extends Controller {
 	public function get_carrerass()
 	{
 		$carrera = Carreras::paginate()->lists('nombre','id');
-		return view('Administrador/select_carrera_estudiante',compact('carrera'));
+		return view('Administrador/estudiantes/select_carrera_estudiante',compact('carrera'));
 	}
 
 	public function get_estudiantes(Request $request)
@@ -657,7 +788,7 @@ class AdministradorController extends Controller {
 
 		$carrera = Carreras::findOrFail($request->get('carrera'));
 
-		return view('Administrador/estudiantes_list',compact('datos_estudiantes','carrera'));
+		return view('Administrador/estudiantes/estudiantes_list',compact('datos_estudiantes','carrera'));
 	}
 
 
@@ -667,7 +798,7 @@ class AdministradorController extends Controller {
 
 		$carreras = Carreras::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_estudiante',compact('carreras'));
+		return view('Administrador/estudiantes/create_estudiante',compact('carreras'));
 	}
 
 
@@ -696,7 +827,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_estudiante', compact('estudianteEditable','id','carreras'));
+		return view('Administrador/estudiantes/edit_estudiante', compact('estudianteEditable','id','carreras'));
 	
 	}
 
@@ -736,9 +867,12 @@ class AdministradorController extends Controller {
 	public function get_docentes()
 	{
 			
-		$datos_docentes = Docentes::paginate();
+		$datos_docentes = \DB::table('docentes')
+						->join('departamentos','docentes.departamento_id','=','departamentos.id')
+						->select('docentes.*','departamentos.nombre as departamento')
+						->paginate();
 
-		return view('Administrador/docentes_list',compact('datos_docentes'));
+		return view('Administrador/docentes/docentes_list',compact('datos_docentes'));
 	}
 
 
@@ -747,7 +881,7 @@ class AdministradorController extends Controller {
 
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_docente',compact('departamentos'));
+		return view('Administrador/docentes/create_docente',compact('departamentos'));
 	}
 
 
@@ -775,7 +909,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_docente', compact('docenteEditable','id','departamentos'));
+		return view('Administrador/docentes/edit_docente', compact('docenteEditable','id','departamentos'));
 	
 	}
 
@@ -814,10 +948,13 @@ class AdministradorController extends Controller {
 	public function get_list()
 	{
 
-		$datos_carreras = Carreras::paginate();
+		$datos_carreras = \DB::table('carreras')
+						->join('escuelas','carreras.escuela_id','=','escuelas.id')
+						->select('carreras.*','escuelas.nombre as escuela')
+						->paginate();
 
 	
-		return view('Administrador/carreras_list',compact('datos_carreras'));
+		return view('Administrador/carreras/carreras_list',compact('datos_carreras'));
 
 	}
 
@@ -827,7 +964,7 @@ class AdministradorController extends Controller {
 
 		$escuelas = Escuelas::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_carrera',compact('escuelas'));
+		return view('Administrador/carreras/create_carrera',compact('escuelas'));
 	}
 
 
@@ -854,7 +991,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_carrera', compact('carreraEditable','id','escuelas'));
+		return view('Administrador/carreras/edit_carrera', compact('carreraEditable','id','escuelas'));
 	
 	}
 
@@ -893,10 +1030,13 @@ class AdministradorController extends Controller {
 	public function get_departamentos()
 	{
 
-		$datos_departamentos = Departamentos::paginate();
+		$datos_departamentos = \DB::table('departamentos')
+							->join('facultades','departamentos.facultad_id','=','facultades.id')
+							->select('departamentos.*','facultades.nombre as facultad')
+							->paginate();
 
 	
-		return view('Administrador/departamentos_list',compact('datos_departamentos'));
+		return view('Administrador/departamentos/departamentos_list',compact('datos_departamentos'));
 
 	}
 
@@ -906,7 +1046,7 @@ class AdministradorController extends Controller {
 
 		$facultades = Facultades::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_departamento',compact('facultades'));
+		return view('Administrador/departamentos/create_departamento',compact('facultades'));
 	}
 
 
@@ -934,7 +1074,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_departamento', compact('departamentoEditable','id','facultades'));
+		return view('Administrador/departamentos/edit_departamento', compact('departamentoEditable','id','facultades'));
 	
 	}
 
@@ -972,10 +1112,13 @@ class AdministradorController extends Controller {
 	public function get_escuelas()
 	{
 
-		$datos_escuelas = Escuelas::paginate();
+		$datos_escuelas = \DB::table('escuelas')
+						->join('departamentos','escuelas.departamento_id','=','departamentos.id')
+						->select('escuelas.*','departamentos.nombre as departamento')
+						->paginate();
 
 	
-		return view('Administrador/escuelas_list',compact('datos_escuelas'));
+		return view('Administrador/escuelas/escuelas_list',compact('datos_escuelas'));
 
 	}
 
@@ -985,7 +1128,7 @@ class AdministradorController extends Controller {
 
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_escuela',compact('departamentos'));
+		return view('Administrador/escuelas/create_escuela',compact('departamentos'));
 	}
 
 
@@ -1013,7 +1156,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_escuela', compact('escuelaEditable','id','departamentos'));
+		return view('Administrador/escuelas/edit_escuela', compact('escuelaEditable','id','departamentos'));
 	
 	}
 
@@ -1051,10 +1194,13 @@ class AdministradorController extends Controller {
 	public function get_facultades()
 	{
 
-		$datos_facultades = Facultades::paginate();
+		$datos_facultades = \DB::table('facultades')
+							->join('campus','facultades.campus_id','=','campus.id')
+							->select('facultades.*','campus.nombre as campus')
+							->paginate();
 
-	
-		return view('Administrador/facultades_list',compact('datos_facultades'));
+		
+		return view('Administrador/facultades/facultades_list',compact('datos_facultades'));
 
 	}
 
@@ -1064,7 +1210,7 @@ class AdministradorController extends Controller {
 
 		$campus = Campus::paginate()->lists('nombre','id');
 
-		return view('Administrador/create_facultad',compact('campus'));
+		return view('Administrador/facultades/create_facultad',compact('campus'));
 	}
 
 
@@ -1092,7 +1238,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_facultad', compact('facultadEditable','id','campus'));
+		return view('Administrador/facultades/edit_facultad', compact('facultadEditable','id','campus'));
 	
 	}
 
@@ -1133,14 +1279,14 @@ class AdministradorController extends Controller {
 
 		$datos_funcionarios = Funcionarios::paginate();
 
-		return view('Administrador/funcionarios_list',compact('datos_funcionarios'));
+		return view('Administrador/funcionarios/funcionarios_list',compact('datos_funcionarios'));
 	}
 
 	public function get_createFuncionario()
 	{
 
 		$departamentos = Departamentos::paginate()->lists('nombre','id');
-		return view('Administrador/create_funcionario',compact('departamentos'));
+		return view('Administrador/funcionarios/create_funcionario',compact('departamentos'));
 	}
 
 
@@ -1168,7 +1314,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_funcionario', compact('funcionarioEditable','id','departamentos'));
+		return view('Administrador/funcionarios/edit_funcionario', compact('funcionarioEditable','id','departamentos'));
 	
 	}
 
@@ -1207,13 +1353,13 @@ class AdministradorController extends Controller {
 	{
 
 		$datos_periodos = Periodos::paginate();
-		return view('Administrador/periodos_list',compact('datos_periodos'));
+		return view('Administrador/periodos/periodos_list',compact('datos_periodos'));
 	}
 
 	public function get_createPeriodo()
 	{
 
-		return view('Administrador/create_periodo');
+		return view('Administrador/periodos/create_periodo');
 	}
 
 
@@ -1240,7 +1386,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_periodo', compact('periodoEditable','id'));
+		return view('Administrador/periodos/edit_periodo', compact('periodoEditable','id'));
 	
 	}
 
@@ -1278,13 +1424,13 @@ class AdministradorController extends Controller {
 	{
 
 		$datos_roles = Roles::paginate();
-		return view('Administrador/roles_list',compact('datos_roles'));
+		return view('Administrador/roles/roles_list',compact('datos_roles'));
 	}
 
 	public function get_createRol()
 	{
 
-		return view('Administrador/create_rol');
+		return view('Administrador/roles/create_rol');
 	}
 
 
@@ -1311,7 +1457,7 @@ class AdministradorController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/edit_rol', compact('rolEditable','id'));
+		return view('Administrador/roles/edit_rol', compact('rolEditable','id'));
 	
 	}
 
