@@ -7,6 +7,7 @@ use App\Models\Asignaturas_cursadas;
 use App\Models\Periodos;
 use App\Models\Campus;
 use App\Models\Dias;
+use App\Models\Cursos;
 
 
 class DocenteController extends Controller {

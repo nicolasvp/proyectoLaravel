@@ -16,22 +16,19 @@
 */
 
 //Route::get('home', 'HomeController@index');
+Route::group(['middleware' => ['auth']], function(){
+			Route::controllers([
+						'admin' => 'AdministradorController',
+						'alumno' => 'AlumnoController',
+						'encargado' => 'EncargadoController',
+						'docente' => 'DocenteController',
+						]);
+});
 
-Route::controller('Administrador','AdministradorController');
-
-Route::controller('Encargado','EncargadoController');
-
-Route::controller('Alumno','AlumnoController');
-
-Route::controller('Docente','DocenteController');
-
-
-
-Route::controller('/','loginController');
-Route::controller('/login','loginController');
+	
 
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
+Route::Controller("/login","loginController");
+Route::Controller("/","loginController");
+Route::get('/logout', 'LoginController@getLogout');
+

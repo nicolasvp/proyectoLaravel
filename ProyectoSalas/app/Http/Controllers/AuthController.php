@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -7,8 +7,7 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use \Illuminate\Contracts\Auth\Guard as Auth;
 
-
-class loginController extends Controller
+class AuthController extends Controller
 {
     /**
      * The Guard implementation.
@@ -22,12 +21,12 @@ class loginController extends Controller
         $this->auth = $auth;
     }
 
-    public function getIndex()
+    public function getLogin()
     {
-        return view('login/login');
+        return view('auth.login');
     }
 
-    public function post_index(Request $request)
+    public function postLogin(Request $request)
     {
         $credenciales = $request->only(['rut', 'password']);
         $rules = [ // Reglas de validacion TODO: validar rut
@@ -39,21 +38,18 @@ class loginController extends Controller
 
         if ($this->auth->attempt($credenciales, $request->has('remember')))
         { // Login exitoso
-            return redirect()->action('AdministradorController@getIndex');
+            return redirect()->route('backend.dashboard');
         }
 
-        return redirect()->action('loginController@getIndex')
-                ->with('login_errors', true);
-
-        //    ->withInput($request->only(['rut', 'remember']))
-          //  ->withErrors(['rut' => 'Sus credenciales no son válidas, intente nuevamente!']);
+        return redirect()->route('auth.login')
+            ->withInput($request->only(['rut', 'remember']))
+            ->withErrors(['rut' => 'Sus credenciales no son válidas, intente nuevamente!']);
     }
 
     public function getLogout()
     {
         $this->auth->logout();
-
-        return redirect()->action('loginController@getIndex')
+        return redirect()->route('auth.login')
             ->with('message', 'Ha salido correctamente');
     }
 }

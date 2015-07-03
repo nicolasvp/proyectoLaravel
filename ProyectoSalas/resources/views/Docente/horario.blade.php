@@ -27,8 +27,8 @@
                         <li>
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Docente</a>
 </li>
-            <li> <a href="{{URL::to('/Docente/horario')}}">Horario</a></li>
-             <li><a href="{{URL::to('/Docente/consulta')}}">Consultar</a></li>            
+            <li> <a href="{{URL::to('/docente/horario')}}">Horario</a></li>
+             <li><a href="{{URL::to('/docente/consulta')}}">Consultar</a></li>            
 
 </li>
 

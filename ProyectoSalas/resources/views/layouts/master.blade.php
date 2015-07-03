@@ -39,7 +39,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">@yield('user','NombreUsuario')</a></li>
-            <li><a href="#">@yield('session','Cerrar Sesión')</a></li>
+            <li><a href="/logout">@yield('session','Cerrar Sesión')</a></li>
           </ul>
         </div>
       </div>
