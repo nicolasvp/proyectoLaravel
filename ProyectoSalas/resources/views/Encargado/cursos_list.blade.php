@@ -59,7 +59,7 @@ Gestión de salas - UTEM
        <div class="form-group">
           {!! Form::open(['action' => ['EncargadoController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura,Docente']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
@@ -73,6 +73,7 @@ Gestión de salas - UTEM
               <th>#</th>
               <th>Nombre</th>
               <th>Docente</th>
+              <th>Rut</th>
               <th>Sección</th>
               <th>Acción</th>
             </tr>
@@ -82,7 +83,8 @@ Gestión de salas - UTEM
             <tr>
                <td>{{ $cur->id }}</td>
                <td>{{ $cur->nombre}}</td>
-               <td>{{ $cur->nombres}} {{$cur->apellidos}} - {{$cur->rut}}</td>
+               <td>{{ $cur->nombres}} {{$cur->apellidos}}</td>
+               <td>{{$cur->rut}}</td>
                <td>{{ $cur->seccion}}</td>
                <td>
 

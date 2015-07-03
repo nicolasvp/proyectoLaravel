@@ -76,15 +76,14 @@ class AdministradorController extends Controller {
 	{
 			
 
-		$datos_usuario = \DB::table('roles_usuarios')
-				->join('roles', 'roles_usuarios.rol_id', '=','roles.id')
+		$datos_usuario = Roles_usuarios::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
 				->where('roles_usuarios.rut', '=', $request->get('rut'))
 				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre')
 				->get();
 
 		$rut = $request->get('rut');
 
-		$rol_usuario = \DB::table('roles')->lists('nombre', 'id');
+		$rol_usuario = Roles::paginate()->lists('nombre', 'id');
 
 		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
 
@@ -141,9 +140,10 @@ class AdministradorController extends Controller {
 	{
 	
 
-		\DB::table('roles_usuarios')->insert(
-    	['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]
-   		);
+		$perfil = new Roles_usuarios();
+		$perfil->fill(['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]);
+		$perfil->save();
+
 		Session::flash('message', 'El Perfil fue asignado exitosamente!');
 
 		return redirect()->action('AdministradorController@getIndex');
@@ -280,9 +280,11 @@ class AdministradorController extends Controller {
 	public function post_add(Request $request)
 	{
 	
-		\DB::table('horarios')->insert(
-    	['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
+		
+		$horario = new Horarios();
+		$horario = fill(['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
     	'curso_id' => $request->get('curso_id'), 'dia_id' => $request->get('dia_id')]);
+    	$horario->save();
 
 
 		Session::flash('message', 'La sala fue asignada exitosamente!');
@@ -355,7 +357,7 @@ class AdministradorController extends Controller {
 	}
 
 
-
+	
 	public function delete_destroyHorario(Request $request)
 	{
 		$horario = Horarios::findOrFail($request->get('id'));
@@ -867,8 +869,7 @@ class AdministradorController extends Controller {
 	public function get_docentes()
 	{
 			
-		$datos_docentes = \DB::table('docentes')
-						->join('departamentos','docentes.departamento_id','=','departamentos.id')
+		$datos_docentes = Docentes::join('departamentos','docentes.departamento_id','=','departamentos.id')
 						->select('docentes.*','departamentos.nombre as departamento')
 						->paginate();
 
@@ -948,8 +949,7 @@ class AdministradorController extends Controller {
 	public function get_list()
 	{
 
-		$datos_carreras = \DB::table('carreras')
-						->join('escuelas','carreras.escuela_id','=','escuelas.id')
+		$datos_carreras = Carreras::join('escuelas','carreras.escuela_id','=','escuelas.id')
 						->select('carreras.*','escuelas.nombre as escuela')
 						->paginate();
 
@@ -1030,8 +1030,7 @@ class AdministradorController extends Controller {
 	public function get_departamentos()
 	{
 
-		$datos_departamentos = \DB::table('departamentos')
-							->join('facultades','departamentos.facultad_id','=','facultades.id')
+		$datos_departamentos = Departamentos::join('facultades','departamentos.facultad_id','=','facultades.id')
 							->select('departamentos.*','facultades.nombre as facultad')
 							->paginate();
 
@@ -1112,8 +1111,7 @@ class AdministradorController extends Controller {
 	public function get_escuelas()
 	{
 
-		$datos_escuelas = \DB::table('escuelas')
-						->join('departamentos','escuelas.departamento_id','=','departamentos.id')
+		$datos_escuelas = Escuelas::join('departamentos','escuelas.departamento_id','=','departamentos.id')
 						->select('escuelas.*','departamentos.nombre as departamento')
 						->paginate();
 
@@ -1194,8 +1192,7 @@ class AdministradorController extends Controller {
 	public function get_facultades()
 	{
 
-		$datos_facultades = \DB::table('facultades')
-							->join('campus','facultades.campus_id','=','campus.id')
+		$datos_facultades = Facultades::join('campus','facultades.campus_id','=','campus.id')
 							->select('facultades.*','campus.nombre as campus')
 							->paginate();
 

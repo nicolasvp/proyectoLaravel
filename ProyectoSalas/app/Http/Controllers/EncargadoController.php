@@ -33,8 +33,7 @@ class EncargadoController extends Controller {
 
 	public function get_cursos()
 	{
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
@@ -50,10 +49,12 @@ class EncargadoController extends Controller {
 	
 		if(trim($request->get('name')) != "")
 		{
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
-				->where('asignaturas.nombre', '=' , $request->get('name'))
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('docentes.nombres','like', '%'.$request->get('name').'%')
+				->orWhere('docentes.apellidos','like', '%'.$request->get('name').'%')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
 
@@ -63,11 +64,11 @@ class EncargadoController extends Controller {
 		else
 		{
 
-		$datos_cursos = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
+
 
 		return view('Encargado/cursos_list',compact('datos_cursos'));
 		}
@@ -82,8 +83,7 @@ class EncargadoController extends Controller {
 	public function post_curso(Request $request)
 	{
 
-		$datos_curso = \DB::table('cursos')
-				->join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
+		$datos_curso = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->where('cursos.id', '=', $request->get('id_curso'))
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
@@ -101,19 +101,18 @@ class EncargadoController extends Controller {
 		return view('Encargado/add',compact('datos_curso','periodos','salas','curso_id','dias'));
 	}
 
+
+
+
 	public function post_add(Request $request)
 	{
 	
 
-		\DB::table('horarios')->insert(
-    	['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
-    	'curso_id' => $request->get('curso_id'),'dia_id' => $request->get('dia_id')]);
-
-/*
 		$horario = new Horarios();
-		$horario->fill(\Request::all());
+		$horario->fill(['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
+    	'curso_id' => $request->get('curso_id'),'dia_id' => $request->get('dia_id')]);
 		$horario->save();
-*/
+
 
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 
@@ -266,21 +265,112 @@ class EncargadoController extends Controller {
 	public function get_horarios()
 	{
 
-
-		//$datos_horarios = Horarios::paginate();
-
-		$datos_horarios = \DB::table('horarios')
-				
-				->join('salas', 'horarios.sala_id', '=','salas.id')
+		$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
 				->join('dias','horarios.dia_id','=','dias.id')
-				->select('horarios.*','dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
 
 		return view('Encargado/horarios_list',compact('datos_horarios'));
+	}
+
+	public function get_searchHorario(Request $request)
+	{
+	
+		if(trim($request->get('name')) != "")
+		{
+			
+		$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('docentes.nombres','like', '%'.$request->get('name').'%')
+				->orWhere('docentes.apellidos','like', '%'.$request->get('name').'%')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->paginate();
+
+		return view('Encargado/horarios_list',compact('datos_horarios'));
+
+		}
+
+		else
+		{
+
+		$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
+				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+				->join('cursos', 'horarios.curso_id', '=','cursos.id')
+				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+				->join('dias','horarios.dia_id','=','dias.id')
+				->join('docentes','cursos.docente_id','=','docentes.id')
+				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->paginate();	
+	
+
+
+		return view('Encargado/horarios_list',compact('datos_horarios'));
+		}
+
+	}
+
+
+	public function get_editHorario(Request $request)
+	{
+
+		$horarioEditable = Horarios::findOrFail($request->get('id'));
+
+		$periodos = Periodos::paginate()->lists('bloque','id');
+
+		$dias = Dias::paginate()->lists('nombre','id');
+
+		$salas = Salas::paginate()->lists('nombre','id');
+
+		
+		$curso = Cursos::join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+		->where('cursos.id','=',$horarioEditable->curso_id)
+		->select('asignaturas.nombre')
+		->paginate();
+
+
+		$id = $request->get('id');
+
+		$curso_id = $horarioEditable->curso_id;
+
+		return view('Encargado/edit_horario', compact('horarioEditable','periodos','dias','salas','curso','curso_id','id'));
+
+	}
+
+
+	public function put_updateHorario(Request $request)
+	{
+
+		$horario = Horarios::findOrFail($request->get('id'));
+		$horario->fill(\Request::all());
+		$horario->save();
+		
+		Session::flash('message', 'El horario fue editado exitosamente!');
+
+		return redirect()->action('EncargadoController@get_horarios');
+	}
+
+
+
+	public function delete_destroyHorario(Request $request)
+	{
+		$horario = Horarios::findOrFail($request->get('id'));
+
+		$horario->delete();
+
+
+		Session::flash('message', 'El horario fue eliminado exitosamente!');
+
+		return redirect()->action('EncargadoController@get_horarios');
 	}
 
 

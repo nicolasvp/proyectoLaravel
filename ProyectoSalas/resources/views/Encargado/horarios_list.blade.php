@@ -58,9 +58,9 @@ Gestión de salas - UTEM
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-          {!! Form::open(['action' => ['EncargadoController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+          {!! Form::open(['action' => ['EncargadoController@get_searchHorario'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura,Docente']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
@@ -74,8 +74,9 @@ Gestión de salas - UTEM
               <th>#</th>
               <th>Curso</th>
               <th>Período</th>
+              <th>Hora</th>
               <th>Sala</th>
-              <th>Fecha</th>
+              <th>Día</th>
             </tr>
 
             
@@ -85,14 +86,27 @@ Gestión de salas - UTEM
                <td>{{ $horario->id }}</td>
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->bloque}}</td>
+               <td>{{ $horario->inicio}} - {{$horario->fin}}</td>
                <td>{{ $horario->sala}}</td>
                <td>{{ $horario->dia}}
-               <td>
+           <td>
+                 {!! Form::open(['action' => ['EncargadoController@get_editHorario'], 'method' => 'GET']) !!}
+                 {!! Form::hidden('id', $horario->horario_id)!!}
+                 <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
+                 {!! Form::close() !!}
 
-     
-       <button type="submit" class="btn btn-success btn-sm">Editar</button>
+          </td>
 
-               </td>
+
+           <td>
+
+               {!! Form::open(['action' => ['EncargadoController@delete_destroyHorario'], 'method' => 'DELETE']) !!}
+                {!! Form::hidden('id', $horario->horario_id)!!}
+                <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este horario?')" class="btn btn-danger btn-sm ">Eliminar</button>
+                {!! Form::close() !!}
+
+           </td>
+
             </tr>
              @endforeach
 

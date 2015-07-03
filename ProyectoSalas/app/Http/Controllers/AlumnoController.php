@@ -52,8 +52,7 @@ class AlumnoController extends Controller {
 
 
 
-		$datos_horario  = \DB::table('asignaturas_cursadas')
-				->join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
+		$datos_horario  = Asignaturas_cursadas::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
 				->join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
@@ -88,9 +87,7 @@ class AlumnoController extends Controller {
 		
 		//$resultado = Horarios::where('periodo_id','=',$request->get('periodo'))->where('dia_id','=',$request->get('dia'))->get();
 
-		$resultados = \DB::table('horarios')
-				
-				->join('salas', 'horarios.sala_id', '=','salas.id')
+		$resultados = Horarios::join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
