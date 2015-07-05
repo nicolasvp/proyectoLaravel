@@ -1,22 +1,30 @@
 @extends('layouts/master')
 
-@section('welcome')
 
-Gestión de salas - UTEM
-
-@stop
 
 
 @section('sideBar')
 
 
 
-@include('Encargado/menu');
+@include('Encargado/top')
 
 
 
          <div class="col-sm-9" >
+
+             <p>
+                         {!! Form::open(['action' => 'EncargadoController@get_depto', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-info pull-right">Subir asignaturas</button>
+
+                         {!! Form::close() !!}
+         </p>
    <p> <h2>Ingrese los datos para la asignatura</h2></p>
+
+
+
+
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">

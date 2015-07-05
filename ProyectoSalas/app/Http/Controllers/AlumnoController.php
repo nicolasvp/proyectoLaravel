@@ -8,10 +8,9 @@ use App\Models\Periodos;
 use App\Models\Campus;
 use App\Models\Dias;
 use App\Models\Asignaturas;
-
-
 use App\Models\Cursos;
 
+use App\Models\Carreras;
 
 class AlumnoController extends Controller {
 
@@ -20,36 +19,15 @@ class AlumnoController extends Controller {
 
 	public function getIndex()
 	{	
-		
-		/*
-		
-		$var = Estudiantes::find(3)->cursos()->get();
 
-		$var3 = Asignaturas::find(2)->cursos()->get();
-
-		//$var2 = Cursos::find(3)->asignaturas()->get();
-
-		dd($var);
-*/
+	
 		return view('Alumno/indexAlumno');
-
-
 
 	}
 
 
 	public function get_horario()
 	{
-
-		//$estudiante = Estudiantes::where('rut','=','13572469')->get();
-
-		/*
-		$id = Estudiantes::findOrFail('8');
-	
-		$asig_curs = Asignaturas_cursadas::where('estudiante_id','=', $id->id)->select('curso_id')->get();
-*/
-		
-
 
 
 		$datos_horario  = Asignaturas_cursadas::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')

@@ -137,7 +137,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		
 		'UTEM\Dirdoc\Auth\DirdocAuthServiceProvider',
-
+		'Maatwebsite\Excel\ExcelServiceProvider',
 		/*
 		*Agregado
 		*/
@@ -204,7 +204,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 
 			/*AGREGADO*/
-
+		'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 		'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
 

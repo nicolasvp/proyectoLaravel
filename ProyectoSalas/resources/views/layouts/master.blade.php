@@ -15,7 +15,7 @@
     <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+   <!-- <link href="{{ asset('css/admin.css') }}" rel="stylesheet"> -->
 
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
@@ -26,20 +26,16 @@
 	<body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
+
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-         <a class="navbar-brand" href="#">@yield('welcome','BIENVENIDO A GESTION DE SALAS UTEM')</a>
+          
+        <img alt="25x25" src="/images/utem2.png" height="40px">
+         <a class="navbar-brand" href="#">@yield('welcome','Gestión de Salas UTEM')</a>
 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">@yield('user','NombreUsuario')</a></li>
-            <li><a href="/logout">@yield('session','Cerrar Sesión')</a></li>
+            <li><a href="/logout" class="btn btn-danger">@yield('session','Cerrar Sesión')</a></li>
           </ul>
         </div>
       </div>
@@ -51,7 +47,7 @@
     
 			
 			<div class="container" style="margin-top: 120px;">
-				<footer>© Sistema de salas UTEM - 2015</footer>
+				<footer>© Sistema de Salas UTEM - 2015</footer>
 			</div>
 	</body>
 </html>

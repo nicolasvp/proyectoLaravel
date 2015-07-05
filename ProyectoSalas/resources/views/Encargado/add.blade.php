@@ -1,17 +1,13 @@
 @extends('layouts/master')
 
-@section('welcome')
 
-Gestión de salas - UTEM
-
-@stop
 
 
 @section('sideBar')
 
 
 
- @include('Encargado/menu');
+ @include('Encargado/top')
 
 
 

@@ -64,13 +64,7 @@ class EncargadoController extends Controller {
 		else
 		{
 
-		$datos_cursos = Cursos::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
-				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
-				->paginate();	
-
-
-		return view('Encargado/cursos_list',compact('datos_cursos'));
+			return redirect()->action('EncargadoController@get_cursos');
 		}
 	}
 
@@ -303,18 +297,7 @@ class EncargadoController extends Controller {
 		else
 		{
 
-		$datos_horarios  = Horarios::join('salas','horarios.sala_id','=','salas.id')
-				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-				->join('cursos', 'horarios.curso_id', '=','cursos.id')
-				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
-				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
-				->paginate();	
-	
-
-
-		return view('Encargado/horarios_list',compact('datos_horarios'));
+			return redirect()->action('EncargadoController@get_horarios');
 		}
 
 	}
@@ -373,6 +356,137 @@ class EncargadoController extends Controller {
 		return redirect()->action('EncargadoController@get_horarios');
 	}
 
+
+/*--------------------------------------A S I G N A T U R A S---------------------------------------------------------*/
+	public function get_asignaturas()
+	{
+		$datos_asignaturas = Asignaturas::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+										  ->select('asignaturas.*','departamentos.nombre as departamento')
+										  ->paginate();
+
+		return view('Encargado/asignaturas_list',compact('datos_asignaturas'));
+	}
+
+
+	public function get_searchAsignatura(Request $request)
+	{
+	
+		if(trim($request->get('name')) != "")
+		{
+
+		$datos_asignaturas = Asignaturas::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('departamentos.nombre','like', '%'.$request->get('name').'%')
+				->orWhere('asignaturas.codigo','like','%'.$request->get('name').'%')
+				->select('asignaturas.*','departamentos.nombre as departamento')
+				->paginate();	
+
+		return view('Encargado/asignaturas_list',compact('datos_asignaturas'));
+		}
+
+		else
+		{
+
+	 	return redirect()->action('EncargadoController@get_asignaturas');
+
+		}
+	}
+
+
+
+
+
+/*---------------------------------------------U P L O A D--------------------------------------------------------*/
+
+public function post_save(Request $request)
+{
+ //dd($request);
+       //obtenemos el campo file definido en el formulario
+
+		$file = $request->file('file');
+       
+       //obtenemos el nombre del archivo
+    
+       $nombre = $file->getClientOriginalName();
+
+       //indicamos que queremos guardar un nuevo archivo en el disco local
+       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+		Session::flash('message', 'Las asignaturas fueron agregadas exitosamente!');
+
+       return redirect()->action('EncargadoController@get_depto');
+}
+
+
+/*---------------------------------------I M P O R T--------------------------------------------------------------*/
+
+	public function get_depto()
+	{
+		$departamentos = Departamentos::all()->lists('nombre','id');
+		return view('Encargado/upload_asignaturas',compact('departamentos'));
+	}
+
+
+
+	public function put_uploadAsignaturas(Request $request)
+	{
+	
+
+		$departamento = $request->get('departamento');
+
+		\Excel::load('/asignaturasINFO.xlsx',function($archivo) use ($departamento)
+		{
+
+			$result = $archivo->get();
+
+			foreach($result as $key => $value)
+			{
+				$asignatura = new Asignaturas();
+				$asignatura->fill(['departamento_id' => $departamento,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
+				$asignatura->save();
+
+			}
+
+		})->get();
+
+		Session::flash('message', 'Las asignaturas fueron creadas exitosamente!');
+
+		return redirect()->action('EncargadoController@getIndex');
+	}
+
+
+
+	public function get_download()
+	{
+		$es = Estudiantes::join('carreras','estudiantes.carrera_id','=','carreras.id')
+							->select('estudiantes.*','carreras.nombre','carreras.codigo')
+							->get();
+		//dd($es);
+
+		\Excel::create('Estudiantes',function($excel) use ($es)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($es)
+			{
+				$data=[];
+
+				array_push($data, array('CARRERA','RUT','NOMBRES','APELLIDOS','EMAIL'));
+
+				foreach($es as $key => $e)
+				{
+					
+					array_push($data, array($e->codigo,$e->rut,$e->nombres,$e->apellidos,$e->email));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			dd('++++');
+
+		return ('bajado');
+	}
 
 
 

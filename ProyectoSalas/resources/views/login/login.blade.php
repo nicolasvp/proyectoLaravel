@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,20 +25,24 @@
     
   </head>
 
-  <body>
+  <body style="background-color:#E6E6FA">
 
 
-<table align="center" width="650" border="0" height="50" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<table align="center" width="650px" border="0" height="50px" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+
             <tr>
-                <td width="247" height="200"></td>
-                <td width="225" height="200"><img src="images/esfera.jpg" width="225" height="200"></td>
-                <td width="248" height="200"></td>
+
+                <td width="247px" height="200px"></td>
+
+                <td width="225px" height="200px"><img src="images/utemcito-azul.png" width="225px" height="180px" ></td>  
+                <td width="248px" height="200px"></td>
+
             </tr>
         </table>
 
 <div id="wrapper">
       <div class="container" style="width: 350px;">
-        <div class="panel panel-default" style="margin-top: 100px;">
+        <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-heading">
         <form class="form-signin" method="post" action="/">
 
@@ -83,7 +88,7 @@
     </div> 
 
 </div>
-
+</div>
 
 
 <!--
@@ -97,8 +102,8 @@
       </script>
 -->
 
-  <div class="container" style="margin-top: 120px;">
-        <footer>© Sistema de salas UTEM - 2015</footer>
+  <div class="container" style="margin-top: 50px;">
+        <footer>© Sistema de Salas UTEM - 2015</footer>
       </div>
   </body>
 </html>
