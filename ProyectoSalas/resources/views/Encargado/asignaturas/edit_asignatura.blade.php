@@ -7,7 +7,7 @@
 
 
         
-         @include('Administrador/menu')  
+       @include('Encargado/top')  
 
 
 
@@ -18,7 +18,7 @@
    <div class="panel-body">
        <div class="form-group">
   
-      {!! Form::model($asignaturaEditable, ['action' => ['AdministradorController@put_updateAsignatura', $asignaturaEditable], 'method' => 'PUT']) !!}
+      {!! Form::model($asignaturaEditable, ['action' => ['EncargadoController@put_updateAsignatura', $asignaturaEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
        {!! Form::label('departamento_id', 'Departamento') !!}
@@ -37,8 +37,8 @@
        {!! Form::text('codigo', null,['class' => 'form-control', 'placeholder' => 'Ingresa código']) !!}
       </div>
 
-        <div class="form-group">
-        {!! Form::label('descripcion', 'Descripción') !!}
+      <div class="form-group">
+      {!! Form::label('descripcion', 'Descripción') !!}
        {!! Form::text('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
       </div>
 

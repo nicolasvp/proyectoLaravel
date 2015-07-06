@@ -17,7 +17,7 @@
                         
                       <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Administrador</a>
 
-            <li class="list-group-item"> <a href="{{URL::to('/admin/menus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i> Campus</a></li>
+            <li class="list-group-item"> <a href="{{URL::to('/admin/menus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/admin/menu')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Salas</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/carreras')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Cursos</a></li>

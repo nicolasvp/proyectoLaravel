@@ -27,7 +27,7 @@
        <div class="form-group">
           {!! Form::open(['action' => ['EncargadoController@get_searchHorario'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Asignatura,Docente']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
