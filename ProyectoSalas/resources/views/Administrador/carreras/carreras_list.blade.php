@@ -37,6 +37,13 @@
    <div class="panel-body">
        <div class="form-group">
 
+       {!! Form::open(['action' => ['AdministradorController@get_searchCarrera'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+            <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Código,Nombre,Escuela']) !!}
+          </div>
+          <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
+
           <table class="table table-striped">
             <tr> 
               <th>#</th>

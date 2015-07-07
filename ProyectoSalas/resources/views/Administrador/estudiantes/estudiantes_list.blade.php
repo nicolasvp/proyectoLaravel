@@ -9,7 +9,7 @@
        
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de Estudiantes : </h2></p><p>{{ $carrera->nombre }}</p>
+   <p> <h2>Lista de Estudiantes</h2></p>
 
             <p>
                          {!! Form::open(['action' => 'AdministradorController@get_createEstudiante', 'method' => 'GET']) !!}
@@ -32,9 +32,17 @@
    <div class="panel-body">
        <div class="form-group">
 
+       {!! Form::open(['action' => ['AdministradorController@get_searchEstudiante'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+            <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Rut,Código']) !!}
+          </div>
+          <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
+
+
           <table class="table table-striped">
             <tr> 
-              <th>#</th>
+              <th>Carrera</th>
               <th>Rut</th>
               <th>Nombres</th>
               <th>Apellidos</th>
@@ -46,7 +54,7 @@
             @foreach($datos_estudiantes as $estudiante)
 
             <tr>
-               <td>{{ $estudiante->id}}</td>
+               <td>{{ $estudiante->carrera}}</td>
                <td>{{ $estudiante->rut}}</td>
                <td>{{ $estudiante->nombres}}</td>
                <td>{{ $estudiante->apellidos}}</td>

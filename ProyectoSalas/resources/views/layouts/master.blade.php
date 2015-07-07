@@ -30,12 +30,12 @@
         <div class="navbar-header">
           
         <img alt="25x25" src="/images/utem2.png" height="40px">
-         <a class="navbar-brand" href="#">@yield('welcome','Gestión de Salas UTEM')</a>
+         @yield('welcome','<a class="navbar-brand" href="#">Gestión de Salas UTEM</a>')
 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout" class="btn btn-danger">@yield('session','Cerrar Sesión')</a></li>
+            <li><a href="/logout" ">@yield('session','Cerrar Sesión')</a></li>
           </ul>
         </div>
       </div>

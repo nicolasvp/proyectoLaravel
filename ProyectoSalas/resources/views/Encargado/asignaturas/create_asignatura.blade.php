@@ -16,7 +16,7 @@
              <p>
                          {!! Form::open(['action' => 'EncargadoController@get_depto', 'method' => 'GET']) !!}
    
-                          <button type="submit" class="btn btn-info pull-right">Subir asignaturas</button>
+                          <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
 
                          {!! Form::close() !!}
          </p>

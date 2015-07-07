@@ -1,3 +1,7 @@
+@section('welcome')
+<a class="navbar-brand" href="/admin">Gestión de Salas UTEM</a>
+@stop
+
 <div class="panel panel-default" style="margin-top: 40px;">
                         <div class="panel-heading">
                             
@@ -20,18 +24,19 @@
             <li class="list-group-item"> <a href="{{URL::to('/admin/menus')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Campus</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/search')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignar Perfil</a></li>               
             <li class="list-group-item"><a href="{{URL::to('/admin/menu')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Salas</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/admin/carreras')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Cursos</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/admin/carrera')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignaturas</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/admin/carrerass')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Estudiantes</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/select')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Cursos</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/asignaturas')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignaturas</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/estudiantes')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Estudiantes</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/docentes')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Docentes</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/admin/list')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Carreras</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/carreras')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Carreras</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/departamentos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Departamentos</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/escuelas')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Escuelas</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/facultades')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Facultades</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/funcionarios')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Funcionarios</a></li>
             <li class="list-group-item"><a href="{{URL::to('/admin/periodos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Periodos</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/admin/roles')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Roles</a></li>  
-                       
+            <li class="list-group-item"><a href="{{URL::to('/admin/dias')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Dias</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/roles')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Roles</a></li>
+            <li class="list-group-item"><a href="{{URL::to('/admin/')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Roles Usuarios</a></li>                        
        
 </ul>
 </div>

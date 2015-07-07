@@ -250,7 +250,7 @@ class EncargadoController extends Controller {
 	public function get_estudiantes()
 	{
 		$datos_estudiantes = Estudiantes::join('carreras','estudiantes.carrera_id','=','carreras.id')
-									->select('estudiantes.*','carreras.nombre as carrera')
+									->select('estudiantes.*','carreras.codigo as carrera')
 									->paginate();
 
 		return view('Encargado/estudiantes/estudiantes_list',compact('datos_estudiantes'));
@@ -310,7 +310,8 @@ class EncargadoController extends Controller {
 
 			 $datos_estudiantes = Estudiantes::join('carreras','estudiantes.carrera_id','=','carreras.id')
 			->where('estudiantes.rut', '=' , $request->get('name'))
-			->select('estudiantes.*','carreras.nombre as carrera')
+			->orWhere('carreras.codigo','=', $request->get('name'))
+			->select('estudiantes.*','carreras.codigo as carrera')
 			->paginate();
 
 			return view('Encargado/estudiantes/estudiantes_list',compact('datos_estudiantes'));
@@ -344,7 +345,7 @@ class EncargadoController extends Controller {
 
 			$carrera = $request->get('carrera');
 
-			\Excel::load($nombre,function($archivo) use ($carrera)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($carrera)
 			{
 
 				$result = $archivo->get();
@@ -449,7 +450,8 @@ class EncargadoController extends Controller {
 			{
 
 			 $datos_docentes = Docentes::join('departamentos','docentes.departamento_id','=','departamentos.id')
-			->where('docentes.rut', '=' , $request->get('name'))
+			->where('docentes.rut', '=' , (integer) $request->get('name'))
+			->orWhere('departamentos.nombre','=',$request->get('name'))
 			->select('docentes.*','departamentos.nombre as departamento')
 			->paginate();
 
@@ -483,7 +485,7 @@ class EncargadoController extends Controller {
 
 			$departamento = $request->get('departamento');
 
-			\Excel::load($nombre,function($archivo) use ($departamento)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
 			{
 
 				$result = $archivo->get();
@@ -823,7 +825,7 @@ class EncargadoController extends Controller {
 
 	public function post_uploadAsignaturas(Request $request)
 	{
-	 //dd($request);
+	 
 	     
 		   $file = $request->file('file');
 	    
@@ -833,7 +835,7 @@ class EncargadoController extends Controller {
 
 			$departamento = $request->get('departamento');
 
-			\Excel::load($nombre,function($archivo) use ($departamento)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
 			{
 
 				$result = $archivo->get();

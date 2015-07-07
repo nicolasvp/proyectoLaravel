@@ -10,6 +10,14 @@
        
 
          <div class="col-sm-9" >
+                            <p>
+                         {!! Form::open(['action' => 'AdministradorController@get_uploadPeriodos', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
+
+                         {!! Form::close() !!}
+         </p>
+
    <p> <h2>Ingrese los datos para el período</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">

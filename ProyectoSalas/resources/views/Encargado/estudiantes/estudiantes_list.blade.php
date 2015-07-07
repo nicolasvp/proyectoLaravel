@@ -40,7 +40,7 @@
 
        {!! Form::open(['action' => ['EncargadoController@get_searchEstudiante'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Rut']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Rut,Código']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}

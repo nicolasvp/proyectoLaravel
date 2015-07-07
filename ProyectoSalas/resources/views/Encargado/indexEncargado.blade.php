@@ -1,5 +1,8 @@
 @extends('layouts/master')
 
+@section('welcome')
+<a class="navbar-brand" href="/encargado">Gestión de Salas UTEM</a>
+@stop
 
 
 

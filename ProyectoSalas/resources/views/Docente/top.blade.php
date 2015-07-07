@@ -1,3 +1,7 @@
+@section('welcome')
+<a class="navbar-brand" href="/docente">Gestión de Salas UTEM</a>
+@stop
+
 <div class="panel panel-default" style="margin-top: 40px;">
                         <div class="panel-heading">
                             

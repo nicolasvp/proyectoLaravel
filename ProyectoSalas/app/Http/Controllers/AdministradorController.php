@@ -27,6 +27,7 @@ use App\Models\Asignaturas_cursadas;
 
 
 
+
 class AdministradorController extends Controller {
 
 
@@ -38,7 +39,7 @@ class AdministradorController extends Controller {
 
 		return view('Administrador/indexAdministrador');
 	}
-
+/*------------------------------------------------C A M P U S------------------------------------------------*/
 
 	public function get_menus()
 	{
@@ -72,24 +73,7 @@ class AdministradorController extends Controller {
 	}
 
 	
-	public function get_show(Request $request)
-	{
-			
 
-		$datos_usuario = Roles_usuarios::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
-				->where('roles_usuarios.rut', '=', $request->get('rut'))
-				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre')
-				->get();
-
-		$rut = $request->get('rut');
-
-		$rol_usuario = Roles::paginate()->lists('nombre', 'id');
-
-		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
-
-		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut'));
-			
-	}
 		
 	
 	public function get_edit(Request $request)
@@ -129,39 +113,7 @@ class AdministradorController extends Controller {
 	}
 
 
-	public function get_search()
-	{
-			
-		return view('Administrador/perfiles/search');
-	}
 
-
-	public function post_profile(Request $request)
-	{
-	
-
-		$perfil = new Roles_usuarios();
-		$perfil->fill(['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]);
-		$perfil->save();
-
-		Session::flash('message', 'El Perfil fue asignado exitosamente!');
-
-		return redirect()->action('AdministradorController@getIndex');
-	}
-
-	public function delete_rol(Request $request)
-	{
-
-		
-		$profile = Roles_usuarios::findOrFail($request->get('id'));
-
-		$profile->delete();
-
-		Session::flash('message', 'El Perfil fue removido exitosamente');
-
-		return redirect()->action('AdministradorController@getIndex');
-
-	}
 
     //ARCHIVAR CAMPUS
 
@@ -196,7 +148,101 @@ class AdministradorController extends Controller {
 		return redirect()->action('AdministradorController@getIndex');
 	}
 
-	/*----------------------------------S A L A S ---------------------------------------------*/
+
+
+
+	public function get_uploadCampus()
+	{
+		return view('Administrador/campus/upload_campus');
+	}
+
+	public function post_uploadCampus(Request $request)
+	{
+
+	     
+		   $file = $request->file('file');
+	    
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Campus();
+					$var->fill(['nombre' => $value->nombre,'direccion' => $value->direccion,'latitud' =>$value->latitud,'longitud' => $value->longitud,
+						'descripcion' => $value->descripcion,'rut_encargado' => $value->rut_encargado]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Los campus fueron agregados exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_campusList');
+	}
+
+
+
+	/*---------------------------------P E R F I L E S--------------------------------------------------------*/
+
+	public function get_search()
+	{
+			
+		return view('Administrador/perfiles/search');
+	}
+
+		public function get_show(Request $request)
+	{
+			
+
+		$datos_usuario = Roles_usuarios::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
+				->where('roles_usuarios.rut', '=', $request->get('rut'))
+				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre')
+				->get();
+
+		$rut = $request->get('rut');
+
+		$rol_usuario = Roles::paginate()->lists('nombre', 'id');
+
+		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
+
+		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut'));
+			
+	}
+
+
+	public function post_profile(Request $request)
+	{
+	
+
+		$perfil = new Roles_usuarios();
+		$perfil->fill(['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]);
+		$perfil->save();
+
+		Session::flash('message', 'El Perfil fue asignado exitosamente!');
+
+		return redirect()->action('AdministradorController@getIndex');
+	}
+
+	public function delete_rol(Request $request)
+	{
+
+		
+		$profile = Roles_usuarios::findOrFail($request->get('id'));
+
+		$profile->delete();
+
+		Session::flash('message', 'El Perfil fue removido exitosamente');
+
+		return redirect()->action('AdministradorController@getIndex');
+
+	}
+	/*----------------------------------S A L A S ------------------------------------------------------------*/
 
 	public function get_menu()
 	{
@@ -247,9 +293,6 @@ class AdministradorController extends Controller {
 
 		}
 	}
-
-
-
 
 
 
@@ -584,8 +627,42 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_uploadTiposSala()
+	{
+		return view('Administrador/tipos_sala/upload_tipoSala');
+	}
+
+	public function post_uploadTiposSala(Request $request)
+	{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) 
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new tipos_salas();
+						$var->fill(['nombre' => $value->nombre,'descripcion' => $value->descripcion]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Los tipos de salas fueron agregados exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_tiposSalas');
+	}
+
 	/* --------------------------------- C U R S O S -------------------------------------------*/
-	public function get_carreras()
+	public function get_select()
 	{
 
 		$carrera = Carreras::paginate()->lists('nombre','id');
@@ -688,27 +765,16 @@ class AdministradorController extends Controller {
 
 	/*---------------------------------------A S I G N A T U R A S---------------------------------------_*/
 
-	public function get_carrera()
+
+
+
+	public function get_asignaturas()
 	{
-		$carrera = Carreras::paginate()->lists('nombre','id');
-		return view('Administrador/asignaturas/select_carrera',compact('carrera'));
-	}
+		$datos_asignaturas = Asignaturas::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+										  ->select('asignaturas.*','departamentos.nombre as departamento')
+										  ->paginate();
 
-
-
-	public function get_asignaturas(Request $request)
-	{
-		$carrera = Carreras::findOrFail($request->get('carrera'));
-
-		$escuela = Escuelas::findOrFail($carrera->escuela_id);
-
-		$departamento = Departamentos::findOrFail($escuela->departamento_id);
-
-		$datos_asignaturas = Asignaturas::where('departamento_id','=', $escuela->departamento_id)->paginate();
-		
-
-
-		return view('Administrador/asignaturas/asignaturas_list',compact('datos_asignaturas','departamento'));
+		return view('Administrador/asignaturas/asignaturas_list',compact('datos_asignaturas'));
 	}
 
 
@@ -723,13 +789,13 @@ class AdministradorController extends Controller {
 
 	public function post_storeAsignatura()
 	{
-		
+	
 		$asignatura = new Asignaturas();
 		$asignatura->fill(\Request::all());
 		$asignatura->save();
 
-		Session::flash('message', 'La asignatura fue creada exitosamente!');
-		return redirect()->action('AdministradorController@getIndex');
+		Session::flash('message', 'La asignatura '.\Request::get('nombre').' fue creada exitosamente!');
+		return redirect()->action('AdministradorController@get_asignaturas');
 	
 	}
 
@@ -757,7 +823,9 @@ class AdministradorController extends Controller {
 		$asignatura->fill(\Request::all());
 		$asignatura->save();
 		
-		return redirect()->action('AdministradorController@get_carrera');
+		Session::flash('message','La asignatura '.\Request::get('nombre').' fue editada');
+
+		return redirect()->action('AdministradorController@get_asignaturas');
 	}
 
 
@@ -769,28 +837,88 @@ class AdministradorController extends Controller {
 		$asignatura->delete();
 
 
-		Session::flash('message','La asignatura fue eliminada');
+		Session::flash('message','La asignatura '.$asignatura->nombre.' fue eliminada');
 
-		return redirect()->action('AdministradorController@get_carrera');
+		return redirect()->action('AdministradorController@get_asignaturas');
 		
 	}
+
+
+	public function get_depto()
+	{
+		$departamentos = Departamentos::all()->lists('nombre','id');
+		return view('Administrador/asignaturas/upload_asignaturas',compact('departamentos'));
+	}
+
+
+	public function post_uploadAsignaturas(Request $request)
+	{
+	 
+	     
+		   $file = $request->file('file');
+	    
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$departamento = $request->get('departamento');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Asignaturas();
+					$var->fill(['departamento_id' => $departamento,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Las asignaturas fueron agregadas exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_asignaturas');
+	}
+
+
+	public function get_searchAsignatura(Request $request)
+	{
+	
+		if(trim($request->get('name')) != "")
+		{
+
+		$datos_asignaturas = Asignaturas::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
+				->orWhere('departamentos.nombre','like', '%'.$request->get('name').'%')
+				->orWhere('asignaturas.codigo','like','%'.$request->get('name').'%')
+				->select('asignaturas.*','departamentos.nombre as departamento')
+				->paginate();	
+
+		return view('Administrador/asignaturas/asignaturas_list',compact('datos_asignaturas'));
+		}
+
+		else
+		{
+
+	 	return redirect()->action('AdministradorController@get_asignaturas');
+
+		}
+	}
+
+
 
 	/*------------------------ E S T U D I A N T E S ---------------------------------*/
 
-	public function get_carrerass()
+
+	public function get_estudiantes()
 	{
-		$carrera = Carreras::paginate()->lists('nombre','id');
-		return view('Administrador/estudiantes/select_carrera_estudiante',compact('carrera'));
-	}
+		$datos_estudiantes = Estudiantes::join('carreras','estudiantes.carrera_id','=','carreras.id')
+									->select('estudiantes.*','carreras.codigo as carrera')
+									->paginate();
 
-	public function get_estudiantes(Request $request)
-	{
-		
-		$datos_estudiantes = Estudiantes::where('carrera_id','=',$request->get('carrera'))->paginate();
-
-		$carrera = Carreras::findOrFail($request->get('carrera'));
-
-		return view('Administrador/estudiantes/estudiantes_list',compact('datos_estudiantes','carrera'));
+		return view('Administrador/estudiantes/estudiantes_list',compact('datos_estudiantes'));
 	}
 
 
@@ -811,8 +939,8 @@ class AdministradorController extends Controller {
 		$estudiante->fill(\Request::all());
 		$estudiante->save();
 
-		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue creado exitosamente!');
-		return redirect()->action('AdministradorController@get_carrerass');
+		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue ingresado exitosamente!');
+		return redirect()->action('AdministradorController@get_estudiantes');
 	
 	}
 
@@ -844,7 +972,7 @@ class AdministradorController extends Controller {
 		
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue editado exitosamente!');
 
-		return redirect()->action('AdministradorController@get_carrerass');
+		return redirect()->action('AdministradorController@get_estudiantes');
 	}
 
 
@@ -858,8 +986,69 @@ class AdministradorController extends Controller {
 
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue eliminado exitosamente!');
 
-		return redirect()->action('AdministradorController@get_carrerass');
+		return redirect()->action('AdministradorController@get_estudiantes');
 		
+	}
+
+		public function get_searchEstudiante(Request $request)
+		{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_estudiantes = Estudiantes::join('carreras','estudiantes.carrera_id','=','carreras.id')
+			->where('estudiantes.rut', '=' , $request->get('name'))
+			->orWhere('carreras.codigo','=', $request->get('name'))
+			->select('estudiantes.*','carreras.codigo as carrera')
+			->paginate();
+
+			return view('Administrador/estudiantes/estudiantes_list',compact('datos_estudiantes'));
+			}
+
+			else
+			{
+
+		 	return redirect()->action('AdministradorController@get_estudiantes');
+
+			}
+		}
+
+
+		public function get_carrera()
+	{
+		$carreras = Carreras::all()->lists('nombre','id');
+		return view('Administrador/estudiantes/upload_estudiantes',compact('carreras'));
+	}
+
+	public function post_uploadEstudiantes(Request $request)
+	{
+
+	    
+		   $file = $request->file('file');
+	    
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$carrera = $request->get('carrera');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($carrera)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Estudiantes();
+					$var->fill(['carrera_id' => $carrera,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos,'email' =>$value->email]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Los alumnos fueron agregados exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_estudiantes');
 	}
 
 
@@ -943,10 +1132,73 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_searchDocente(Request $request)
+		{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_docentes = Docentes::join('departamentos','docentes.departamento_id','=','departamentos.id')
+			->where('docentes.rut', '=' , (integer) $request->get('name'))
+			->orWhere('departamentos.nombre','=',$request->get('name'))
+			->select('docentes.*','departamentos.nombre as departamento')
+			->paginate();
+
+			return view('Administrador/docentes/docentes_list',compact('datos_docentes'));
+			}
+
+			else
+			{
+
+		 	return redirect()->action('AdministradorController@get_docentes');
+
+			}
+		
+
+		}
+
+
+		public function get_deptos()
+	{
+		$departamentos = Departamentos::all()->lists('nombre','id');
+		return view('Administrador/docentes/upload_docentes',compact('departamentos'));
+	}
+
+	public function post_uploadDocentes(Request $request)
+	{
+
+	    // dd($request);
+		   $file = $request->file('file');
+	    //dd($file);
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$departamento = $request->get('departamento');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Docentes();
+					$var->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Los docentes fueron agregados exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_docentes');
+	}
+
 /*-------------------------------C A R R E R A S--------------------------------------------*/
 
 
-	public function get_list()
+	public function get_carreras()
 	{
 
 		$datos_carreras = Carreras::join('escuelas','carreras.escuela_id','=','escuelas.id')
@@ -1023,6 +1275,69 @@ class AdministradorController extends Controller {
 		return redirect()->action('AdministradorController@get_list');
 		
 	}
+
+	public function get_escuela()
+	{
+		$escuelas = Escuelas::all()->lists('nombre','id');
+
+		return view('Administrador/carreras/upload_carreras',compact('escuelas'));
+	}
+
+	public function post_uploadCarreras(Request $request)
+	{
+
+	 
+		   $file = $request->file('file');
+	 
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$escuela = $request->get('escuela');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($escuela)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Carreras();
+					$var->fill(['escuela_id' => $escuela,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Las carreras fueron agregadas exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_carreras');
+	}
+
+	public function get_searchCarrera(Request $request)
+		{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_carreras = Carreras::join('escuelas','carreras.escuela_id','=','escuelas.id')
+			->where('carreras.nombre', '=' ,  $request->get('name'))
+			->orWhere('carreras.codigo','=',  (integer) $request->get('name'))
+			->orWhere('escuelas.nombre','=', $request->get('name'))
+			->select('carreras.*','escuelas.nombre as escuela')
+			->paginate();
+
+			return view('Administrador/carreras/carreras_list',compact('datos_carreras'));
+			}
+
+			else
+			{
+
+		 	return redirect()->action('AdministradorController@get_carreras');
+
+			}
+		}
+
 
 /*--------------------------------------------D E P A R T A M E N T O S--------------------------------------*/
 
@@ -1106,6 +1421,45 @@ class AdministradorController extends Controller {
 		
 	}
 
+
+	public function get_facultadesDeptos()
+	{
+
+		$facultades = Facultades::all()->lists('nombre','id');
+		return view('Administrador/departamentos/upload_departamentos',compact('facultades'));
+	}
+	
+	public function post_uploadDepartamentos(Request $request)
+	{
+
+	 
+		   $file = $request->file('file');
+	 
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$facultad = $request->get('facultad');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($facultad)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Departamentos();
+					$var->fill(['nombre' => $value->nombre,'facultad_id' => $facultad,'descripcion' =>$value->descripcion]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Los departamentos fueron agregados exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_departamentos');
+	}
+
 	/*-------------------------------E S C U E L A S---------------------------------------------*/
 
 	public function get_escuelas()
@@ -1187,6 +1541,44 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_deptoEscuela()
+	{
+		$departamentos = Departamentos::all()->lists('nombre','id');
+
+		return view('Administrador/escuelas/upload_escuelas',compact('departamentos'));
+	}
+
+
+	public function post_uploadEscuelas(Request $request)
+	{
+
+	 
+		   $file = $request->file('file');
+	 
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+			$departamento = $request->get('departamento');
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+					$var = new Escuelas();
+					$var->fill(['nombre' => $value->nombre,'departamento_id' => $departamento,'descripcion' =>$value->descripcion]);
+					$var->save();
+
+				}
+
+			})->get();
+			Session::flash('message', 'Las escuelas fueron agregadas exitosamente!');
+
+	       return redirect()->action('AdministradorController@get_escuelas');
+	}
 	/*--------------------------F A C U L T A D E S-----------------------------------*/
 
 	public function get_facultades()
@@ -1268,13 +1660,51 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_campus()
+	{
+		$campus = Campus::all()->lists('nombre','id');
+		return view('Administrador/facultades/upload_facultades',compact('campus'));
+	}
+
+	public function post_uploadFacultades(Request $request)
+		{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				$campus = $request->get('campus');
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) use ($campus)
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new Facultades();
+						$var->fill(['nombre' => $value->nombre,'campus_id' => $campus,'descripcion' =>$value->descripcion]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Las facultades fueron agregadas exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_facultades');
+		}
 	/*--------------------------------------F U N C I O N A R I O S----------------------------------------*/
 
 
 	public function get_funcionarios()
 	{
 
-		$datos_funcionarios = Funcionarios::paginate();
+		$datos_funcionarios = Funcionarios::join('departamentos','funcionarios.departamento_id','=','departamentos.id')
+							->select('funcionarios.*','departamentos.nombre as departamento')
+							->paginate();
 
 		return view('Administrador/funcionarios/funcionarios_list',compact('datos_funcionarios'));
 	}
@@ -1344,6 +1774,43 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_deptoFuncionarios()
+	{
+		$departamentos = Departamentos::all()->lists('nombre','id');
+
+		return view ('Administrador/funcionarios/upload_funcionarios',compact('departamentos'));
+	}
+
+	public function post_uploadFuncionarios(Request $request)
+	{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				$departamento = $request->get('departamento');
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new Funcionarios();
+						$var->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' => $value->nombres,'apellidos' =>$value->apellidos]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Las funcionarios fueron agregados exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_funcionarios');
+	}
 
 	/*--------------------------------------P E R I O D O S------------------------------------------------*/
 	public function get_periodos()
@@ -1416,6 +1883,42 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_uploadPeriodos()
+	{
+		return view('Administrador/periodos/upload_periodos');
+	}
+
+	public function post_uploadPeriodos(Request $request)
+	{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) 
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new Periodos();
+						$var->fill(['bloque' => $value->bloque,'inicio' => $value->inicio,'fin' => $value->fin]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Los períodos fueron agregados exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_periodos');
+	}
+
+
+
 	/*--------------------------------------R O L E S-------------------------------------------------------*/
 	public function get_roles()
 	{
@@ -1487,8 +1990,145 @@ class AdministradorController extends Controller {
 		
 	}
 
+	public function get_uploadRoles()
+	{
+		return view('Administrador/roles/upload_roles');
+	}
+
+	public function post_uploadRoles(Request $request)
+	{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) 
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new Roles();
+						$var->fill(['nombre' => $value->nombre,'descripcion' => $value->descripcion]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Los roles fueron agregados exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_roles');
+	}
+
+/*----------------------------------------D I A S-------------------------------------------------------------*/
+
+	public function get_dias()
+	{
+
+		$datos_dias = Dias::paginate();
+		return view('Administrador/dias/dias_list',compact('datos_dias'));
+	}
+
+	public function get_createDia()
+	{
+
+		return view('Administrador/dias/create_dia');
+	}
+
+
+	public function post_storeDia()
+	{
+		
+		$dia= new Dias();
+		$dia->fill(\Request::all());
+		$dia->save();
+
+		Session::flash('message', 'El dia '.$dia->nombre.' fue creado exitosamente!');
+
+		return redirect()->action('AdministradorController@get_dias');
+	
+	}
 
 
 
+	public function get_editDia(Request $request)
+	{
+		
+		$diaEditable = Dias::findOrFail($request->get('id'));
+
+
+		$id = $request->get('id');
+
+		return view('Administrador/dias/edit_dia', compact('diaEditable','id'));
+	
+	}
+
+
+
+	public function put_updateDia(Request $request)
+	{
+
+		$dia = Dias::findOrFail($request->get('id'));
+		$dia->fill(\Request::all());
+		$dia->save();
+		
+		Session::flash('message', 'El dia '.$dia->nombre.' fue editado exitosamente!');
+
+		return redirect()->action('AdministradorController@get_dias');
+	}
+
+
+	public function delete_destroyDia(Request $request)
+	{
+
+		$dia = Dias::findOrFail($request->get('id'));
+
+		$dia->delete();
+
+
+		Session::flash('message', 'El dia '.$dia->nombre.' fue eliminado exitosamente!');
+
+		return redirect()->action('AdministradorController@get_dias');
+		
+	}
+
+	public function get_uploadDias()
+	{
+		return view('Administrador/dias/upload_dias');
+	}
+
+	public function post_uploadDias(Request $request)
+	{
+
+		 
+			   $file = $request->file('file');
+		 
+		       $nombre = $file->getClientOriginalName();
+
+		       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+				\Excel::load('/storage/app/'.$nombre,function($archivo) 
+				{
+
+					$result = $archivo->get();
+
+					foreach($result as $key => $value)
+					{
+						$var = new Dias();
+						$var->fill(['nombre' => $value->nombre]);
+						$var->save();
+
+					}
+
+				})->get();
+				Session::flash('message', 'Los dias fueron agregados exitosamente!');
+
+		       return redirect()->action('AdministradorController@get_dias');
+	}
+/*-------------------------------R O L E S U S U A R I O S---------------------------------------------------------------*/
 
 }

@@ -48,7 +48,7 @@
                <td>{{ $funcionario->rut}}</td>
                <td>{{ $funcionario->nombres}}</td>
                <td>{{ $funcionario->apellidos}}</td>
-               <td>{{ $funcionario->departamento_id}}</td>
+               <td>{{ $funcionario->departamento}}</td>
               <td>
     
                   {!! Form::open(['action' => ['AdministradorController@get_editFuncionario'], 'method' => 'GET']) !!}
