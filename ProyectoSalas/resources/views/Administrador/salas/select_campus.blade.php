@@ -26,7 +26,7 @@
   
 
 
- {!! Form::open(['action' => 'AdministradorController@get_salas', 'method' => 'GET']) !!}
+ {!! Form::open(['action' => 'Administrador\SalaController@get_salas', 'method' => 'GET']) !!}
 
 
     <div class="form-group">

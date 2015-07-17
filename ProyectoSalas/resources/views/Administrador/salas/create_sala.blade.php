@@ -14,7 +14,7 @@
    <div class="panel-body">
        <div class="form-group">
   
-      {!! Form::open(['action' => ['AdministradorController@post_storeSala'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\SalaController@post_storeSala'], 'method' => 'POST']) !!}
 
 
         <div class="form-group">

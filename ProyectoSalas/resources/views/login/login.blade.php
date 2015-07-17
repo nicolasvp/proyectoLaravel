@@ -73,11 +73,11 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px;"><i class="fa fa-user fa-fw"></i>Iniciar sesión</button>
       </form>
 
-      
-      <script src="http://localhost:8000/js/jquery.Rut.min.js"></script>
+      {!! Html::script('js/jquery-2.1.4.min.js') !!}
+      <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
       <script type="text/javascript">
       jQuery(document).ready(function($) {
-        $("#rut").Rut();
+        $("#rut").rut();
        });
       </script> 
 
@@ -90,17 +90,6 @@
 </div>
 </div>
 
-
-<!--
-   <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
-      <script type="text/javascript">
-      jQuery(document).ready(function($) {
-                 $('.btn').click(function (){
-                    alert("kjsdkajsdakj");
-                 });
-       });
-      </script>
--->
 
   <div class="container" style="margin-top: 50px;">
         <footer>© Sistema de Salas UTEM - 2015</footer>

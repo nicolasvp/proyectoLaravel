@@ -14,7 +14,7 @@
    <p> <h2>Lista de salas</h2></p>
 
          <p>
-                         {!! Form::open(['action' => 'AdministradorController@get_createSala', 'method' => 'GET']) !!}
+                         {!! Form::open(['action' => 'Administrador\SalaController@get_createSala', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-primary btn-sm">Ingresar sala</button>
 
@@ -55,14 +55,14 @@
                <td>{{ $sala->capacidad}}</td>
               <td>
     
-                  {!! Form::open(['action' => ['AdministradorController@get_editSala'], 'method' => 'GET']) !!}
+                  {!! Form::open(['action' => ['Administrador\SalaController@get_editSala'], 'method' => 'GET']) !!}
                   {!! Form::hidden('id_sala', $sala->id)!!}
                    <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
                   {!! Form::close() !!}
 
               </td>
               <td>
-                  {!! Form::open(['action' => ['AdministradorController@delete_destroySala'], 'method' => 'DELETE']) !!}
+                  {!! Form::open(['action' => ['Administrador\SalaController@delete_destroySala'], 'method' => 'DELETE']) !!}
                   {!! Form::hidden('id_sala', $sala->id)!!}
                    <button type="submit" onclick="return confirm('¿Seguro que desea eliminar esta sala?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}

@@ -11,21 +11,65 @@
 
 |
 */
-/*
 
-*/
 
 //Route::get('home', 'HomeController@index');
+
+Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
+{
+
+  	Route::get('/','EncargadoController@getIndex');
+  	Route::controller('asignaturas','AsignaturaController');
+  	Route::controller('salas','SalaController');
+  	Route::controller('cursos','CursoController');
+  	Route::controller('horarios','HorarioController');
+  	Route::controller('docentes','DocenteController');
+  	Route::controller('estudiantes','EstudianteController');
+
+
+
+});
+
+Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], function()
+{
+    Route::get('/','AdministradorController@getIndex');
+    Route::controller('campus','CampusController');
+    Route::controller('perfiles','PerfilController');
+    Route::controller('salas','SalaController');
+    Route::controller('tipos_salas','TipoSalaController');
+    Route::controller('cursos','CursoController');
+    Route::controller('asignaturas','AsignaturaController'); 
+    Route::controller('estudiantes','EstudianteController');
+    Route::controller('docentes','DocenteController');
+    Route::controller('carreras','CarreraController');
+    Route::controller('departamentos','DepartamentoController');
+    Route::controller('escuelas','EscuelaController');
+    Route::controller('facultades','FacultadController');
+    Route::controller('funcionarios','FuncionarioController');
+    Route::controller('periodos','PeriodoController');
+    Route::controller('dias','DiaController');
+    Route::controller('roles','RolController');
+    Route::controller('roles_usuarios','RolUsuarioController'); 
+
+});
+
+
+//Route::group(['prefix' => 'estudiante', 'namespace' => 'EstudianteController'])
+/*
 Route::group(['middleware' => ['auth']], function(){
 			Route::controllers([
 						'admin' => 'AdministradorController',
 						'alumno' => 'AlumnoController',
-						'encargado' => 'EncargadoController',
+					//	'encargado' => 'EncargadoController',
 						'docente' => 'DocenteController',
 						]);
 });
 
-	
+
+*/
+
+
+Route::Controller("alumno","AlumnoController");
 
 
 Route::Controller("/login","loginController");

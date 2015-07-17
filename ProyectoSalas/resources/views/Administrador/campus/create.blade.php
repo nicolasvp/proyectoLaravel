@@ -12,7 +12,7 @@
          <div class="col-sm-9" >
 
            <p>
-                         {!! Form::open(['action' => 'AdministradorController@get_uploadCampus', 'method' => 'GET']) !!}
+                         {!! Form::open(['action' => 'Administrador\CampusController@get_upload', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
 
@@ -23,9 +23,12 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+@include('Administrador/messages')
+
        <div class="form-group">
   
-      {!! Form::open(['action' => ['AdministradorController@post_store'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@post_store'], 'method' => 'POST']) !!}
 
       <div class="form-group">
        {!! Form::label('nombre', 'Nombre') !!}

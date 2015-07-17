@@ -15,6 +15,15 @@
    <div class="panel-body">
 
 
+      @if(Session::has('message'))
+
+          <div class="alert alert-dismissible alert-success">
+           <strong>{{ Session::get('message') }}</strong>
+          </div>
+       
+
+
+      @endif
        <div class="form-group">
 
         <table class="table table-striped">
@@ -33,7 +42,7 @@
                <td>{{ $users->rut}}</td>
                <td>{{ $users->nombre}}</td>
                 <td> 
-      {!! Form::open(['action' => ['AdministradorController@delete_rol'], 'method' => 'DELETE']) !!}
+      {!! Form::open(['action' => ['Administrador\PerfilController@delete_destroy'], 'method' => 'DELETE']) !!}
       {!! Form::hidden('id', $users->id)!!}
        <button type="submit" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-danger btn-sm">Eliminar</button>
       {!! Form::close() !!}
@@ -52,17 +61,12 @@
 <p> <h2>Asignar perfil</h2></p>
 <div class="panel panel-default">
     <div class="panel-body">
-      @if(Session::has('message'))
 
-          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
-
-
-      @endif
        <table class="table table-striped">
 
 
      <div class="form-group">
-   {!! Form::open(['action' => 'AdministradorController@post_profile']) !!}
+   {!! Form::open(['action' => 'Administrador\PerfilController@post_profile']) !!}
 
     <div class="form-group">
     {!! Form::hidden('rut', $rut)!!}

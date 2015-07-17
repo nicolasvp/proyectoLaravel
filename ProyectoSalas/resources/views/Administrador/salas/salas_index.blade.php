@@ -40,7 +40,7 @@
     
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignar Salas</b></h3></td>
       <td>             
-                     {!! Form::open(['action' => 'AdministradorController@get_cursosList', 'method' => 'GET']) !!}
+                     {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
 
 
                   <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -52,7 +52,7 @@
     <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Modificar Salas</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_selectCampus', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_selectCampus', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -64,7 +64,7 @@
         <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Salas</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_salasList', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_salasList', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -77,7 +77,7 @@
      <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Tipos de Salas</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_tiposSalas', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\TipoSalaController@getIndex', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -89,7 +89,7 @@
 
     <tr>
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Horarios</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_horarios', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_horarios', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -105,30 +105,8 @@
 </table> 
 
 
-
-
-
-
-      
-
-
-   
-                     
-
-
-           
-           
-                  
-
-   
   </div>
 </div>
-
-
-
-
-
-
 
 
 

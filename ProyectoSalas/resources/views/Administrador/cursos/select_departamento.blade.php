@@ -30,7 +30,7 @@
   
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+ {!! Form::open(['action' => 'Administrador\CursoController@get_create', 'method' => 'GET']) !!}
 
 
     <div class="form-group">

@@ -30,7 +30,7 @@
 
 
    
-      {!! Form::model($horarioEditable, ['action' => ['AdministradorController@put_updateHorario', $horarioEditable], 'method' => 'PUT']) !!}
+      {!! Form::model($horarioEditable, ['action' => ['Administrador\SalaController@put_updateHorario', $horarioEditable], 'method' => 'PUT']) !!}
 
     <div class="form-group">
     {!! Form::label('sala_id', 'Sala') !!}

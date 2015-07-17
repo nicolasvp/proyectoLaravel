@@ -41,7 +41,7 @@
     
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignar Sala</b></h3></td>
       <td>             
-                     {!! Form::open(['action' => 'EncargadoController@get_selectCurso', 'method' => 'GET']) !!}
+                     {!! Form::open(['action' => 'Encargado\SalaController@get_curso', 'method' => 'GET']) !!}
 
                   <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
                     {!! Form::close() !!}
@@ -52,7 +52,7 @@
     <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Modificar Sala</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'EncargadoController@get_salas', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Encargado\SalaController@get_salas', 'method' => 'GET']) !!}
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
                       {!! Form::close() !!}

@@ -17,7 +17,7 @@
    <div class="panel-body">
        <div class="form-group">
   
-      {!! Form::model($campusEditable, ['action' => ['AdministradorController@put_update', $campusEditable], 'method' => 'PUT']) !!}
+      {!! Form::model($campusEditable, ['action' => ['Administrador\CampusController@put_update', $campusEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
        {!! Form::label('nombre', 'Nombre') !!}

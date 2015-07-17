@@ -1,7 +1,7 @@
 @extends('layouts/master')
 
 @section('welcome')
-<a class="navbar-brand" href="/admin">Gestión de Salas UTEM</a>
+<a class="navbar-brand" href="/administrador">Gestión de Salas UTEM</a>
 @stop
 
 

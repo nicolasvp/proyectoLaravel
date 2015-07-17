@@ -10,7 +10,7 @@
    <p> <h2>Lista de horarios</h2></p>
 
              <p>
-                         {!! Form::open(['action' => 'AdministradorController@get_cursosList', 'method' => 'GET']) !!}
+                         {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-primary btn-sm">Ingresar horario</button>
 
@@ -32,7 +32,7 @@
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-          {!! Form::open(['action' => ['AdministradorController@get_searchHorario'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+          {!! Form::open(['action' => ['Administrador\SalaController@get_searchHorario'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
           {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso,Docente']) !!}
           </div>
@@ -47,6 +47,7 @@
             <tr> 
               <th>Curso</th>
               <th>Docente</th>
+              <th>Período</th>
               <th>Hora</th>
               <th>Sala</th>
               <th>Día</th>
@@ -59,12 +60,13 @@
             <tr>
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->nombres}} {{$horario->apellidos}}</td>
+               <td>{{ $horario->bloque}}
                <td>{{ $horario->inicio}} - {{ $horario->fin}}</td>
                <td>{{ $horario->sala}}</td>
                <td>{{ $horario->dia}}</td>
 
      <td>
-                 {!! Form::open(['action' => ['AdministradorController@get_editHorario'], 'method' => 'GET']) !!}
+                 {!! Form::open(['action' => ['Administrador\SalaController@get_editHorario'], 'method' => 'GET']) !!}
                   {!! Form::hidden('id', $horario->horario_id)!!}
                    <button type="submit"  class="btn btn-primary btn-sm">Editar</button>
                   {!! Form::close() !!}
@@ -74,7 +76,7 @@
 
       <td>
 
-       {!! Form::open(['action' => ['AdministradorController@delete_destroyHorario'], 'method' => 'DELETE']) !!}
+       {!! Form::open(['action' => ['Administrador\SalaController@delete_destroyHorario'], 'method' => 'DELETE']) !!}
         {!! Form::hidden('id', $horario->horario_id)!!}
         <button type="submit"  onclick="return confirm('¿Seguro que desea eliminar este horario?')" class="btn btn-danger btn-sm ">Eliminar</button>
         {!! Form::close() !!}

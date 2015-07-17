@@ -20,7 +20,7 @@
                         
                        <a class="list-group-item active"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> Menú Encargado</a>
 
-            <li class="list-group-item"> <a href="{{URL::to('/encargado/ingreso')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Salas</a></li>
+            <li class="list-group-item"> <a href="{{URL::to('/encargado/salas')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Salas</a></li>
             <li class="list-group-item"> <a href="{{URL::to('/encargado/cursos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Cursos</a></li>       
             <li class="list-group-item"><a href="{{URL::to('/encargado/asignaturas')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Asignaturas</a></li> 
             <li class="list-group-item"><a href="{{URL::to('/encargado/estudiantes')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Estudiantes</a></li> 

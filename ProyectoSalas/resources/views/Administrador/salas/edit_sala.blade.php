@@ -26,7 +26,7 @@
 
 
    
-      {!! Form::model($datos_sala, ['action' => ['AdministradorController@put_updateSala', $datos_sala], 'method' => 'PUT']) !!}
+      {!! Form::model($datos_sala, ['action' => ['Administrador\SalaController@put_updateSala', $datos_sala], 'method' => 'PUT']) !!}
 
       <div class="form-group">
        {!! Form::label('nombre', 'Nombre') !!}

@@ -1,13 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Estudiantes;
-use App\Models\Horarios;
-use App\Models\Asignaturas_cursadas;
-use App\Models\Periodos;
-use App\Models\Campus;
-use App\Models\Dias;
-use App\Models\Cursos;
+use App\Models\Estudiante;
+use App\Models\Horario;
+use App\Models\Asignaturas_cursada;
+use App\Models\Periodo;
+use App\Models\Campu;
+use App\Models\Dia;
+use App\Models\Curso;
 
 
 class DocenteController extends Controller {
@@ -26,7 +26,7 @@ class DocenteController extends Controller {
 	{
 
 		
-		$datos_horario  = Cursos::join('horarios', 'cursos.id', '=','horarios.curso_id')
+		$datos_horario  = Curso::join('horarios', 'cursos.id', '=','horarios.curso_id')
 				->join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
@@ -45,8 +45,8 @@ class DocenteController extends Controller {
 	public function get_consulta()
 	{
 		$campus = Campus::paginate()->lists('nombre','id');
-		$periodo = Periodos::paginate()->lists('bloque','id');
-		$dia = Dias::paginate()->lists('nombre','id');
+		$periodo = Periodo::paginate()->lists('bloque','id');
+		$dia = Dia::paginate()->lists('nombre','id');
 
 		return view('Docente/consulta',compact('campus','periodo','dia'));
 	}
@@ -57,7 +57,7 @@ class DocenteController extends Controller {
 		
 		//$resultado = Horarios::where('periodo_id','=',$request->get('periodo'))->where('dia_id','=',$request->get('dia'))->get();
 
-		$resultados = Horarios::join('salas', 'horarios.sala_id', '=','salas.id')
+		$resultados = Horario::join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
