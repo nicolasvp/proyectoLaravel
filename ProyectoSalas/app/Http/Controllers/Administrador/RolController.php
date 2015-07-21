@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Rol;
 
@@ -29,11 +28,11 @@ class RolController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateRolRequest $request)
 	{
 		
 		$rol= new Rol();
-		$rol->fill(\Request::all());
+		$rol->fill($request->all());
 		$rol->save();
 
 		Session::flash('message', 'El rol '.$rol->nombre.' fue creado exitosamente!');
@@ -58,7 +57,7 @@ class RolController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditRolRequest $request)
 	{
 
 		$rol = Rol::findOrFail($request->get('id'));

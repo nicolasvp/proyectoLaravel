@@ -12,13 +12,6 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Tipos de salas</h2></p>
 
-            <p>
-                         {!! Form::open(['action' => 'Administrador\TipoSalaController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar tipo</button>
-
-                         {!! Form::close() !!}
-         </p>
 
       @if(Session::has('message'))
 
@@ -33,11 +26,19 @@
        <div class="form-group">
 
         {!! Form::open(['action' => ['Administrador\TipoSalaController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
-            <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre']) !!}
-          </div>
-          <button type="submit" class="btn btn-info">Buscar</button>
+                <div class="form-group">
+              {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre']) !!}
+              </div>
+              <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
+
+             {!! Form::open(['action' => 'Administrador\TipoSalaController@get_create', 'method' => 'GET']) !!}
+   
+                <button type="submit" class="btn btn-success">Ingresar tipo</button>
+
+            {!! Form::close() !!}
+
+
 
           <table class="table table-striped">
             <tr> 

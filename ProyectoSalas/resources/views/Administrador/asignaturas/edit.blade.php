@@ -16,6 +16,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+        @include('Administrador/messages')
+        
        <div class="form-group">
   
       {!! Form::model($asignaturaEditable, ['action' => ['Administrador\AsignaturaController@put_update', $asignaturaEditable], 'method' => 'PUT']) !!}

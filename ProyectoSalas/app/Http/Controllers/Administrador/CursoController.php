@@ -27,13 +27,7 @@ class CursoController extends Controller {
 
 	public function getIndex(Request $request)
 	{
-		/* FILTRAR LOS CURSOS POR CARRERAS
-		$carrera = Carreras::findOrFail($request->get('carrera'));
 
-		$escuela = Escuelas::findOrFail($carrera->escuela_id);
-
-		$departamento = Departamentos::findOrFail($escuela->departamento_id);
-*/ 
 		$datos_cursos = Curso::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
@@ -50,22 +44,23 @@ class CursoController extends Controller {
 	}
 
 
-	public function get_create(Request $request)
+	public function get_create(Requests \SelectDeptoRequest $request)
 	{
 
-		    $asignaturas = Asignatura::where('departamento_id', '=', $request->get('departamentos'))->lists('nombre','id');
+		    $asignaturas = Asignatura::where('departamento_id', '=', $request->get('departamento'))->lists('nombre','id');
 			
-			$docentes = Docente::where('departamento_id', '=', $request->get('departamentos'))->lists('apellidos','id');
+			$docentes = Docente::where('departamento_id', '=', $request->get('departamento'))->lists('apellidos','id');
 
 			return view('Administrador/cursos/create',compact('asignaturas','docentes'));
 	}
 	
 
-	public function post_store()
+	public function post_store(Requests \CreateCursoRequest $request)
 	{
 	
 		$curso = new Curso();
-		$curso->fill(\Request::all());
+		$curso->fill(['asignatura_id' => $request->get('asignatura'), 'docente_id' => $request->get('docente'),
+			'semestre' => $request->get('semestre'), 'anio' => $request->get('año'), 'seccion' => $request->get('seccion')]);
 		$curso->save();
 
 		Session::flash('message', 'El curso fue creado exitosamente!');
@@ -92,12 +87,14 @@ class CursoController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditCursoRequest $request)
 	{
 	
 		$curso = Curso::findOrFail($request->get('id'));
 		$curso->fill(\Request::all());
 		$curso->save();
+
+		Session::flash('message','El curso fue editado exitosamente');
 		
 		return redirect()->action('Administrador\CursoController@getIndex');
 	}
@@ -114,6 +111,32 @@ class CursoController extends Controller {
 
 		return redirect()->action('Administrador\CursoController@getIndex');
 		
+	}
+
+	public function get_search(Request $request)
+	{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_cursos = Curso::join('docentes','cursos.docente_id','=','docentes.id')
+			 ->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+			 ->where('docentes.rut','=', (integer) $request->get('name'))
+			 ->orWhere('docentes.nombres', 'like' , '%'.$request->get('name').'%')
+			 ->orWhere('docentes.apellidos', 'like' , '%'.$request->get('name').'%')
+			 ->orWhere('asignaturas.nombre','like','%'.$request->get('name').'%')
+			 ->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
+			 ->paginate();
+
+			return view('Administrador/cursos/list',compact('datos_cursos'));
+			}
+
+			else
+			{
+
+		 	return redirect()->action('Administrador\CursoController@getIndex');
+
+			}
 	}
 
 

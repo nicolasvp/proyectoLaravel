@@ -23,27 +23,36 @@
       @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
+
    <div class="panel-body">
        <div class="form-group">
+
+
           {!! Form::open(['action' => ['Encargado\HorarioController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso,Día']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
 
+          {!! Form::open(['action' => 'Encargado\SalaController@get_curso', 'method' => 'GET']) !!}
+   
+            <button type="submit" class="btn btn-success ">Asignar Sala</button>
+
+          {!! Form::close() !!}
+                
 </form>
 
 
           <table class="table table-striped">
             <tr> 
-              <th>#</th>
+              <th>Campus</th>
               <th>Curso</th>
               <th>Período</th>
               <th>Hora</th>
+              <th>Docente</th>
               <th>Sala</th>
-              <th>Día</th>
               <th></th>
               <th></th>
             </tr>
@@ -52,12 +61,12 @@
             @foreach($datos_horarios as $horario)
 
             <tr>
-               <td>{{ $horario->horario_id }}</td>
+               <td>{{ $horario->campus }}</td>
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->bloque}}</td>
                <td>{{ $horario->inicio}} - {{$horario->fin}}</td>
-               <td>{{ $horario->sala}}</td>
-               <td>{{ $horario->dia}}
+               <td>{{ $horario->nombres}} {{$horario->apellidos}}</td>
+               <td>{{ $horario->sala}}</td> 
            <td>
                  {!! Form::open(['action' => ['Encargado\HorarioController@get_edit'], 'method' => 'GET']) !!}
                  {!! Form::hidden('id', $horario->horario_id)!!}

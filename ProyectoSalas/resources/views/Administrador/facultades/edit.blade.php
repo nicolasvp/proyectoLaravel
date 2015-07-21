@@ -12,6 +12,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+        @include('Administrador/messages')
+
        <div class="form-group">
   
       {!! Form::model($facultadEditable, ['action' => ['Administrador\FacultadController@put_update', $facultadEditable], 'method' => 'PUT']) !!}
@@ -34,7 +37,7 @@
 
         {!! Form::hidden('id', $id)!!}
 
-      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Actualizar</button></div>
 
       {!! Form::close() !!}
 

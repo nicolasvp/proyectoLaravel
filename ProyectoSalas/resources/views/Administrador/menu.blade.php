@@ -34,7 +34,6 @@
             <li class="list-group-item"><a href="{{URL::to('/administrador/facultades')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Facultades</a></li>
             <li class="list-group-item"><a href="{{URL::to('/administrador/funcionarios')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Funcionarios</a></li>
             <li class="list-group-item"><a href="{{URL::to('/administrador/periodos')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Periodos</a></li>
-            <li class="list-group-item"><a href="{{URL::to('/administrador/dias')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Dias</a></li>
             <li class="list-group-item"><a href="{{URL::to('/administrador/roles')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Roles</a></li>
             <li class="list-group-item"><a href="{{URL::to('/administrador/roles_usuarios')}}"><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i>Roles Usuarios</a></li>                        
        

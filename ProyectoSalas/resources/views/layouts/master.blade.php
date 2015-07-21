@@ -35,7 +35,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout" ">@yield('session','Cerrar Sesión')</a></li>
+            <li><a href="/logout">@yield('session','Cerrar Sesión')</a></li>
           </ul>
         </div>
       </div>
@@ -45,9 +45,9 @@
     @yield('sideBar')
 
     
-			
-			<div class="container" style="margin-top: 120px;">
-				<footer>© Sistema de Salas UTEM - 2015</footer>
-			</div>
+		<div id="footer">
+    <footer>© Sistema de Salas UTEM - 2015</footer>
+    </div>
+	
 	</body>
 </html>

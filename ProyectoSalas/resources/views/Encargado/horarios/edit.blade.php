@@ -48,13 +48,8 @@
 
     {!! Form::hidden('curso_id', $curso_id)!!}
 
-    <div class="form-group">
-    {!! Form::label('dia_id', 'Día') !!}
-   {!! Form::select('dia_id', (['0' => 'Selecciona un día'] + $dias), null, ['class' => 'form-control']) !!}
-    </div>
 
-    
-
+  
 
     {!! Form::hidden('id', $id)!!}
 

@@ -62,7 +62,7 @@ class CampusController extends Controller {
 	
 	}
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditCampusRequest $request)
 	{
 	
 		$campusEditable = Campus::findOrFail($request->get('id'));
@@ -185,6 +185,34 @@ class CampusController extends Controller {
 	       return redirect()->action('Administrador\CampusController@get_list');
 	}
 
+	public function get_download()
+	{
+		$var = Campus::all();
+
+		\Excel::create('Campus',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('NOMBRE','DIRECCION','LATITUD','LONGITUD','DESCRIPCION','RUT_ENCARGADO'));
+
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->nombre,$v->direccion,$v->latitud,$v->longitud,$v->descripcion,$v->rut_encargado));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
+
+	       return redirect()->action('Administrador\CampusController@get_list');
+	}
 
 	
 

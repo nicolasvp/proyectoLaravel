@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Funcionario;
@@ -34,11 +33,11 @@ class FuncionarioController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateFuncionarioRequest $request)
 	{
 		
 		$funcionario= new Funcionario();
-		$funcionario->fill(\Request::all());
+		$funcionario->fill($request->all());
 		$funcionario->save();
 
 		Session::flash('message', 'El funcionario '.$funcionario->nombres.' '.$funcionario->apellidos.' fue ingresado exitosamente!');
@@ -64,7 +63,7 @@ class FuncionarioController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditFuncionarioRequest $request)
 	{
 
 		$funcionario = Funcionario::findOrFail($request->get('id'));

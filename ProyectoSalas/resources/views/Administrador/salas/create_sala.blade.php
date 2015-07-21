@@ -12,6 +12,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\SalaController@post_storeSala'], 'method' => 'POST']) !!}
@@ -19,13 +22,13 @@
 
         <div class="form-group">
          {!! Form::label('campus', 'Campus') !!}
-       {!! Form::select('campus_id', ( $campus), null, ['class' => 'form-control'])!!}
+       {!! Form::select('campus', (['0' => '-- Seleccionar un departamento --'] +$campus), null, ['class' => 'form-control'])!!}
       </div>
 
 
       <div class="form-group">
          {!! Form::label('tipo', 'Tipo') !!}
-       {!! Form::select('tipo_sala_id', ( $tipos_salas), null, ['class' => 'form-control'])!!}
+       {!! Form::select('tipo_sala', (['0' => '-- Seleccionar un departamento --'] +$tipos_salas), null, ['class' => 'form-control'])!!}
       </div>
 
        <div class="form-group">

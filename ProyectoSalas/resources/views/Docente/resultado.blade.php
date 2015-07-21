@@ -40,7 +40,7 @@
                <td>{{ $result->nombre}}</td>
                <td>{{ $result->sala}}</td>
                <td>{{ $result->inicio}} - {{$result->fin}}</td>
-               <td>{{ $result->dia}}</td>
+               <td></td>
             </tr>
 
              @endforeach

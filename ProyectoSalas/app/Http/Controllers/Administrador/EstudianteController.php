@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Estudiante;
 use App\Models\Carrera;
@@ -38,11 +37,12 @@ class EstudianteController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests\CreateEstudianteRequest $request)
 	{
 		
 		$estudiante = new Estudiante();
-		$estudiante->fill(\Request::all());
+		$estudiante->fill(['carrera_id' => $request->get('carrera'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
+			'apellidos' => $request->get('apellidos'), 'email' => $request->get('email')]);
 		$estudiante->save();
 
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue ingresado exitosamente!');
@@ -69,7 +69,7 @@ class EstudianteController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditEstudianteRequest $request)
 	{
 
 		$estudiante = Estudiante::findOrFail($request->get('id'));

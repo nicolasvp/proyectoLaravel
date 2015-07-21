@@ -3,17 +3,16 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 
 
 use App\Models\Curso;
-use App\Models\Dia;
 use App\Models\Periodo;
 use App\Models\Sala;
 use App\Models\Campus;
 use App\Models\Horario;
 use App\Models\Tipo_sala;
+use Carbon\Carbon;
 
 
 
@@ -30,7 +29,6 @@ class SalaController extends Controller {
 		
 		return view('Administrador/salas/salas_index');
 	}
-
 
 	public function get_cursos()
 	{
@@ -78,7 +76,14 @@ class SalaController extends Controller {
 
 
 
-	public function post_curso(Request $request)
+	public function get_campus(Request $request)
+	{
+		$campus = Campus::all()->lists('nombre','id');
+		$id_curso = $request->get('id_curso');
+		return view('Administrador/salas/campus',compact('campus','id_curso'));
+	}
+
+	public function get_datos(Requests \SelectCampusRequest $request)
 	{
 
 		$datos_curso = Curso::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
@@ -90,32 +95,101 @@ class SalaController extends Controller {
 
 		$periodos = Periodo::paginate()->lists('bloque','id');
 		
-		$salas = Sala::paginate()->lists('nombre','id');
+		$salas = Sala::where('campus_id','=',$request->get('campus'))->get()->lists('nombre','id');
 
 		$curso_id = $request->get('id_curso');
 
-		$dias = Dia::paginate()->lists('nombre','id');
+		
 
-		return view('Administrador/salas/store_curso',compact('datos_curso','periodos','salas','curso_id','dias'));
+		return view('Administrador/salas/create_horario',compact('datos_curso','periodos','salas','curso_id'));
 	}
 
 
 
-	public function post_storeCurso(Request $request)
+	public function post_storeCurso(Requests \CreateAsignarSalaRequest $request)
 	{
 	
-		
-		$horario = new Horario();
-		$horario->fill(['sala_id' => $request->get('asig_sala'), 'periodo_id' => $request->get('asig_periodo'),
-    	'curso_id' => $request->get('curso_id'), 'dia_id' => $request->get('dia_id')]);
-    	$horario->save();
+			
+		$inicio = new Carbon($request->inicio);
+		$termino = new Carbon($request->termino);
+	
 
+		while($inicio <= $termino)
+		{
+			Carbon::setTestNow($inicio);
+			if($request->lunes)
+			{
+				$lunes = new Carbon('this monday');
+				if($lunes <= $termino)
+				{
+				$lun = new Horario();
+				$lun->fill(['fecha' => $lunes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$lun->save();
+				}
+
+			}
+			if($request->martes)
+			{
+				$martes = new Carbon('this tuesday');
+				if($martes <= $termino)
+				{
+				$mar = new Horario();
+				$mar->fill(['fecha' => $martes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$mar->save();
+				}
+			}
+			if($request->miercoles)
+			{
+				$miercoles = new Carbon('this wednesday');
+				if($miercoles <= $termino)
+				{
+				$mier = new Horario();
+				$mier->fill(['fecha' => $miercoles,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$mier->save();
+				}
+			}
+			if($request->jueves)
+			{
+				$jueves = new Carbon('this thursday');
+				if($jueves <= $termino)
+				{
+				$jue = new Horario();
+				$jue->fill(['fecha' => $jueves,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$jue->save();
+				}
+			}
+			if($request->viernes)
+			{
+				$viernes = new Carbon('this friday');
+				if($viernes <= $termino)
+				{
+				$vier = new Horario();
+				$vier->fill(['fecha' => $viernes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$vier->save();
+				}
+			}
+			if($request->sabado)
+			{
+				$sabado = new Carbon('this saturday');
+				if($sabado <= $termino)
+				{
+				$sab = new Horario();
+				$sab->fill(['fecha' => $sabado,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$sab->save();
+				}
+			}
+
+			$inicio->addWeek(1);
+			
+		}
 
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 
 		
 		return redirect()->action('Administrador\SalaController@get_horarios');
 		
+
+
 
 	}
 
@@ -128,9 +202,9 @@ class SalaController extends Controller {
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
+				->join('campus','salas.campus_id','=','campus.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','horarios.fecha','docentes.*')
 				->paginate();
 				
 
@@ -147,7 +221,6 @@ class SalaController extends Controller {
 
 		$periodos = Periodo::paginate()->lists('bloque','id');
 
-		$dias = Dia::paginate()->lists('nombre','id');
 
 		$salas = Sala::paginate()->lists('nombre','id');
 
@@ -162,7 +235,7 @@ class SalaController extends Controller {
 
 		$curso_id = $horarioEditable->curso_id;
 
-		return view('Administrador/salas/edit_horario', compact('horarioEditable','periodos','dias','salas','curso','curso_id','id'));
+		return view('Administrador/salas/edit_horario', compact('horarioEditable','periodos','salas','curso','curso_id','id'));
 
 	}
 
@@ -205,12 +278,13 @@ class SalaController extends Controller {
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
+				->join('campus','salas.campus_id','=','campus.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
 				->orWhere('docentes.nombres','like', '%'.$request->get('name').'%')
 				->orWhere('docentes.apellidos','like', '%'.$request->get('name').'%')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->orWhere('campus.nombre','like','%'.$request->get('name').'%')
+				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
 				return view('Administrador/salas/horarios_list',compact('datos_horarios'));
@@ -223,9 +297,9 @@ class SalaController extends Controller {
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->join('campus','salas.campus_id','=','campus.id')
+				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();	
 
 		return view('Administrador/salas/horarios_list',compact('datos_horarios'));
@@ -235,33 +309,12 @@ class SalaController extends Controller {
 
 
 
-	public function get_selectCampus()
-	{
-
-
-		$salas_campus = Campus::paginate()->lists('nombre','id');
-			
-		return view('Administrador/salas/select_campus',compact('salas_campus'));
-	
-
-	}
-
-
-	public function get_salas(Request $request)
-	{
-		$salas = Sala::where('campus_id','=',$request->get('select_campus'))->lists('nombre','id');
-
-	
-		return view('Administrador/salas/select_sala',compact('salas'));
-
-	}
-
 	public function get_editSala(Request $request)
 	{
 
-		$datos_sala = Sala::findOrFail($request->get('id_sala'));
+		$datos_sala = Sala::findOrFail($request->get('sala'));
 		
-		$id = $request->get('id_sala');
+		$id = $request->get('sala');
 		
 		$campus = Campus::paginate()->lists('nombre','id');
 
@@ -272,11 +325,12 @@ class SalaController extends Controller {
 	}
 
 
-	public function put_updateSala(Request $request)
+	public function put_updateSala(Requests \EditSalaAdminRequest $request)
 	{
-	
+
 		$sala = Sala::findOrFail($request->get('id'));
-		$sala->fill(\Request::all());
+		$sala->fill(['campus_id' => $request->get('campus'),'tipo_sala_id' => $request->get('tipo_sala'),'nombre' => $request->get('nombre'),
+			'descripcion' => $request->get('descripcion'),'capacidad' => $request->get('capacidad')]);
 		$sala->save();
 
 
@@ -308,11 +362,12 @@ class SalaController extends Controller {
 	}
 
 
-	public function post_storeSala()
+	public function post_storeSala(Requests \CreateSalaRequest $request)
 	{
 	
 		$sala= new Sala();
-		$sala->fill(\Request::all());
+		$sala->fill(['campus_id' => $request->get('campus'),'tipo_sala_id' => $request->get('tipo_sala'),'nombre' => $request->get('nombre'),
+			'descripcion' => $request->get('descripcion') ,'capacidad' => $request->get('capacidad')]);
 		$sala->save();
 
 		Session::flash('message', 'La sala '.$sala->nombre.' fue agregada exitosamente!');
@@ -325,7 +380,7 @@ class SalaController extends Controller {
 	public function delete_destroySala(Request $request)
 	{
 
-		$sala = Sala::findOrFail($request->get('id_sala'));
+		$sala = Sala::findOrFail($request->get('sala'));
 
 		$sala->delete();
 
@@ -333,6 +388,36 @@ class SalaController extends Controller {
 		Session::flash('message', 'La sala '.$sala->nombre.' fue eliminada exitosamente!');
 
 		return redirect()->action('Administrador\SalaController@get_salasList');
+	}
+
+
+	public function get_searchSala(Request $request)
+	{
+		if(trim($request->get('name')) != "")
+		{
+
+			$datos_salas  = Sala::join('campus','salas.campus_id','=','campus.id')
+							->join('tipos_salas','salas.tipo_sala_id','=','tipos_salas.id')
+							->where('campus.nombre','like','%'.$request->get('name').'%')
+							->orWhere('tipos_salas.nombre','like','%'.$request->get('name').'%')
+							->orWhere('salas.nombre','like','%'.$request->get('name').'%')
+							->select('salas.*','campus.nombre as campus','tipos_salas.nombre as tipo_sala')
+							->paginate();
+
+				return view('Administrador/salas/salas_list',compact('datos_salas'));
+		}
+
+		else
+		{
+
+			$datos_salas = Sala::join('campus','salas.campus_id','=','campus.id')
+							->join('tipos_salas','salas.tipo_sala_id','=','tipos_salas.id')
+							->select('salas.*','tipos_salas.nombre as tipo_sala','campus.nombre as campus')
+							->paginate();
+
+				return view('Administrador/salas/salas_list',compact('datos_salas'));
+
+		}
 	}
 
 

@@ -16,12 +16,15 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+       @include('Administrador/messages')
+       
        <div class="form-group">
   
       {!! Form::model($docenteEditable, ['action' => ['Administrador\DocenteController@put_update', $docenteEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
-       {!! Form::label('departamento_id', 'Departamento') !!}
+       {!! Form::label('departamento', 'Departamento') !!}
        {!! Form::select('departamento_id', (['0' => '-- Seleccionar un Departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
       </div>
 
@@ -45,7 +48,7 @@
         {!! Form::hidden('id', $id)!!}
     
 
-      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Actualizar</button></div>
 
       {!! Form::close() !!}
 

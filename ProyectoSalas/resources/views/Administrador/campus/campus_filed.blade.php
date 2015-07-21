@@ -43,7 +43,7 @@
                <td>
 
 
-      {!! Form::open(['action' => ['AdministradorController@post_restore_campus'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@post_restore_campus'], 'method' => 'POST']) !!}
       {!! Form::hidden('id', $campu->id)!!}
        <button type="submit"  class="btn btn-success">Recuperar</button>
       {!! Form::close() !!}

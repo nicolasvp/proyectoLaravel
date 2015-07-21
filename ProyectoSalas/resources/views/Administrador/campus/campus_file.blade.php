@@ -38,7 +38,7 @@
                <td>{{ $campu->nombre}}</td>
                <td>{{ $campu->direccion}}</td>
                <td>
-      {!! Form::open(['action' => ['AdministradorController@delete_campus'], 'method' => 'DELETE']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@delete_campus'], 'method' => 'DELETE']) !!}
       {!! Form::hidden('id', $campu->id)!!}
        <button type="submit" onclick="return confirm('¿Seguro que desea archivar este campus?')" class="btn btn-danger btn-sm">Archivar</button>
       {!! Form::close() !!}

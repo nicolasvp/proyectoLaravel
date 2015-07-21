@@ -38,11 +38,11 @@ class DepartamentoController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateDepartamentoRequest $request)
 	{
 		
 		$departamento= new Departamento();
-		$departamento->fill(\Request::all());
+		$departamento->fill($request->all());
 		$departamento->save();
 
 		Session::flash('message', 'El departamento '.$departamento->nombre.' fue creado exitosamente!');
@@ -68,7 +68,7 @@ class DepartamentoController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditDepartamentoRequest $request)
 	{
 
 		$departamento = Departamento::findOrFail($request->get('id'));

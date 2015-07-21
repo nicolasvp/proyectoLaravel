@@ -11,7 +11,6 @@ use App\Models\Departamento;
 use App\Models\Horario;
 use App\Models\Periodo;
 use App\Models\Sala;
-use App\Models\Dia;
 use App\Models\Curso;
 
 
@@ -28,9 +27,9 @@ public function getIndex()
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->join('campus','salas.campus_id','=','campus.id')
+				->select('campus.nombre as campus','horarios.fecha','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
 
@@ -48,11 +47,10 @@ public function getIndex()
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->join('docentes','cursos.docente_id','=','docentes.id')
+				->join('campus','salas.campus_id','=','campus.id')
 				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
-				->orWhere('dias.nombre','like','%'.$request->get('name').'%')
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
 		return view('Encargado/horarios/list',compact('datos_horarios'));
@@ -75,7 +73,6 @@ public function getIndex()
 
 		$periodos = Periodo::paginate()->lists('bloque','id');
 
-		$dias = Dia::paginate()->lists('nombre','id');
 
 		$salas = Sala::paginate()->lists('nombre','id');
 
@@ -90,7 +87,7 @@ public function getIndex()
 
 		$curso_id = $horarioEditable->curso_id;
 
-		return view('Encargado/horarios/edit', compact('horarioEditable','periodos','dias','salas','curso','curso_id','id'));
+		return view('Encargado/horarios/edit', compact('horarioEditable','periodos','salas','curso','curso_id','id'));
 
 	}
 

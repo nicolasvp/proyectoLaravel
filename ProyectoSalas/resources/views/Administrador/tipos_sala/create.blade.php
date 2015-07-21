@@ -20,6 +20,10 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+
+@include('Administrador/messages')
+
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\TipoSalaController@post_store'], 'method' => 'POST']) !!}
@@ -35,7 +39,7 @@
       </div>
      
       
-      <div align=center><button type="submit" class="btn btn-primary">Aceptar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Aceptar</button></div>
 
       {!! Form::close() !!}
      

@@ -16,19 +16,21 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\CursoController@post_store'], 'method' => 'POST']) !!}
 
       <div class="form-group">
-       {!! Form::label('asignatura_id', 'Asignatura') !!}
-       {!! Form::select('asignatura_id', (['0' => '-- Seleccionar una asignatura --'] +$asignaturas), null, ['class' => 'form-control'])!!}
+       {!! Form::label('asignatura', 'Asignatura') !!}
+       {!! Form::select('asignatura', (['0' => '-- Seleccionar una asignatura --'] +$asignaturas), null, ['class' => 'form-control'])!!}
       </div>
 
 
       <div class="form-group">
-        {!! Form::label('docente_id', 'Docente') !!}
-       {!! Form::select('docente_id', (['0' => '-- Seleccionar un docente --'] +  $docentes), null, ['class' => 'form-control'])!!}
+        {!! Form::label('docente', 'Docente') !!}
+       {!! Form::select('docente', (['0' => '-- Seleccionar un docente --'] +  $docentes), null, ['class' => 'form-control'])!!}
       </div>
 
       <div class="form-group">
@@ -37,15 +39,14 @@
       </div>
 
       <div class="form-group">
-        {!! Form::label('anio', 'Anio') !!}
-       {!! Form::text('anio', '',['class' => 'form-control', 'placeholder' => 'Ingresa año']) !!}
+        {!! Form::label('año', 'Año') !!}
+       {!! Form::text('año', '',['class' => 'form-control', 'placeholder' => 'Ingresa año']) !!}
       </div>
 
       <div class="form-group">
         {!! Form::label('seccion', 'Sección') !!}
        {!! Form::text('seccion', '',['class' => 'form-control', 'placeholder' => 'Ingresa sección']) !!}
       </div>
-
      
       
       <div align=center><button type="submit" class="btn btn-primary">Aceptar</button></div>

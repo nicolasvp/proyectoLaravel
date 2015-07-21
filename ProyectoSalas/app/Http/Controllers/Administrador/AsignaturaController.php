@@ -37,11 +37,12 @@ class AsignaturaController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests\CreateAsignaturaRequest $request)
 	{
 	
 		$asignatura = new Asignatura();
-		$asignatura->fill(\Request::all());
+		$asignatura->fill(['departamento_id' => $request->get('departamento'),'codigo' => $request->get('codigo'),
+			'nombre' => $request->get('nombre'), 'descripcion' => $request->get('descripcion')]);
 		$asignatura->save();
 
 		Session::flash('message', 'La asignatura '.\Request::get('nombre').' fue creada exitosamente!');
@@ -66,7 +67,7 @@ class AsignaturaController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditAsignaturaRequest $request)
 	{
 	
 		$asignatura = Asignatura::findOrFail($request->get('id'));
@@ -158,6 +159,35 @@ class AsignaturaController extends Controller {
 	 	return redirect()->action('Administrador\AsignaturaController@getIndex');
 
 		}
+	}
+
+	public function get_download()
+	{
+		$var = Asignatura::all();
+
+		\Excel::create('Asignaturas',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('CODIGO','NOMBRE','DESCRIPCION'));
+
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->codigo,$v->nombre,$v->descripcion));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
+
+	       return redirect()->action('Administrador\CampusController@get_list');
 	}
 	
 

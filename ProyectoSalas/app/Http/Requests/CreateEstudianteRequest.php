@@ -23,10 +23,10 @@ class CreateEstudianteRequest extends Request {
 	{
 		return [
 			'carrera' => 'required|integer|not_in:0',
-			'rut' => 'required|integer|unique:estudiantes,rut',
+			'rut' => 'required|integer|between:8,9|unique:estudiantes,rut',
 			'nombres' => 'required|alpha',
 			'apellidos' => 'required|alpha',
-			'email' => 'required'
+			'email' => 'required|email|valid_email'
 		];
 	}
 

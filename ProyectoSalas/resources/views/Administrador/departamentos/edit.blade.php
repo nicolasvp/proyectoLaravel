@@ -13,6 +13,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+        @include('Administrador/messages')
+        
        <div class="form-group">
   
       {!! Form::model($departamentoEditable, ['action' => ['Administrador\DepartamentoController@put_update', $departamentoEditable], 'method' => 'PUT']) !!}

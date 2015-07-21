@@ -6,7 +6,6 @@ use App\Models\Horario;
 use App\Models\Asignaturas_cursada;
 use App\Models\Periodo;
 use App\Models\Campu;
-use App\Models\Dia;
 use App\Models\Curso;
 
 
@@ -30,9 +29,8 @@ class DocenteController extends Controller {
 				->join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->where('cursos.docente_id', '=', '1') //debe cambiar el id del estudiante
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 				
 		
@@ -46,9 +44,9 @@ class DocenteController extends Controller {
 	{
 		$campus = Campus::paginate()->lists('nombre','id');
 		$periodo = Periodo::paginate()->lists('bloque','id');
-		$dia = Dia::paginate()->lists('nombre','id');
 
-		return view('Docente/consulta',compact('campus','periodo','dia'));
+
+		return view('Docente/consulta',compact('campus','periodo'));
 	}
 
 
@@ -61,10 +59,8 @@ class DocenteController extends Controller {
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->where('horarios.periodo_id', '=', $request->get('periodo'))
-				->where('horarios.dia_id','=', $request->get('dia')) 
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 
 		return view('Docente/resultado',compact('resultados'));

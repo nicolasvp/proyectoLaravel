@@ -26,6 +26,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+
        <div class="form-group">
   
 
@@ -34,7 +37,7 @@
 
 
     <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
+    {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --']  +$departamentos), null, ['class' => 'form-control'])!!}
     </div>
 
 

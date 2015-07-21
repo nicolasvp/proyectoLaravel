@@ -22,6 +22,8 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\DepartamentoController@post_store'], 'method' => 'POST']) !!}

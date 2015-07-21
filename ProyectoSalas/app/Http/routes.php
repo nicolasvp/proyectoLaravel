@@ -47,7 +47,6 @@ Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], func
     Route::controller('facultades','FacultadController');
     Route::controller('funcionarios','FuncionarioController');
     Route::controller('periodos','PeriodoController');
-    Route::controller('dias','DiaController');
     Route::controller('roles','RolController');
     Route::controller('roles_usuarios','RolUsuarioController'); 
 
@@ -70,6 +69,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 Route::Controller("alumno","AlumnoController");
+Route::Controller("docente","DocenteController");
 
 
 Route::Controller("/login","loginController");

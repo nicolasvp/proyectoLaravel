@@ -15,6 +15,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+    
        <div class="form-group">
   
       {!! Form::model($campusEditable, ['action' => ['Administrador\CampusController@put_update', $campusEditable], 'method' => 'PUT']) !!}

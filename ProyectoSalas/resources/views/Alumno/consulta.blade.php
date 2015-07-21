@@ -37,10 +37,6 @@
     </div>
 
     
-     <div class="form-group">
-      {!! Form::label('dia', 'Día') !!}
-   {!! Form::select('dia', (['0' => 'Selecciona un Día'] + $dia), null, ['class' => 'form-control']) !!}
-    </div>
 
       <div align="center"<th><button type="submit"  class="btn btn-primary ">Consultar</button></th></div>
       {!! Form::close() !!}

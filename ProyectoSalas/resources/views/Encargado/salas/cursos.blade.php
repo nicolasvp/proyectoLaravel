@@ -56,7 +56,7 @@
                <td>{{ $cur->seccion}}</td>
                <td>
 
-      {!! Form::open(['action' => ['Encargado\SalaController@get_datos'], 'method' => 'GET']) !!}
+      {!! Form::open(['action' => ['Encargado\SalaController@get_campus'], 'method' => 'GET']) !!}
       {!! Form::hidden('id_curso', $cur->id)!!}
        <button type="submit" class="btn btn-success btn-sm">Seleccionar</button>
       {!! Form::close() !!}

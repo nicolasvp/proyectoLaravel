@@ -11,9 +11,8 @@ use App\Models\Curso;
 use App\Models\Periodo;
 use App\Models\Horario;
 use App\Models\Campus;
-use App\Models\Dia;
 
-
+use Carbon\Carbon;
 
 
 
@@ -40,7 +39,12 @@ class SalaController extends Controller {
 
 
 
-
+	public function get_campus(Request $request)
+	{
+		$campus = Campus::all()->lists('nombre','id');
+		$id_curso = $request->get('id_curso');
+		return view('Encargado/salas/campus',compact('campus','id_curso'));
+	}
 
 	public function get_datos(Request $request)
 	{
@@ -52,40 +56,100 @@ class SalaController extends Controller {
 				->paginate();
 
 
-		$periodos = Periodo::paginate()->lists('bloque','id');
+		$periodos = Periodo::get()->lists('bloque','id');
 		
-		$salas = Sala::paginate()->lists('nombre','id');
+		$salas = Sala::where('campus_id','=',$request->get('campus'))->get()->lists('nombre','id');
 
 		$curso_id = $request->get('id_curso');
 
-		$dias = Dia::paginate()->lists('nombre','id');
 
-		return view('Encargado/salas/create',compact('datos_curso','periodos','salas','curso_id','dias'));
+		return view('Encargado/salas/create',compact('datos_curso','periodos','salas','curso_id'));
 	}
 
 
 
 
-	public function post_store(Requests \AsignarSalaRequest $request)
+	public function post_store(Request $request)
 	{
 	
-//dd($request);
-		//$horario = new Horario();
-		/*$horario = Horario::where('sala_id','=',$request->get('sala'),'and','periodo_id','=',$request->get('periodo'),
-			'and','dia_id','=',$request->get('dia'))
-		->select('horario.*')
-		->paginate();*/
-		$horario = \DB::table('horarios')->where('sala_id','=',$request->get('sala'),'and','periodo_id','=',$request->get('periodo'),
-			'and','dia_id','=',$request->get('dia'))->get();
-		
-		if($horario!=null)
-		dd($horario);
-	else{
-		dd('holra');
-		$horario->fill(['sala_id' => $request->get('sala'), 'periodo_id' => $request->get('periodo'),
-    	'curso_id' => $request->get('curso'),'dia_id' => $request->get('dia')]);
-		$horario->save();
-}
+		//	dd($request);
+		$inicio = new Carbon($request->inicio);
+		$termino = new Carbon($request->termino);
+
+
+		while($inicio <= $termino)
+		{
+			Carbon::setTestNow($inicio);
+			if($request->lunes)
+			{
+				$lunes = new Carbon('this monday');
+				if($lunes <= $termino)
+				{
+				$lun = new Horario();
+				$lun->fill(['fecha' => $lunes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$lun->save();
+				}
+				//echo "lunes: ".$lunes."<br>";
+			}
+			if($request->martes)
+			{
+				$martes = new Carbon('this tuesday');
+				if($martes <= $termino)
+				{
+				$mar = new Horario();
+				$mar->fill(['fecha' => $martes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$mar->save();
+				//echo "martes: ".$martes."<br>";
+				}
+			}
+			if($request->miercoles)
+			{
+				$miercoles = new Carbon('this wednesday');
+				if($miercoles <= $termino)
+				{
+				$mier = new Horario();
+				$mier->fill(['fecha' => $miercoles,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$mier->save();
+				//echo "miercoles: ".$miercoles."<br>";
+				}
+			}
+			if($request->jueves)
+			{
+				$jueves = new Carbon('this thursday');
+				if($jueves <= $termino)
+				{
+				$jue = new Horario();
+				$jue->fill(['fecha' => $jueves,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$jue->save();
+				//echo "jueves: ".$jueves."<br>";
+				}
+			}
+			if($request->viernes)
+			{
+				$viernes = new Carbon('this friday');
+				if($viernes <= $termino)
+				{
+				$vier = new Horario();
+				$vier->fill(['fecha' => $viernes,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$vier->save();
+				//echo "viernes: ".$viernes."<br>";
+				}
+			}
+			if($request->sabado)
+			{
+				$sabado = new Carbon('this saturday');
+				if($sabado <= $termino)
+				{
+				$sab = new Horario();
+				$sab->fill(['fecha' => $sabado,'sala_id' => $request->get('sala'),'periodo_id' => $request->get('periodo'),'curso_id' => $request->get('curso')]);
+				$sab->save();
+				//echo "sabado: ".$sabado."<br>";
+				}
+			}
+
+			$inicio->addWeek(1);
+			
+		}	
 
 		Session::flash('message', 'La sala fue asignada exitosamente!');
 

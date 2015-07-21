@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Escuela;
@@ -38,11 +37,11 @@ class EscuelaController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateEscuelaRequest $request)
 	{
 		
 		$escuela= new Escuela();
-		$escuela->fill(\Request::all());
+		$escuela->fill($request->all());
 		$escuela->save();
 
 		Session::flash('message', 'La escuela '.$escuela->nombre.' fue creada exitosamente!');
@@ -68,7 +67,7 @@ class EscuelaController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditEscuelaRequest $request)
 	{
 
 		$escuela = Escuela::findOrFail($request->get('id'));

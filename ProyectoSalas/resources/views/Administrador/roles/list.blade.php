@@ -11,15 +11,6 @@
  
    <p> <h2>Lista de roles</h2></p>
 
-         <p>
-                         {!! Form::open(['action' => 'Administrador\RolController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar rol</button>
-
-                         {!! Form::close() !!}
-         </p>
-
-
       @if(Session::has('message'))
 
           <div class="alert alert-dismissible alert-success">
@@ -38,6 +29,13 @@
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
+
+
+        {!! Form::open(['action' => 'Administrador\RolController@get_create', 'method' => 'GET']) !!}
+   
+          <button type="submit" class="btn btn-success">Ingresar rol</button>
+
+        {!! Form::close() !!}
 
           <table class="table table-striped">
             <tr> 

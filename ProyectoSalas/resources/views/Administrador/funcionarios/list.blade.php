@@ -10,13 +10,7 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Funcionarios</h2></p>
 
-            <p>
-                         {!! Form::open(['action' => 'Administrador\FuncionarioController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar funcionario</button>
 
-                         {!! Form::close() !!}
-         </p>
 
       @if(Session::has('message'))
 
@@ -36,6 +30,11 @@
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
+          {!! Form::open(['action' => 'Administrador\FuncionarioController@get_create', 'method' => 'GET']) !!}
+         
+               <button type="submit" class="btn btn-success">Ingresar funcionario</button>
+
+          {!! Form::close() !!}
           <table class="table table-striped">
             <tr> 
               <th>#</th>

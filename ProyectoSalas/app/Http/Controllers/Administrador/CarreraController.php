@@ -38,11 +38,11 @@ class CarreraController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateCarreraRequest $request)
 	{
 		
 		$carrera= new Carrera();
-		$carrera->fill(\Request::all());
+		$carrera->fill($request->all());
 		$carrera->save();
 
 		Session::flash('message', 'La carrera '.$carrera->nombre.' fue creada exitosamente!');
@@ -67,7 +67,7 @@ class CarreraController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditCarreraRequest $request)
 	{
 
 		$carrera = Carrera::findOrFail($request->get('id'));

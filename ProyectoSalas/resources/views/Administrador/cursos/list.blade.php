@@ -18,7 +18,7 @@
          <p>
                          {!! Form::open(['action' => 'Administrador\CursoController@get_departamento', 'method' => 'GET']) !!}
    
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar curso</button>
+                          <button type="submit" class="btn btn-success">Ingresar curso</button>
 
                          {!! Form::close() !!}
          </p>
@@ -35,12 +35,21 @@
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
+        
+          {!! Form::open(['action' => ['Administrador\CursoController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+            <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Docente,Rut']) !!}
+          </div>
+          <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
+
 
           <table class="table table-striped">
             <tr> 
               <th>#</th>
               <th>Nombre</th>
               <th>Docente</th>
+              <th>Rut</th>
               <th>Semestre</th>
               <th>Sección</th>
                <th>Editar</th>
@@ -52,7 +61,8 @@
             <tr>
                <td>{{ $curso->id}}</td>
                <td>{{ $curso->nombre}}</td>
-               <td>{{ $curso->nombres}} {{ $curso->apellidos}} - {{ $curso->rut}}</td>
+               <td>{{ $curso->nombres}} {{ $curso->apellidos}}</td>
+               <td>{{ $curso->rut}}</td>
                <td>{{ $curso->semestre}}</td>
                <td>{{ $curso->seccion}}</td>
               <td>

@@ -124,9 +124,9 @@ public function getIndex()
 	public function post_upload(Request $request)
 	{
 
-	    // dd($request);
+
 		   $file = $request->file('file');
-	    //dd($file);
+
 	       $nombre = $file->getClientOriginalName();
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));

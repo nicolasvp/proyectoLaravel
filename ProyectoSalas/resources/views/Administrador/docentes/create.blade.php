@@ -24,6 +24,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+       @include('Administrador/messages')
+    
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\DocenteController@post_store'], 'method' => 'POST']) !!}
@@ -31,7 +34,7 @@
 
       <div class="form-group">
        {!! Form::label('departamento_id', 'Departamento') !!}
-       {!! Form::select('departamento_id', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
+       {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
       </div>
 
 

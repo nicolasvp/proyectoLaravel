@@ -23,7 +23,7 @@ class CreateDocenteRequest extends Request {
 	{
 		return [
 			'departamento' => 'required|integer|not_in:0',
-			'rut' => 'required|integer|unique:docentes,rut',
+			'rut' => 'required|integer|between:8,9|unique:docentes,rut',
 			'nombres' => 'required|alpha',
 			'apellidos' => 'required|alpha'
 		];

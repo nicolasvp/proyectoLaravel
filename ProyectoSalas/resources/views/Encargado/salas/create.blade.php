@@ -1,8 +1,6 @@
 @extends('layouts/master')
 
 
-
-
 @section('sideBar')
 
 
@@ -54,33 +52,46 @@
 </div>
 
 
-
-
 <div class="panel panel-default">
     <div class="panel-body">
 
        @include('Encargado/messages')
 
-       <table class="table table-striped">
 
      <div class="form-group">
    {!! Form::open(['action' => 'Encargado\SalaController@post_store']) !!}
 
 
-<p> <h2>Selección de Día</h2></p>
-    <div class="form-group">
-   {!! Form::select('dia', (['0' => '-- Selecciona un día --'] + $dias), null, ['class' => 'form-control']) !!}
-    </div>
 
+<table class="table table-striped">
+<tr>
+<td><p>Fecha de inicio</p></td>
+<td>{!! Form::date('inicio', \Carbon\Carbon::now()) !!}</td>
+<td><p>Fecha de término</p></td>
+<td>{!! Form::date('termino', \Carbon\Carbon::now()) !!}</td>
+</tr>
+
+ </table>
+
+<p> <h2>Selección de dias</h2></p>
+          <table class="table table-striped">
+            <tr> 
+              <th>   <div class="form-group">Lunes  {!! Form::checkbox('lunes', '1' ) !!}</div></th>
+              <th><div class="form-group">Martes  {!! Form::checkbox('martes', '2' ) !!}</div></th>
+              <th>     <div class="form-group">Miércoles  {!! Form::checkbox('miercoles', '3' ) !!}</div></th>
+              <th><div class="form-group">Jueves  {!! Form::checkbox('jueves', '4' ) !!}</div></th>
+              <th>   <div class="form-group">Viernes  {!! Form::checkbox('viernes', '5' ) !!}</div></th>
+               <th>   <div class="form-group">Sábado  {!! Form::checkbox('sabado', '6' ) !!}</div></th>
+            </tr>
+     
+
+          </table>
 
 <p> <h2>Selección de período</h2></p>
-
-
 
     <div class="form-group">
    {!! Form::select('periodo', (['0' => '-- Selecciona un Período --'] + $periodos), null, ['class' => 'form-control']) !!}
     </div>
-
 
 
 <p> <h2>Selección de sala</h2></p>
@@ -93,13 +104,15 @@
     {!! Form::hidden('curso', $curso_id)!!}
     </div>
 
+ 
+
       <div align="center"<th><button type="submit" class="btn btn-primary ">Asignar</button></th></div>
       {!! Form::close() !!}
 
 
       </div>
 
-      </table>
+      
 
     </div>
 </div>

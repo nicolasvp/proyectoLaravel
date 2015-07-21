@@ -11,14 +11,6 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Estudiantes</h2></p>
 
-            <p>
-                         {!! Form::open(['action' => 'Administrador\EstudianteController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar estudiante</button>
-
-                         {!! Form::close() !!}
-         </p>
-
       @if(Session::has('message'))
 
           <div class="alert alert-dismissible alert-success">
@@ -39,6 +31,11 @@
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
+        {!! Form::open(['action' => 'Administrador\EstudianteController@get_create', 'method' => 'GET']) !!}
+   
+            <button type="submit" class="btn btn-success">Ingresar estudiante</button>
+
+        {!! Form::close() !!}
 
           <table class="table table-striped">
             <tr> 

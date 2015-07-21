@@ -39,7 +39,7 @@
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->sala}}</td>
                <td>{{$horario->inicio}} - {{$horario->fin}}</td>
-               <td>{{ $horario->dia}}</td>
+               <td></td>
             </tr>
 
              @endforeach

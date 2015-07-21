@@ -21,9 +21,10 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
-       <div class="form-group">
-  
 
+       @include('Administrador/messages')
+
+       <div class="form-group">
 
    
       {!! Form::model($datos_sala, ['action' => ['Administrador\SalaController@put_updateSala', $datos_sala], 'method' => 'PUT']) !!}
@@ -40,13 +41,13 @@
 
       <div class="form-group">
          {!! Form::label('campus', 'Campus') !!}
-       {!! Form::select('campus_id', ( $campus), null, ['class' => 'form-control'])!!}
+       {!! Form::select('campus', ( $campus), null, ['class' => 'form-control'])!!}
       </div>
 
 
       <div class="form-group">
          {!! Form::label('tipo', 'Tipo') !!}
-       {!! Form::select('tipo_sala_id', ( $tipos_salas), null, ['class' => 'form-control'])!!}
+       {!! Form::select('tipo_sala', ( $tipos_salas), null, ['class' => 'form-control'])!!}
       </div>
 
       <div class="form-group">

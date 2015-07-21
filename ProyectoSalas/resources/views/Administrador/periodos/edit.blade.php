@@ -35,7 +35,7 @@
 
         {!! Form::hidden('id', $id)!!}
 
-      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Actualizar</button></div>
 
       {!! Form::close() !!}
 

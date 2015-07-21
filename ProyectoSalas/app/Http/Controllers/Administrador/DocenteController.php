@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Docente;
 use App\Models\Departamento;
@@ -36,11 +35,12 @@ class DocenteController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests\CreateDocenteRequest $request)
 	{
 		
 		$docente= new Docente();
-		$docente->fill(\Request::all());
+		$docente->fill(['departamento_id' => $request->get('departamento'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
+			'apellidos' => $request->get('apellidos')]);
 		$docente->save();
 
 		Session::flash('message', 'El docente '.$docente->nombres.' '.$docente->apellidos.' fue creado exitosamente!');
@@ -66,7 +66,7 @@ class DocenteController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditDocenteRequest $request)
 	{
 
 		$estudiante = Docente::findOrFail($request->get('id'));

@@ -14,12 +14,16 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+    
        <div class="form-group">
   
       {!! Form::model($estudianteEditable, ['action' => ['Administrador\EstudianteController@put_update', $estudianteEditable], 'method' => 'PUT']) !!}
 
+
       <div class="form-group">
-       {!! Form::label('carrera_id', 'Carrera') !!}
+       {!! Form::label('carrera', 'Carrera') !!}
        {!! Form::select('carrera_id', (['0' => '-- Seleccionar una carrera --'] +$carreras), null, ['class' => 'form-control'])!!}
       </div>
 
@@ -48,7 +52,7 @@
         {!! Form::hidden('id', $id)!!}
     
 
-      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Actualizar</button></div>
 
       {!! Form::close() !!}
 

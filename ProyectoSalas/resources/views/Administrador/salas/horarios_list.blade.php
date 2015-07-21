@@ -9,14 +9,6 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de horarios</h2></p>
 
-             <p>
-                         {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar horario</button>
-
-                         {!! Form::close() !!}
-         </p>
-
 
       @if(Session::has('message'))
 
@@ -32,25 +24,33 @@
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
+
           {!! Form::open(['action' => ['Administrador\SalaController@get_searchHorario'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
-            <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso,Docente']) !!}
-          </div>
+              
+              <div class="form-group">
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Campus,Curso,Docente']) !!}
+             
+             </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
+          {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
+   
+            <button type="submit" class="btn btn-success">Ingresar horario</button>
+
+          {!! Form::close() !!}
 
 </form>
 
 
           <table class="table table-striped">
             <tr> 
+              <th>Campus</th>
               <th>Curso</th>
               <th>Docente</th>
               <th>Período</th>
-              <th>Hora</th>
               <th>Sala</th>
-              <th>Día</th>
+              <th>Fecha</th>
               <th></th>
             </tr>
 
@@ -58,12 +58,13 @@
             @foreach($datos_horarios as $horario)
 
             <tr>
+               <td>{{ $horario->campus}}</td>
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->nombres}} {{$horario->apellidos}}</td>
                <td>{{ $horario->bloque}}
-               <td>{{ $horario->inicio}} - {{ $horario->fin}}</td>
                <td>{{ $horario->sala}}</td>
-               <td>{{ $horario->dia}}</td>
+               <td>{{ $horario->fecha}}</td>
+
 
      <td>
                  {!! Form::open(['action' => ['Administrador\SalaController@get_editHorario'], 'method' => 'GET']) !!}

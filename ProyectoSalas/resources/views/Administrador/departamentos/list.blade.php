@@ -13,14 +13,6 @@
  
    <p> <h2>Lista de los departamentos</h2></p>
 
-         <p>
-                         {!! Form::open(['action' => 'Administrador\DepartamentoController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar departamento</button>
-
-                         {!! Form::close() !!}
-         </p>
-
 
       @if(Session::has('message'))
 
@@ -40,6 +32,13 @@
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
+
+
+            {!! Form::open(['action' => 'Administrador\DepartamentoController@get_create', 'method' => 'GET']) !!}
+   
+           <button type="submit" class="btn btn-success">Ingresar departamento</button>
+
+           {!! Form::close() !!}
 
           <table class="table table-striped">
             <tr> 

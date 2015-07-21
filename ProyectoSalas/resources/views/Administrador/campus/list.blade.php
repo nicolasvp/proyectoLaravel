@@ -11,16 +11,26 @@
        
 
     <div class="col-sm-9" >
-   <p> <h2>Lista de campus</h2></p>
 
-    <p>
-                         {!! Form::open(['action' => 'Administrador\CampusController@get_create', 'method' => 'GET']) !!}
+   <p> <h2>Lista de campus</h2></p>
+     <p>
+                         {!! Form::open(['action' => 'Administrador\CampusController@get_download', 'method' => 'GET']) !!}
    
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar campus</button>
+                          <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
 
                          {!! Form::close() !!}
-         </p>
+    </p>
+    
+            <p>             {!! Form::open(['action' => 'Administrador\CampusController@get_create', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-success">Ingresar campus</button>
 
+                         {!! Form::close() !!}
+        </p>
+
+           
+
+        
 
       @if(Session::has('message'))
 

@@ -11,7 +11,7 @@ class EditFacultadRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -21,9 +21,10 @@ class EditFacultadRequest extends Request {
 	 */
 	public function rules()
 	{
-		dd($this->id);
+	
 		return [
-			//
+			'nombre' => 'required|alpha|unique:facultades,nombre,'.$this->id,
+			'campus_id' => 'required|integer|not_in:0'
 		];
 	}
 

@@ -49,18 +49,7 @@
       </td>
      
     </tr>
-    <tr>
-     
-      <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Modificar Salas</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_selectCampus', 'method' => 'GET']) !!}
 
-
-                    <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
-                      {!! Form::close() !!}
-          
-      </td>
-      
-    </tr>
         <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Salas</b></h3></td>

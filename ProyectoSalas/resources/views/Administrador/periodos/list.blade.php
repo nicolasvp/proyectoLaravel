@@ -10,13 +10,14 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Períodos</h2></p>
 
-            <p>
-                         {!! Form::open(['action' => 'Administrador\PeriodoController@get_create', 'method' => 'GET']) !!}
+   <p>
+      {!! Form::open(['action' => 'Administrador\PeriodoController@get_create', 'method' => 'GET']) !!}
    
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar periodo</button>
+        <button type="submit" class="btn btn-success">Ingresar periodo</button>
 
-                         {!! Form::close() !!}
-         </p>
+      {!! Form::close() !!}
+
+   </p>
 
       @if(Session::has('message'))
 

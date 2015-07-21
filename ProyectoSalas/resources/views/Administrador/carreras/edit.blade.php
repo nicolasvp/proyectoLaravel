@@ -14,6 +14,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+    
        <div class="form-group">
   
       {!! Form::model($carreraEditable, ['action' => ['Administrador\CarreraController@put_update', $carreraEditable], 'method' => 'PUT']) !!}

@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\Tipo_sala;
@@ -31,11 +30,11 @@ class TipoSalaController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreateTipoSalaRequest $request)
 	{
 		
 		$tipo= new Tipo_sala();
-		$tipo->fill(\Request::all());
+		$tipo->fill($request->all());
 		$tipo->save();
 
 		Session::flash('message', 'El tipo de sala '.$tipo->nombre.' fue creado exitosamente!');

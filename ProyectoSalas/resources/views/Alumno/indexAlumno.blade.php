@@ -18,7 +18,6 @@
   <div class="form-group">
   <div class="jumbotron">
       <h2>Aca van las opciones</h2>
-      <p>{{$fecha}}</p>
 
    
      
@@ -34,7 +33,6 @@
 </div>
 
 
-      </div>
-    </div>
+      
 
 @stop

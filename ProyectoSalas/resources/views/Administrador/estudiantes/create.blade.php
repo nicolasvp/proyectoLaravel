@@ -22,6 +22,9 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+    
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\EstudianteController@post_store'], 'method' => 'POST']) !!}
@@ -29,33 +32,32 @@
 
       <div class="form-group">
        {!! Form::label('carrera_id', 'Carrera') !!}
-       {!! Form::select('carrera_id', (['0' => '-- Seleccionar una carrera --'] +$carreras), null, ['class' => 'form-control'])!!}
+       {!! Form::select('carrera', (['0' => '-- Seleccionar una carrera --'] +$carreras), null, ['class' => 'form-control'])!!}
       </div>
 
 
       <div class="form-group">
-       {!! Form::label('rut', 'Rut') !!}
-       {!! Form::text('rut', null,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
-         
+        {!! Form::label('rut', 'RUT') !!}
+       {!! Form::text('rut', '',['class' => 'form-control', 'placeholder' => 'Ingresa RUT']) !!}
       </div>
 
       <div class="form-group">
         {!! Form::label('nombres', 'Nombres') !!}
-       {!! Form::text('nombres', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombres']) !!}
+       {!! Form::text('nombres', '',['class' => 'form-control', 'placeholder' => 'Ingresa nombres']) !!}
       </div>
 
-        <div class="form-group">
+      <div class="form-group">
         {!! Form::label('apellidos', 'Apellidos') !!}
-       {!! Form::text('apellidos', null,['class' => 'form-control', 'placeholder' => 'Ingresa apellidos']) !!}
+       {!! Form::text('apellidos', '',['class' => 'form-control', 'placeholder' => 'Ingresa apellidos']) !!}
       </div>
 
-        <div class="form-group">
-        {!! Form::label('email', 'Email') !!}
-       {!! Form::text('email', null,['class' => 'form-control', 'placeholder' => 'Ingresa email']) !!}
+      <div class="form-group">
+       {!! Form::label('email', 'Email') !!}
+       {!! Form::text('email', '',['class' => 'form-control', 'placeholder' => 'Ingresa email']) !!}
       </div>
 
 
-      <div align=center><button type="submit" class="btn btn-info">Aceptar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Aceptar</button></div>
 
       {!! Form::close() !!}
      

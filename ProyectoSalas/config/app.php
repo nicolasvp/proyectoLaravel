@@ -138,6 +138,8 @@ return [
 		
 		'UTEM\Dirdoc\Auth\DirdocAuthServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'App\Providers\email',
+	
 		/*
 		*Agregado
 		*/

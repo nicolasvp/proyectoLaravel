@@ -3,7 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-//use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Campus;
 use App\Models\Facultad;
@@ -53,7 +52,7 @@ class FacultadController extends Controller {
 
 
 
-	public function get_edit(Requests\EditFacultadRequest $request)
+	public function get_edit(Request $request)
 	{
 		
 		$facultadEditable = Facultad::findOrFail($request->get('id'));
@@ -68,7 +67,7 @@ class FacultadController extends Controller {
 
 
 
-	public function put_update(Request $request)
+	public function put_update(Requests \EditFacultadRequest $request)
 	{
 
 		$facultad = Facultad::findOrFail($request->get('id'));

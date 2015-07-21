@@ -12,13 +12,7 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Docentes</h2></p>
 
-            <p>
-                         {!! Form::open(['action' => 'Administrador\DocenteController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-primary btn-sm">Ingresar docente</button>
 
-                         {!! Form::close() !!}
-         </p>
 
       @if(Session::has('message'))
 
@@ -35,8 +29,14 @@
          {!! Form::open(['action' => ['Administrador\DocenteController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
           {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Rut,Departamento']) !!}
-          </div>
-          <button type="submit" class="btn btn-info">Buscar</button>
+            </div>
+            <button type="submit" class="btn btn-info">Buscar</button>
+          {!! Form::close() !!}
+
+          {!! Form::open(['action' => 'Administrador\DocenteController@get_create', 'method' => 'GET']) !!}
+   
+            <button type="submit" class="btn btn-success">Ingresar docente</button>
+
           {!! Form::close() !!}
 
 
