@@ -4,10 +4,14 @@
 @section('sideBar')
 
 
-        
-             @include('Encargado/top')
        
-
+<div class="panel panel-default" style="margin-top: 40px;"> 
+            
+     @include('Encargado/top')
+       
+  <div class="panel-body">                  
+                  
+   <div class="row">
    <div class="col-sm-9" >
    <p> <h2>Lista de Estudiantes </h2></p>
 
@@ -92,13 +96,15 @@
 </div>
 </div>
 </div>
+</div>
+</div>
 
                     
 </div>
 
 
       </div>
-    </div>
+
 
 
 @stop

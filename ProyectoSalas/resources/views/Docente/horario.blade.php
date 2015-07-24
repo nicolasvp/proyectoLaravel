@@ -3,6 +3,8 @@
 
 @section('sideBar')
 
+<div class="panel panel-default" style="margin-top: 40px;">
+
 @include('Docente/top')
 
 
@@ -59,8 +61,6 @@
 
 
       </div>
-    </div>
-
 
 @stop
 

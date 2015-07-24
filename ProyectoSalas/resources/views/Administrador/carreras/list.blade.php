@@ -4,10 +4,12 @@
 
 
 
-
+<div class="panel panel-default" style="margin-top: 40px;">
       @include('Administrador/menu')
        
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
 
    <div class="col-sm-9" >
@@ -94,9 +96,10 @@
                     
 </div>
 
-
       </div>
     </div>
+      </div>
+    
 
 
 @stop

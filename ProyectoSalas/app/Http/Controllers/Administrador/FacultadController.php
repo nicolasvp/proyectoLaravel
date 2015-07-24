@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Campus;
 use App\Models\Facultad;
+use App\Models\Rol_usuario;
 
 
 
@@ -22,8 +23,12 @@ class FacultadController extends Controller {
 							->select('facultades.*','campus.nombre as campus')
 							->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 		
-		return view('Administrador/facultades/list',compact('datos_facultades'));
+		return view('Administrador/facultades/list',compact('datos_facultades','var'));
 
 	}
 
@@ -33,7 +38,12 @@ class FacultadController extends Controller {
 
 		$campus = Campus::paginate()->lists('nombre','id');
 
-		return view('Administrador/facultades/create',compact('campus'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/facultades/create',compact('campus','var'));
 	}
 
 
@@ -61,7 +71,12 @@ class FacultadController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/facultades/edit', compact('facultadEditable','id','campus'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/facultades/edit', compact('facultadEditable','id','campus','var'));
 	
 	}
 
@@ -97,7 +112,13 @@ class FacultadController extends Controller {
 	public function get_campus()
 	{
 		$campus = Campus::all()->lists('nombre','id');
-		return view('Administrador/facultades/upload',compact('campus'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/facultades/upload',compact('campus','var'));
 	}
 
 	public function post_upload(Request $request)
@@ -144,7 +165,12 @@ class FacultadController extends Controller {
 			->select('facultades.*','campus.nombre as campus')
 			->paginate();
 
-			return view('Administrador/facultades/list',compact('datos_facultades'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/facultades/list',compact('datos_facultades','var'));
 			}
 
 			else

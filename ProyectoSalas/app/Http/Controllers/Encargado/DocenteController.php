@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Departamento;
 use App\Models\Docente;
+use App\Models\Rol_usuario;
 
 
 class DocenteController extends Controller {
@@ -19,7 +20,12 @@ public function getIndex()
 						->select('docentes.*','departamentos.nombre as departamento')
 						->paginate();
 
-		return view('Encargado/docentes/list',compact('datos_docentes'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/docentes/list',compact('datos_docentes','var'));
 	}
 
 
@@ -28,7 +34,12 @@ public function getIndex()
 
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
-		return view('Encargado/docentes/create',compact('departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/docentes/create',compact('departamentos','var'));
 	}
 
 
@@ -58,7 +69,12 @@ public function getIndex()
 
 		$id = $request->get('id');
 
-		return view('Encargado/docentes/edit', compact('docenteEditable','id','departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/docentes/edit', compact('docenteEditable','id','departamentos','var'));
 	
 	}
 
@@ -103,7 +119,12 @@ public function getIndex()
 			->select('docentes.*','departamentos.nombre as departamento')
 			->paginate();
 
-			return view('Encargado/docentes/list',compact('datos_docentes'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Encargado/docentes/list',compact('datos_docentes','var'));
 			}
 
 			else
@@ -118,7 +139,13 @@ public function getIndex()
 	public function get_departamentos()
 	{
 		$departamentos = Departamento::all()->lists('nombre','id');
-		return view('Encargado/docentes/upload',compact('departamentos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/docentes/upload',compact('departamentos','var'));
 	}
 
 	public function post_upload(Request $request)

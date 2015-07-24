@@ -6,9 +6,15 @@
 
 @section('sideBar')
 
+
+
+<div class="panel panel-default" style="margin-top: 40px;">
+
 @include('Alumno/top')
 
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
          <div class="col-sm-9">
    <p>                                                    
                         </p>
@@ -28,11 +34,11 @@
 </div>
 </div>
 </div>
-
+</div>
                     
 </div>
-
-
+</div>
+</div>
       
 
 @stop

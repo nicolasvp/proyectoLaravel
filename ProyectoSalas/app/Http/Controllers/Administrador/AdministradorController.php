@@ -4,7 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-
+use App\Models\Rol_usuario;
 
 
 
@@ -16,10 +16,18 @@ class AdministradorController extends Controller {
 
 
 	public function getIndex()
-	{
+	{	
+		
 
-		return view('Administrador/indexAdministrador');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/indexAdministrador',compact('var'));
 	}
+
+
 
 
 }

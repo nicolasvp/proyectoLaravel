@@ -12,6 +12,9 @@ return [
 	| as the size rules. Feel free to tweak each of these messages here.
 	|
 	*/
+	"spaceNum"			   => "El campo :attribute no es válido",
+	"rut"				   => "El campo :attribute no es válido",
+	"space"				   => "El campo :attribute no es válido",
 	"valid_email"		   => "El campo :attribute no es válido",
 	"accepted"             => "The :attribute must be accepted.",
 	"active_url"           => "The :attribute is not a valid URL.",

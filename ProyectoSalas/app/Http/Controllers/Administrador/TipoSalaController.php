@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\Tipo_sala;
+use App\Models\Rol_usuario;
 
 
 
@@ -20,13 +21,24 @@ class TipoSalaController extends Controller {
 	{
 
 		$datos_tipos = Tipo_sala::paginate();
-		return view('Administrador/tipos_sala/list',compact('datos_tipos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/tipos_sala/list',compact('datos_tipos','var'));
 	}
 
 	public function get_create()
 	{
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 		
-		return view('Administrador/tipos_sala/create');
+		return view('Administrador/tipos_sala/create',compact('var'));
 	}
 
 
@@ -52,7 +64,12 @@ class TipoSalaController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/tipos_sala/edit', compact('tipoEditable','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/tipos_sala/edit', compact('tipoEditable','id','var'));
 	
 	}
 
@@ -87,7 +104,13 @@ class TipoSalaController extends Controller {
 
 	public function get_upload()
 	{
-		return view('Administrador/tipos_sala/upload');
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/tipos_sala/upload',compact('var'));
 	}
 
 	public function post_upload(Request $request)
@@ -128,7 +151,12 @@ class TipoSalaController extends Controller {
 			->select('tipos_salas.*')
 			->paginate();
 
-			return view('Administrador/tipos_sala/list',compact('datos_tipos'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/tipos_sala/list',compact('datos_tipos','var'));
 			}
 
 			else

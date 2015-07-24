@@ -4,9 +4,13 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
 
            @include('Administrador/menu')
        
+   <div class="panel-body">                  
+                  
+   <div class="row">
 
 <div class="col-sm-9" >
   <p> <h2>Perfiles del usuario </h2></p>
@@ -76,7 +80,7 @@
    {!! Form::select('rol_asig', (['0' => 'Selecciona un Perfil'] + $rol_usuario), null, ['class' => 'form-control']) !!}
     </div>
 
-      <div align="center"<th><button type="submit" onclick="return confirm('¿Seguro que desea asignar este perfil?')" class="btn btn-primary ">Asignar perfil</button></th></div>
+      <div align="center"<th><button type="submit" onclick="return confirm('¿Seguro que desea asignar este perfil?')" class="btn btn-success">Asignar perfil</button></th></div>
       {!! Form::close() !!}
 
       </div>
@@ -92,7 +96,7 @@
                     
 </div>
 
-
+  </div>
       </div>
     </div>
 

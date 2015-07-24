@@ -4,8 +4,12 @@
 @section('sideBar')
 
 
-             
+ <div class="panel panel-default" style="margin-top: 40px;">            
         @include('Administrador/menu')
+
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
    <p> <h2>Lista de Funcionarios</h2></p>
@@ -87,7 +91,7 @@
                     
 </div>
 
-
+</div>
       </div>
     </div>
 

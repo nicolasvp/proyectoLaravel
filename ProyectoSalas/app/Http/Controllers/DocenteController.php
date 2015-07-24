@@ -5,8 +5,9 @@ use App\Models\Estudiante;
 use App\Models\Horario;
 use App\Models\Asignaturas_cursada;
 use App\Models\Periodo;
-use App\Models\Campu;
+use App\Models\Campus;
 use App\Models\Curso;
+use App\Models\Rol_usuario;
 
 
 class DocenteController extends Controller {
@@ -17,7 +18,12 @@ class DocenteController extends Controller {
 	public function getIndex()
 	{
 
-		return view('Docente/indexDocente');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/indexDocente',compact('var'));
 
 	}
 
@@ -33,8 +39,12 @@ class DocenteController extends Controller {
 				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 				
-		
-		return view('Docente/horario',compact('datos_horario'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/horario',compact('datos_horario','var'));
 
 	}
 
@@ -45,8 +55,12 @@ class DocenteController extends Controller {
 		$campus = Campus::paginate()->lists('nombre','id');
 		$periodo = Periodo::paginate()->lists('bloque','id');
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Docente/consulta',compact('campus','periodo'));
+		return view('Docente/consulta',compact('campus','periodo','var'));
 	}
 
 
@@ -63,7 +77,12 @@ class DocenteController extends Controller {
 				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 
-		return view('Docente/resultado',compact('resultados'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/resultado',compact('resultados','var'));
 		
 		
 	}

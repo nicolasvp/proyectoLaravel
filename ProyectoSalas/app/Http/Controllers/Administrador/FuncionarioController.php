@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Funcionario;
+use App\Models\Rol_usuario;
 
 
 
@@ -22,14 +23,27 @@ class FuncionarioController extends Controller {
 							->select('funcionarios.*','departamentos.nombre as departamento')
 							->paginate();
 
-		return view('Administrador/funcionarios/list',compact('datos_funcionarios'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+
+		return view('Administrador/funcionarios/list',compact('datos_funcionarios','var'));
 	}
 
 	public function get_create()
 	{
 
 		$departamentos = Departamento::paginate()->lists('nombre','id');
-		return view('Administrador/funcionarios/create',compact('departamentos'));
+
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/funcionarios/create',compact('departamentos','var'));
 	}
 
 
@@ -57,7 +71,13 @@ class FuncionarioController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','id','departamentos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','id','departamentos','var'));
 	
 	}
 
@@ -94,7 +114,13 @@ class FuncionarioController extends Controller {
 	{
 		$departamentos = Departamento::all()->lists('nombre','id');
 
-		return view ('Administrador/funcionarios/upload',compact('departamentos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view ('Administrador/funcionarios/upload',compact('departamentos','var'));
 	}
 
 	public function post_upload(Request $request)
@@ -139,7 +165,13 @@ class FuncionarioController extends Controller {
 			->select('funcionarios.*','departamentos.nombre as departamento')
 			->paginate();
 
-			return view('Administrador/funcionarios/list',compact('datos_funcionarios'));
+
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/funcionarios/list',compact('datos_funcionarios','var'));
 			}
 
 			else

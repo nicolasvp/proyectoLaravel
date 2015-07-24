@@ -8,15 +8,17 @@
 
 @section('sideBar')
 
-
+<div class="panel panel-default" style="margin-top: 40px;">
 
 @include('Encargado/top')
 
 
-         <div class="col-sm-9">
-   <p>                                                    
-                        </p>
-                        <div class="bs-docs-section">                
+ <div class="panel-body">                  
+                  
+   <div class="row">
+
+  <div class="col-sm-9">
+<div class="bs-docs-section">                
 <div class="panel panel-default">
 <div class="panel-body">
   <div class="form-group">
@@ -29,7 +31,6 @@
           </div>
 
       @endif
-     
     </div>
   </div>
 
@@ -41,5 +42,7 @@
                     
 </div>
 
-
+</div>
+</div>
+</div>
 @stop

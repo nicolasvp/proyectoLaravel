@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Periodo;
+use App\Models\Rol_usuario;
 
 
 
@@ -18,13 +19,23 @@ class PeriodoController extends Controller {
 	{
 
 		$datos_periodos = Periodo::paginate();
-		return view('Administrador/periodos/list',compact('datos_periodos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/periodos/list',compact('datos_periodos','var'));
 	}
 
 	public function get_create()
 	{
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/periodos/create');
+		return view('Administrador/periodos/create',compact('var'));
 	}
 
 
@@ -51,7 +62,12 @@ class PeriodoController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/periodos/edit', compact('periodoEditable','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/periodos/edit', compact('periodoEditable','id','var'));
 	
 	}
 
@@ -86,7 +102,13 @@ class PeriodoController extends Controller {
 
 	public function get_upload()
 	{
-		return view('Administrador/periodos/upload');
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/periodos/upload',compact('var'));
 	}
 
 	public function post_upload(Request $request)

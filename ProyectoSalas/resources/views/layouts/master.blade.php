@@ -21,7 +21,6 @@
 
 
 
-
 	</head>
 	<body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -44,10 +43,14 @@
 
     @yield('sideBar')
 
-    
-		<div id="footer">
-    <footer>© Sistema de Salas UTEM - 2015</footer>
-    </div>
+
 	
 	</body>
+          <footer class="footer">
+      <div class="container">
+        <p class="text-muted">© Sistema de Salas UTEM - 2015</p>
+      </div>
+    </footer>
+
+ 
 </html>

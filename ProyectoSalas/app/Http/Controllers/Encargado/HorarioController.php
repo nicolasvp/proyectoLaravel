@@ -12,6 +12,7 @@ use App\Models\Horario;
 use App\Models\Periodo;
 use App\Models\Sala;
 use App\Models\Curso;
+use App\Models\Rol_usuario;
 
 
 
@@ -32,8 +33,12 @@ public function getIndex()
 				->select('campus.nombre as campus','horarios.fecha','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Encargado/horarios/list',compact('datos_horarios'));
+		return view('Encargado/horarios/list',compact('datos_horarios','var'));
 	}
 
 
@@ -53,7 +58,13 @@ public function getIndex()
 				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
-		return view('Encargado/horarios/list',compact('datos_horarios'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+
+		return view('Encargado/horarios/list',compact('datos_horarios','var'));
 
 		}
 
@@ -87,7 +98,12 @@ public function getIndex()
 
 		$curso_id = $horarioEditable->curso_id;
 
-		return view('Encargado/horarios/edit', compact('horarioEditable','periodos','salas','curso','curso_id','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/horarios/edit', compact('horarioEditable','periodos','salas','curso','curso_id','id','var'));
 
 	}
 

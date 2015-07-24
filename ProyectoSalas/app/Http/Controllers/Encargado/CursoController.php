@@ -10,6 +10,7 @@ use App\Models\Departamento;
 use App\Models\Docente;
 use App\Models\Curso;
 use App\Models\Asignatura;
+use App\Models\Rol_usuario;
 
 
 
@@ -18,7 +19,13 @@ class CursoController extends Controller {
 	public function get_departamento()
 	{
 		$departamentos = Departamento::paginate()->lists('nombre','id');
-		return view('Encargado/cursos/departamento',compact('departamentos'));
+		
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/cursos/departamento',compact('departamentos','var'));
 	}
 
 
@@ -30,8 +37,12 @@ class CursoController extends Controller {
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Encargado/cursos/list',compact('datos_cursos'));
+		return view('Encargado/cursos/list',compact('datos_cursos','var'));
 	}
 
 
@@ -42,7 +53,12 @@ class CursoController extends Controller {
 			
 			$docentes = Docente::where('departamento_id', '=', $request->get('departamento'))->lists('apellidos','id');
 
-			return view('Encargado/cursos/create',compact('asignaturas','docentes'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Encargado/cursos/create',compact('asignaturas','docentes','var'));
 	}
 	
 
@@ -72,7 +88,12 @@ class CursoController extends Controller {
 
 		$docentes = Docente::paginate()->lists('apellidos','id');
 
-		return view('Encargado/cursos/edit', compact('cursoEditable','id','asignaturas','docentes'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/cursos/edit', compact('cursoEditable','id','asignaturas','docentes','var'));
 	
 	}
 
@@ -119,7 +140,12 @@ class CursoController extends Controller {
 			 ->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 			 ->paginate();
 
-			return view('Encargado/cursos/list',compact('datos_cursos'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Encargado/cursos/list',compact('datos_cursos','var'));
 			}
 
 			else

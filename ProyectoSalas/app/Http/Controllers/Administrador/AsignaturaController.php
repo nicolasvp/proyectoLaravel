@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Asignatura;
 use App\Models\Departamento;
+use App\Models\Rol_usuario;
 
 
 
@@ -20,11 +21,16 @@ class AsignaturaController extends Controller {
 
 	public function getIndex()
 	{
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
 		$datos_asignaturas = Asignatura::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
 										  ->select('asignaturas.*','departamentos.nombre as departamento')
 										  ->paginate();
 
-		return view('Administrador/asignaturas/list',compact('datos_asignaturas'));
+		return view('Administrador/asignaturas/list',compact('datos_asignaturas','var'));
 	}
 
 
@@ -33,7 +39,12 @@ class AsignaturaController extends Controller {
 
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
-		return view('Administrador/asignaturas/create',compact('departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/asignaturas/create',compact('departamentos','var'));
 	}
 
 
@@ -61,7 +72,12 @@ class AsignaturaController extends Controller {
 
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
-		return view('Administrador/asignaturas/edit', compact('asignaturaEditable','id','departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/asignaturas/edit', compact('asignaturaEditable','id','departamentos','var'));
 	
 	}
 
@@ -98,7 +114,13 @@ class AsignaturaController extends Controller {
 	public function get_depto()
 	{
 		$departamentos = Departamento::all()->lists('nombre','id');
-		return view('Administrador/asignaturas/upload',compact('departamentos'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/asignaturas/upload',compact('departamentos','var'));
 	}
 
 
@@ -150,7 +172,12 @@ class AsignaturaController extends Controller {
 				->select('asignaturas.*','departamentos.nombre as departamento')
 				->paginate();	
 
-		return view('Administrador/asignaturas/list',compact('datos_asignaturas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/asignaturas/list',compact('datos_asignaturas','var'));
 		}
 
 		else

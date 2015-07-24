@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Escuela;
+use App\Models\Rol_usuario;
 
 
 
@@ -22,8 +23,12 @@ class EscuelaController extends Controller {
 						->select('escuelas.*','departamentos.nombre as departamento')
 						->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 	
-		return view('Administrador/escuelas/list',compact('datos_escuelas'));
+		return view('Administrador/escuelas/list',compact('datos_escuelas','var'));
 
 	}
 
@@ -33,7 +38,12 @@ class EscuelaController extends Controller {
 
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
-		return view('Administrador/escuelas/create',compact('departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/escuelas/create',compact('departamentos','var'));
 	}
 
 
@@ -61,7 +71,12 @@ class EscuelaController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/escuelas/edit', compact('escuelaEditable','id','departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/escuelas/edit', compact('escuelaEditable','id','departamentos','var'));
 	
 	}
 
@@ -98,7 +113,12 @@ class EscuelaController extends Controller {
 	{
 		$departamentos = Departamento::all()->lists('nombre','id');
 
-		return view('Administrador/escuelas/upload',compact('departamentos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/escuelas/upload',compact('departamentos','var'));
 	}
 
 
@@ -145,7 +165,12 @@ class EscuelaController extends Controller {
 			->select('escuelas.*','departamentos.nombre as departamento')
 			->paginate();
 
-			return view('Administrador/escuelas/list',compact('datos_escuelas'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/escuelas/list',compact('datos_escuelas','var'));
 			}
 
 			else

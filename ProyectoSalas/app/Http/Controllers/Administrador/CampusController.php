@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 //use Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Campus;
+use App\Models\Rol_usuario;
 
 
 
@@ -19,20 +20,36 @@ class CampusController extends Controller {
 
 	public function getIndex()
 	{
-		return view('Administrador/campus/campus_index');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/campus/campus_index',compact('var'));
 	}
 
 	public function get_list()
 	{
-
+		
 		$campus = Campus::paginate();
-		return view('Administrador/campus/list',compact('campus'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/campus/list',compact('campus','var'));
 	}
 
 
 	public function get_create()
 	{
-		return view('Administrador/campus/create');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/campus/create',compact('var'));
 	}
 
 	
@@ -58,7 +75,12 @@ class CampusController extends Controller {
 		$campusEditable = Campus::findOrFail($request->get('id'));
 		$id = $request->get('id');
 
-		return view('Administrador/campus/edit', compact('campusEditable','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/campus/edit', compact('campusEditable','id','var'));
 	
 	}
 
@@ -100,8 +122,12 @@ class CampusController extends Controller {
 				->orWhere('rut_encargado','=',(integer) $request->get('name'))
 				->select('campus.*')
 				->paginate();	
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/campus/list',compact('campus'));
+		return view('Administrador/campus/list',compact('campus','var'));
 		}
 
 		else
@@ -134,7 +160,12 @@ class CampusController extends Controller {
 
 		$filed_campus = Campus::onlyTrashed()->paginate();
 
-		return view('Administrador/campus/campus_filed',compact('filed_campus'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/campus/campus_filed',compact('filed_campus','var'));
 	}
 
 
@@ -152,7 +183,12 @@ class CampusController extends Controller {
 
 	public function get_upload()
 	{
-		return view('Administrador/campus/upload');
+				$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/campus/upload',compact('var'));
 	}
 
 	public function post_upload(Request $request)

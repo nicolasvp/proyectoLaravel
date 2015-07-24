@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Rol;
+use App\Models\Rol_usuario;
 
 
 
@@ -18,13 +19,24 @@ class RolController extends Controller {
 	{
 
 		$datos_roles = Rol::paginate();
-		return view('Administrador/roles/list',compact('datos_roles'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+		return view('Administrador/roles/list',compact('datos_roles','var'));
 	}
 
 	public function get_create()
 	{
 
-		return view('Administrador/roles/create');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+		return view('Administrador/roles/create',compact('var'));
 	}
 
 
@@ -51,7 +63,12 @@ class RolController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/roles/edit', compact('rolEditable','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+		return view('Administrador/roles/edit', compact('rolEditable','id','var'));
 	
 	}
 
@@ -86,7 +103,13 @@ class RolController extends Controller {
 
 	public function get_upload()
 	{
-		return view('Administrador/roles/upload');
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+		return view('Administrador/roles/upload',compact('var'));
 	}
 
 	public function post_upload(Request $request)
@@ -128,7 +151,12 @@ class RolController extends Controller {
 			->select('roles.*')
 			->paginate();
 
-			return view('Administrador/roles/list',compact('datos_roles'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+			return view('Administrador/roles/list',compact('datos_roles','var'));
 			}
 
 			else

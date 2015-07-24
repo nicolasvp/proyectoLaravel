@@ -15,17 +15,28 @@ class RolUsuarioController extends Controller {
 	protected $layout='layouts.master';
 	
 	public function getIndex()
-{
-	$datos_roles = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	{
+		$datos_roles = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 								->select('roles_usuarios.*','roles.nombre')
 								->paginate();
 
-	return view('Administrador/roles_usuarios/list',compact('datos_roles'));
-}
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+	return view('Administrador/roles_usuarios/list',compact('datos_roles','var'));
+	}
 
 	public function get_create()
 	{
-		return view('Administrador/roles_usuarios/create');
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/roles_usuarios/create',compact('var'));
 	}
 
 	public function get_edit(Request $request)
@@ -34,7 +45,12 @@ class RolUsuarioController extends Controller {
 		$campusEditable = Campus::findOrFail($request->get('id'));
 		$id = $request->get('id');
 
-		return view('Administrador/roles_usuarios/edit', compact('rolEditable','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/roles_usuarios/edit', compact('rolEditable','id','var'));
 	
 	}
 	public function delete_destroy(Request $request)
@@ -62,7 +78,12 @@ class RolUsuarioController extends Controller {
 				->select('roles_usuarios.*','roles.nombre')
 				->paginate();	
 
-		return view('Administrador/roles_usuarios/list',compact('datos_roles'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/roles_usuarios/list',compact('datos_roles','var'));
 		}
 
 		else

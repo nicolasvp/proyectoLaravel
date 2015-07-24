@@ -20,8 +20,13 @@ class PerfilController extends Controller {
 
 	public function getIndex()
 	{
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 			
-		return view('Administrador/perfiles/search');
+		return view('Administrador/perfiles/search',compact('var'));
 	}
 
 		public function get_show(Request $request)
@@ -39,7 +44,12 @@ class PerfilController extends Controller {
 
 		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
 
-		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut','var'));
 			
 	}
 
@@ -72,7 +82,32 @@ class PerfilController extends Controller {
 	}
 
 
-	
+	public function get_pichula(Request $request)
+	{
+		//dd(\Request::all());		
+
+
+            if($request->get('perfil') == 'administrador')
+            {
+                return redirect()->action('Administrador\AdministradorController@getIndex');
+            }
+            if($request->get('perfil') == 'encargado')
+            {
+                return redirect()->action('Encargado\EncargadoController@getIndex');
+            }
+            if($request->get('perfil') == 'estudiante')
+            {
+
+                return redirect()->action('AlumnoController@getIndex');
+            }
+            if($request->get('perfil') == 'docente')
+            {
+                return redirect()->action('DocenteController@getIndex');
+            }
+
+		return redirect()->action('Administrador\Administrador@getIndex');
+
+	}
 
 
 }

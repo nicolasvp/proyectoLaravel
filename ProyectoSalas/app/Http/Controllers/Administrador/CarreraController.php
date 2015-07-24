@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Escuela;
 use App\Models\Carrera;
-
+use App\Models\Rol_usuario;
 
 
 
@@ -19,12 +19,17 @@ class CarreraController extends Controller {
 	public function getIndex()
 	{
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 		
+
 		$datos_carreras = Carrera::join('escuelas','carreras.escuela_id','=','escuelas.id')
 						->select('carreras.*','escuelas.nombre as escuela')
 						->paginate();
 
 	
-		return view('Administrador/carreras/list',compact('datos_carreras'));
+		return view('Administrador/carreras/list',compact('datos_carreras','var'));
 
 	}
 
@@ -34,7 +39,12 @@ class CarreraController extends Controller {
 
 		$escuelas = Escuela::paginate()->lists('nombre','id');
 
-		return view('Administrador/carreras/create',compact('escuelas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/carreras/create',compact('escuelas','var'));
 	}
 
 
@@ -61,7 +71,12 @@ class CarreraController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/carreras/edit', compact('carreraEditable','id','escuelas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/carreras/edit', compact('carreraEditable','id','escuelas','var'));
 	
 	}
 
@@ -98,7 +113,12 @@ class CarreraController extends Controller {
 	{
 		$escuelas = Escuela::all()->lists('nombre','id');
 
-		return view('Administrador/carreras/upload',compact('escuelas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/carreras/upload',compact('escuelas','var'));
 	}
 
 	public function post_upload(Request $request)
@@ -145,7 +165,12 @@ class CarreraController extends Controller {
 			->select('carreras.*','escuelas.nombre as escuela')
 			->paginate();
 
-			return view('Administrador/carreras/list',compact('datos_carreras'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/carreras/list',compact('datos_carreras','var'));
 			}
 
 			else

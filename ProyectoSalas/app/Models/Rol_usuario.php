@@ -12,4 +12,6 @@ class Rol_usuario extends Model {
 
 	protected $fillable = ['rut', 'rol_id'];
 
+
+
 }

@@ -138,7 +138,8 @@ return [
 		
 		'UTEM\Dirdoc\Auth\DirdocAuthServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
-		'App\Providers\email',
+
+
 	
 		/*
 		*Agregado
@@ -156,6 +157,10 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+		'App\Providers\email',
+		'App\Providers\space',
+		'App\Providers\rut',
+		'App\Providers\spaceNum',
 
 	],
 

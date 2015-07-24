@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Estudiante;
 use App\Models\Carrera;
+use App\Models\Rol_usuario;
 
 
 
@@ -23,7 +24,12 @@ class EstudianteController extends Controller {
 									->select('estudiantes.*','carreras.codigo as carrera')
 									->paginate();
 
-		return view('Administrador/estudiantes/list',compact('datos_estudiantes'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/estudiantes/list',compact('datos_estudiantes','var'));
 	}
 
 
@@ -33,7 +39,12 @@ class EstudianteController extends Controller {
 
 		$carreras = Carrera::paginate()->lists('nombre','id');
 
-		return view('Administrador/estudiantes/create',compact('carreras'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/estudiantes/create',compact('carreras','var'));
 	}
 
 
@@ -63,7 +74,12 @@ class EstudianteController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/estudiantes/edit', compact('estudianteEditable','id','carreras'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/estudiantes/edit', compact('estudianteEditable','id','carreras','var'));
 	
 	}
 
@@ -108,7 +124,12 @@ class EstudianteController extends Controller {
 			->select('estudiantes.*','carreras.codigo as carrera')
 			->paginate();
 
-			return view('Administrador/estudiantes/list',compact('datos_estudiantes'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/estudiantes/list',compact('datos_estudiantes','var'));
 			}
 
 			else
@@ -123,7 +144,13 @@ class EstudianteController extends Controller {
 		public function get_carrera()
 	{
 		$carreras = Carrera::all()->lists('nombre','id');
-		return view('Administrador/estudiantes/upload',compact('carreras'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/estudiantes/upload',compact('carreras','var'));
 	}
 
 	public function post_upload(Request $request)

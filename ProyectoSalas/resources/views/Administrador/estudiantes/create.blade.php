@@ -5,10 +5,13 @@
 @section('sideBar')
 
 
-      
+    
+<div class="panel panel-default" style="margin-top: 40px;">  
              @include('Administrador/menu')
        
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
          <div class="col-sm-9" >
                                 <p>
                          {!! Form::open(['action' => 'Administrador\EstudianteController@get_carrera', 'method' => 'GET']) !!}
@@ -68,7 +71,8 @@
 </div>
 </div>
 
-                    
+  </div>
+                  
 </div>
 
 

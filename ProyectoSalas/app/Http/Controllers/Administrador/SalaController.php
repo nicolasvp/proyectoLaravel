@@ -12,6 +12,8 @@ use App\Models\Sala;
 use App\Models\Campus;
 use App\Models\Horario;
 use App\Models\Tipo_sala;
+use App\Models\Rol_usuario;
+
 use Carbon\Carbon;
 
 
@@ -26,8 +28,13 @@ class SalaController extends Controller {
 
 	public function getIndex()
 	{
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 		
-		return view('Administrador/salas/salas_index');
+		return view('Administrador/salas/salas_index',compact('var'));
 	}
 
 	public function get_cursos()
@@ -37,8 +44,12 @@ class SalaController extends Controller {
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/salas/curso_list',compact('datos_cursos'));
+		return view('Administrador/salas/curso_list',compact('datos_cursos','var'));
 	}
 
 
@@ -57,7 +68,12 @@ class SalaController extends Controller {
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
 
-		return view('Administrador/salas/curso_list',compact('datos_cursos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/curso_list',compact('datos_cursos','var'));
 		}
 
 		else
@@ -68,7 +84,12 @@ class SalaController extends Controller {
 				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
 				->paginate();	
 
-		return view('Administrador/salas/curso_list',compact('datos_cursos'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/curso_list',compact('datos_cursos','var'));
 
 		}
 	}
@@ -80,7 +101,13 @@ class SalaController extends Controller {
 	{
 		$campus = Campus::all()->lists('nombre','id');
 		$id_curso = $request->get('id_curso');
-		return view('Administrador/salas/campus',compact('campus','id_curso'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/campus',compact('campus','id_curso','var'));
 	}
 
 	public function get_datos(Requests \SelectCampusRequest $request)
@@ -99,9 +126,13 @@ class SalaController extends Controller {
 
 		$curso_id = $request->get('id_curso');
 
-		
 
-		return view('Administrador/salas/create_horario',compact('datos_curso','periodos','salas','curso_id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 		
+
+		return view('Administrador/salas/create_horario',compact('datos_curso','periodos','salas','curso_id','var'));
 	}
 
 
@@ -207,8 +238,12 @@ class SalaController extends Controller {
 				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','horarios.fecha','docentes.*')
 				->paginate();
 				
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+		return view('Administrador/salas/horarios_list',compact('datos_horarios','var'));
 
 
 	}
@@ -235,7 +270,12 @@ class SalaController extends Controller {
 
 		$curso_id = $horarioEditable->curso_id;
 
-		return view('Administrador/salas/edit_horario', compact('horarioEditable','periodos','salas','curso','curso_id','id'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/edit_horario', compact('horarioEditable','periodos','salas','curso','curso_id','id','var'));
 
 	}
 
@@ -287,7 +327,12 @@ class SalaController extends Controller {
 				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
-				return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+				return view('Administrador/salas/horarios_list',compact('datos_horarios','var'));
 		}
 
 		else
@@ -302,7 +347,12 @@ class SalaController extends Controller {
 				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();	
 
-		return view('Administrador/salas/horarios_list',compact('datos_horarios'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/horarios_list',compact('datos_horarios','var'));
 
 		}
 	}
@@ -320,8 +370,12 @@ class SalaController extends Controller {
 
 		$tipos_salas = Tipo_sala::paginate()->lists('nombre','id');
 				
-	
-		return view('Administrador/salas/edit_sala',compact('datos_sala','id','campus','tipos_salas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/edit_sala',compact('datos_sala','id','campus','tipos_salas','var'));
 	}
 
 
@@ -348,7 +402,12 @@ class SalaController extends Controller {
 							->select('salas.*','tipos_salas.nombre as tipo_sala','campus.nombre as campus')
 							->paginate();
 
-		return view('Administrador/salas/salas_list',compact('datos_salas'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/salas_list',compact('datos_salas','var'));
 
 	}
 
@@ -358,7 +417,13 @@ class SalaController extends Controller {
 
 		$campus = Campus::paginate()->lists('nombre','id');
 		$tipos_salas = Tipo_sala::paginate()->lists('nombre','id');
-		return view('Administrador/salas/create_sala',compact('campus','tipos_salas'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/salas/create_sala',compact('campus','tipos_salas','var'));
 	}
 
 
@@ -404,7 +469,12 @@ class SalaController extends Controller {
 							->select('salas.*','campus.nombre as campus','tipos_salas.nombre as tipo_sala')
 							->paginate();
 
-				return view('Administrador/salas/salas_list',compact('datos_salas'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+				return view('Administrador/salas/salas_list',compact('datos_salas','var'));
 		}
 
 		else
@@ -415,7 +485,12 @@ class SalaController extends Controller {
 							->select('salas.*','tipos_salas.nombre as tipo_sala','campus.nombre as campus')
 							->paginate();
 
-				return view('Administrador/salas/salas_list',compact('datos_salas'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+				return view('Administrador/salas/salas_list',compact('datos_salas','var'));
 
 		}
 	}

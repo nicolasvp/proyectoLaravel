@@ -6,6 +6,7 @@ use App\Models\Horario;
 use App\Models\Asignatura_cursada;
 use App\Models\Periodo;
 use App\Models\Campus;
+use App\Models\Rol_usuario;
 
 
 
@@ -16,8 +17,13 @@ class AlumnoController extends Controller {
 
 	public function getIndex()
 	{	
-			
-		return view('Alumno/indexAlumno');
+		
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Alumno/indexAlumno',compact('var'));
 
 	}
 
@@ -36,9 +42,12 @@ class AlumnoController extends Controller {
 				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 				
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
 
-
-		return view('Alumno/horario',compact('datos_horario'));
+		return view('Alumno/horario',compact('datos_horario','var'));
 
 	}
 
@@ -51,7 +60,12 @@ class AlumnoController extends Controller {
 		$campus = Campus::paginate()->lists('nombre','id');
 		$periodo = Periodo::paginate()->lists('bloque','id');
 
-		return view('Alumno/consulta',compact('campus','periodo'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Alumno/consulta',compact('campus','periodo','var'));
 	}
 
 
@@ -66,7 +80,12 @@ class AlumnoController extends Controller {
 				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 
-		return view('Alumno/resultado',compact('resultados'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Alumno/resultado',compact('resultados','var'));
 		
 		
 	}

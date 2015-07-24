@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Facultad;
+use App\Models\Rol_usuario;
 
 
 
@@ -23,8 +24,13 @@ class DepartamentoController extends Controller {
 							->select('departamentos.*','facultades.nombre as facultad')
 							->paginate();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
 	
-		return view('Administrador/departamentos/list',compact('datos_departamentos'));
+		return view('Administrador/departamentos/list',compact('datos_departamentos','var'));
 
 	}
 
@@ -34,7 +40,12 @@ class DepartamentoController extends Controller {
 
 		$facultades = Facultad::paginate()->lists('nombre','id');
 
-		return view('Administrador/departamentos/create',compact('facultades'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/departamentos/create',compact('facultades','var'));
 	}
 
 
@@ -62,7 +73,12 @@ class DepartamentoController extends Controller {
 
 		$id = $request->get('id');
 
-		return view('Administrador/departamentos/edit', compact('departamentoEditable','id','facultades'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/departamentos/edit', compact('departamentoEditable','id','facultades','var'));
 	
 	}
 
@@ -100,7 +116,13 @@ class DepartamentoController extends Controller {
 	{
 
 		$facultades = Facultad::all()->lists('nombre','id');
-		return view('Administrador/departamentos/upload',compact('facultades'));
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Administrador/departamentos/upload',compact('facultades','var'));
 	}
 	
 	public function post_upload(Request $request)
@@ -147,7 +169,12 @@ class DepartamentoController extends Controller {
 			->select('departamentos.*','facultades.nombre as facultad')
 			->paginate();
 
-			return view('Administrador/departamentos/list',compact('datos_departamentos'));
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			return view('Administrador/departamentos/list',compact('datos_departamentos','var'));
 			}
 
 			else

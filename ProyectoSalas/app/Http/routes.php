@@ -15,7 +15,7 @@
 
 //Route::get('home', 'HomeController@index');
 
-Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
+Route::group(['middleware' => ['auth','is_encargado'],'prefix' => 'encargado', 'namespace' => 'Encargado'], function()
 {
 
   	Route::get('/','EncargadoController@getIndex');
@@ -30,7 +30,7 @@ Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
 
 });
 
-Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], function()
+Route::group(['middleware' => ['auth','is_admin'], 'prefix' => 'administrador', 'namespace' => 'Administrador'], function()
 {
     Route::get('/','AdministradorController@getIndex');
     Route::controller('campus','CampusController');

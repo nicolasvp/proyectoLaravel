@@ -6,9 +6,13 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
         
        @include('Encargado/top')  
 
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
 
 <div class="col-sm-9" >
@@ -41,7 +45,7 @@
 
       <div class="form-group">
       {!! Form::label('descripcion', 'Descripción') !!}
-       {!! Form::text('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+       {!! Form::textarea('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
       </div>
 
         {!! Form::hidden('id', $id)!!}
@@ -61,11 +65,15 @@
 
 </div>
 
-                    
+                        
+</div>
+                  
+</div>
+                  
 </div>
 
 
       </div>
-    </div>
+ 
 
 @stop

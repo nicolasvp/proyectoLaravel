@@ -5,9 +5,12 @@
 @section('sideBar')
 
 
-             
+ <div class="panel panel-default" style="margin-top: 40px;">            
              @include('Administrador/menu')
 
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
          <div class="col-sm-9" >
                      <p>
@@ -41,7 +44,7 @@
 
         <div class="form-group">
         {!! Form::label('descripcion', 'Descripción') !!}
-       {!! Form::text('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+       {!! Form::textarea('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
       </div>
 
 
@@ -62,5 +65,5 @@
 
       </div>
     </div>
-
+    </div>
 @stop
