@@ -4,8 +4,13 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
            @include('Administrador/menu')
        
+
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
     @foreach($curso as $c)
@@ -30,7 +35,7 @@
 
 
    
-      {!! Form::model($horarioEditable, ['action' => ['AdministradorController@put_updateHorario', $horarioEditable], 'method' => 'PUT']) !!}
+      {!! Form::model($horarioEditable, ['action' => ['Administrador\SalaController@put_updateHorario', $horarioEditable], 'method' => 'PUT']) !!}
 
     <div class="form-group">
     {!! Form::label('sala_id', 'Sala') !!}
@@ -42,19 +47,12 @@
    {!! Form::select('periodo_id', (['-1' => 'Selecciona un Período'] + $periodos), null, ['class' => 'form-control']) !!}
     </div>
 
-    {!! Form::hidden('curso_id', $curso_id)!!}
-
-    <div class="form-group">
-    {!! Form::label('dia_id', 'Día') !!}
-   {!! Form::select('dia_id', (['0' => 'Selecciona un día'] + $dias), null, ['class' => 'form-control']) !!}
-    </div>
-
-    
+    {!! Form::hidden('curso_id', $curso_id)!!}    
 
 
     {!! Form::hidden('id', $id)!!}
 
-      <div align=center><button type="submit" class="btn btn-info">Actualizar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Actualizar</button></div>
 
       {!! Form::close() !!}
 
@@ -63,10 +61,10 @@
 </div>
 </div>
 
-                    
+   </div>                 
 </div>
 
-
+</div>
       </div>
     </div>
 

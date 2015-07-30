@@ -39,7 +39,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'America/Santiago',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
 	|
 	*/
 
-	'locale' => 'en',
+	'locale' => 'es_ES',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -138,6 +138,9 @@ return [
 		
 		'UTEM\Dirdoc\Auth\DirdocAuthServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+
+
+	
 		/*
 		*Agregado
 		*/
@@ -154,6 +157,10 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+		'App\Providers\email',
+		'App\Providers\space',
+		'App\Providers\rut',
+		'App\Providers\spaceNum',
 
 	],
 

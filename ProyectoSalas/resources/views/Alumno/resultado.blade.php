@@ -3,7 +3,14 @@
 
 @section('sideBar')
 
+
+
+<div class="panel panel-default" style="margin-top: 40px;">
 @include('Alumno/top')
+
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
  <div class="col-sm-9" >
    <p> <h2>Resultado de la consulta</h2></p>
@@ -38,7 +45,7 @@
                <td>{{ $result->nombre}}</td>
                <td>{{ $result->sala}}</td>
                <td>{{ $result->inicio}} - {{$result->fin}}</td>
-               <td>{{ $result->dia}}</td>
+               <td></td>
             </tr>
 
              @endforeach
@@ -52,13 +59,14 @@
 </div>
 </div>
 </div>
-
+</div>
+</div>
                     
 </div>
 
 
       </div>
-    </div>
+
 
 
 @stop

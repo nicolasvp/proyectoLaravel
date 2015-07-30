@@ -3,6 +3,8 @@
 
 @section('sideBar')
 
+<div class="panel panel-default" style="margin-top: 40px;">
+
 @include('Docente/top')
 
 
@@ -39,7 +41,7 @@
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->sala}}</td>
                <td>{{$horario->inicio}} - {{$horario->fin}}</td>
-               <td>{{ $horario->dia}}</td>
+               <td></td>
             </tr>
 
              @endforeach
@@ -59,8 +61,6 @@
 
 
       </div>
-    </div>
-
 
 @stop
 

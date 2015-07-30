@@ -3,17 +3,11 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Campus extends Model  {
 
-	
-	use SoftDeletes;
-
 
 	protected $table = 'campus';
-
-	protected $dates = ['deleted_at'];
 
 	protected $fillable = ['nombre', 'direccion', 'latitud', 'longitud', 'rut_encargado' , 'descripcion'];
 

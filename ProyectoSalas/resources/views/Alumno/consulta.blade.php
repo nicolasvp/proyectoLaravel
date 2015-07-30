@@ -4,9 +4,14 @@
 
 @section('sideBar')
 
+
+
+<div class="panel panel-default" style="margin-top: 40px;">
 @include('Alumno/top')
 
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
  <div class="col-sm-9">
    <p>                                                    
@@ -37,10 +42,6 @@
     </div>
 
     
-     <div class="form-group">
-      {!! Form::label('dia', 'Día') !!}
-   {!! Form::select('dia', (['0' => 'Selecciona un Día'] + $dia), null, ['class' => 'form-control']) !!}
-    </div>
 
       <div align="center"<th><button type="submit"  class="btn btn-primary ">Consultar</button></th></div>
       {!! Form::close() !!}
@@ -60,12 +61,13 @@
 </div>
 </div>
 </div>
-
+</div>
+</div>
                     
 </div>
 
 
       </div>
-    </div>
+
 
 @stop

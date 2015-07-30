@@ -4,9 +4,14 @@
 
 @section('sideBar')
 
+
+
+<div class="panel panel-default" style="margin-top: 40px;">
 @include('Alumno/top')
 
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
  <div class="col-sm-9" >
    <p> <h2>Tus cursos</h2></p>
 
@@ -40,7 +45,7 @@
                <td>{{ $horario->nombre}}</td>
                <td>{{ $horario->sala}}</td>
                <td>{{$horario->inicio}} - {{$horario->fin}}</td>
-               <td>{{ $horario->dia}}</td>
+               <td></td>
             </tr>
 
              @endforeach
@@ -55,7 +60,7 @@
 </div>
 </div>
 
-                    
+  </div>                  
 </div>
 
 

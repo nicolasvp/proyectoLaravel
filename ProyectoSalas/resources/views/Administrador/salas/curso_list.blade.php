@@ -4,11 +4,16 @@
 
 
          
+<div class="panel panel-default" style="margin-top: 40px;">
              @include('Administrador/menu')
        
 
+  <div class="panel-body">                  
+                  
+   <div class="row">
+
    <div class="col-sm-9" >
-   <p> <h2>Lista de cursos</h2></p>
+   <p> <h2>Lista de Cursos</h2></p>
 
       @if(Session::has('message'))
 
@@ -22,9 +27,9 @@
  <div class="panel panel-default">
    <div class="panel-body">
        <div class="form-group">
-          {!! Form::open(['action' => ['AdministradorController@get_searchCurso'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
+          {!! Form::open(['action' => ['Administrador\SalaController@get_searchCurso'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Curso,Docente']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Docente']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
@@ -51,7 +56,7 @@
                <td>{{ $cur->seccion}}</td>
                <td>
 
-      {!! Form::open(['action' => ['AdministradorController@post_curso'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\SalaController@get_campus'], 'method' => 'GET']) !!}
       {!! Form::hidden('id_curso', $cur->id)!!}
        <button type="submit" class="btn btn-success btn-sm">Seleccionar</button>
       {!! Form::close() !!}
@@ -69,13 +74,15 @@
 </div>
 </div>
 </div>
+</div>
+</div>
 
                     
 </div>
 
 
       </div>
-    </div>
+
 
 
 @stop

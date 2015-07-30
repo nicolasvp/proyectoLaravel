@@ -6,14 +6,16 @@
 
 
 
-         
+<div class="panel panel-default" style="margin-top: 40px;">         
             @include('Administrador/menu')  
        
 
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
-   <p> <h2>Seleccion de departamento</h2></p>
+   <p> <h2>Selección de Departamento</h2></p>
 
       @if(Session::has('message'))
 
@@ -26,15 +28,18 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+    @include('Administrador/messages')
+
        <div class="form-group">
   
 
 
- {!! Form::open(['action' => 'AdministradorController@get_createCurso', 'method' => 'GET']) !!}
+ {!! Form::open(['action' => 'Administrador\CursoController@get_create', 'method' => 'GET']) !!}
 
 
     <div class="form-group">
-   {!! Form::select('departamentos', ( $departamentos), null, ['class' => 'form-control'])!!}
+    {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --']  +$departamentos), null, ['class' => 'form-control'])!!}
     </div>
 
 
@@ -55,6 +60,8 @@
       </div>
     </div>
 
+      </div>
+    </div>
 
 
                     

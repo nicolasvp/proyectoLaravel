@@ -6,9 +6,12 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
 
 @include('Encargado/top')
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
    <p> <h2>Asignación y modificación de salas</h2></p>
@@ -41,7 +44,7 @@
     
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignar Sala</b></h3></td>
       <td>             
-                     {!! Form::open(['action' => 'EncargadoController@get_selectCurso', 'method' => 'GET']) !!}
+                     {!! Form::open(['action' => 'Encargado\SalaController@get_curso', 'method' => 'GET']) !!}
 
                   <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
                     {!! Form::close() !!}
@@ -52,7 +55,7 @@
     <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Modificar Sala</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'EncargadoController@get_salas', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Encargado\SalaController@get_salas', 'method' => 'GET']) !!}
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
                       {!! Form::close() !!}
@@ -65,24 +68,15 @@
   </tbody>
 </table> 
 
-
-
   </div>
 </div>
 
-
-
-
 </div>
-
-
 
 </div>
 </div>
 </div>
-
-                    
 </div>
-
+</div>
                     
 @stop

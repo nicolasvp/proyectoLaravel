@@ -4,37 +4,56 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
 
            @include('Administrador/menu')
        
+   <div class="panel-body">                  
+                  
+   <div class="row">
 
 <div class="col-sm-9" >
-  <p> <h2>Perfiles del usuario </h2></p>
+  @foreach($datos_usuario as $usuario)
+  <p> <h2>Perfiles del Usuario: {{ $usuario->nombres}} {{ $usuario->apellidos}}</h2></p>
+  @endforeach
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
 
 
+      @if(Session::has('message'))
+
+          <div class="alert alert-dismissible alert-success">
+           <strong>{{ Session::get('message') }}</strong>
+          </div>
+       
+
+
+      @endif
        <div class="form-group">
 
         <table class="table table-striped">
             <tr> 
               <th>#</th>
               <th>Rut</th>
+              <th>Nombre</th>
+              <th>Email</th>
               <th>Rol</th>
               <th>Acción</th>
               
             </tr>
 
-            @foreach($datos_usuario as $users)
+            @foreach($roles_usuario as $rol)
             
             <tr>
-               <td>{{ $users->id}}</td>
-               <td>{{ $users->rut}}</td>
-               <td>{{ $users->nombre}}</td>
+               <td>{{ $rol->id}}</td>
+               <td>{{ $rol->rut}}</td>
+               <td>{{ $rol->nombres}} {{ $rol->apellidos }}</td>
+               <td>{{ $rol->email }}</td>
+               <td>{{ $rol->rol}}</td>
                 <td> 
-      {!! Form::open(['action' => ['AdministradorController@delete_rol'], 'method' => 'DELETE']) !!}
-      {!! Form::hidden('id', $users->id)!!}
+      {!! Form::open(['action' => ['Administrador\PerfilController@delete_destroy'], 'method' => 'DELETE']) !!}
+      {!! Form::hidden('id', $rol->id)!!}
        <button type="submit" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-danger btn-sm">Eliminar</button>
       {!! Form::close() !!}
 
@@ -49,20 +68,15 @@
                     
 </div>
 </div>
-<p> <h2>Asignar perfil</h2></p>
+<p> <h2>Asignar Perfil</h2></p>
 <div class="panel panel-default">
     <div class="panel-body">
-      @if(Session::has('message'))
 
-          <p class="alert alert-sucess"><b>{{ Session::get('message') }}</b></p>
-
-
-      @endif
        <table class="table table-striped">
 
 
      <div class="form-group">
-   {!! Form::open(['action' => 'AdministradorController@post_profile']) !!}
+   {!! Form::open(['action' => 'Administrador\PerfilController@post_profile']) !!}
 
     <div class="form-group">
     {!! Form::hidden('rut', $rut)!!}
@@ -72,7 +86,7 @@
    {!! Form::select('rol_asig', (['0' => 'Selecciona un Perfil'] + $rol_usuario), null, ['class' => 'form-control']) !!}
     </div>
 
-      <div align="center"<th><button type="submit" onclick="return confirm('¿Seguro que desea asignar este perfil?')" class="btn btn-primary ">Asignar perfil</button></th></div>
+      <div align="center"<th><button type="submit"  class="btn btn-success">Aceptar</button></th></div>
       {!! Form::close() !!}
 
       </div>
@@ -88,7 +102,7 @@
                     
 </div>
 
-
+  </div>
       </div>
     </div>
 

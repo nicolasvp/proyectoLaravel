@@ -1,13 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Estudiantes;
-use App\Models\Horarios;
-use App\Models\Asignaturas_cursadas;
-use App\Models\Periodos;
+use App\Models\Estudiante;
+use App\Models\Horario;
+use App\Models\Asignaturas_cursada;
+use App\Models\Periodo;
 use App\Models\Campus;
-use App\Models\Dias;
-use App\Models\Cursos;
+use App\Models\Curso;
+use App\Models\Rol_usuario;
 
 
 class DocenteController extends Controller {
@@ -18,7 +18,12 @@ class DocenteController extends Controller {
 	public function getIndex()
 	{
 
-		return view('Docente/indexDocente');
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/indexDocente',compact('var'));
 
 	}
 
@@ -26,17 +31,20 @@ class DocenteController extends Controller {
 	{
 
 		
-		$datos_horario  = Cursos::join('horarios', 'cursos.id', '=','horarios.curso_id')
+		$datos_horario  = Curso::join('horarios', 'cursos.id', '=','horarios.curso_id')
 				->join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->where('cursos.docente_id', '=', '1') //debe cambiar el id del estudiante
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 				
-		
-		return view('Docente/horario',compact('datos_horario'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/horario',compact('datos_horario','var'));
 
 	}
 
@@ -45,10 +53,14 @@ class DocenteController extends Controller {
 	public function get_consulta()
 	{
 		$campus = Campus::paginate()->lists('nombre','id');
-		$periodo = Periodos::paginate()->lists('bloque','id');
-		$dia = Dias::paginate()->lists('nombre','id');
+		$periodo = Periodo::paginate()->lists('bloque','id');
 
-		return view('Docente/consulta',compact('campus','periodo','dia'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/consulta',compact('campus','periodo','var'));
 	}
 
 
@@ -57,17 +69,20 @@ class DocenteController extends Controller {
 		
 		//$resultado = Horarios::where('periodo_id','=',$request->get('periodo'))->where('dia_id','=',$request->get('dia'))->get();
 
-		$resultados = Horarios::join('salas', 'horarios.sala_id', '=','salas.id')
+		$resultados = Horario::join('salas', 'horarios.sala_id', '=','salas.id')
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('dias','horarios.dia_id','=','dias.id')
 				->where('horarios.periodo_id', '=', $request->get('periodo'))
-				->where('horarios.dia_id','=', $request->get('dia')) 
-				->select('dias.nombre as dia','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 
-		return view('Docente/resultado',compact('resultados'));
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Docente/resultado',compact('resultados','var'));
 		
 		
 	}

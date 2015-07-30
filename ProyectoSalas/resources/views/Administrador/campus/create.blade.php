@@ -4,15 +4,18 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
 
     @include('Administrador/menu')
        
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
          <div class="col-sm-9" >
 
            <p>
-                         {!! Form::open(['action' => 'AdministradorController@get_uploadCampus', 'method' => 'GET']) !!}
+                         {!! Form::open(['action' => 'Administrador\CampusController@get_upload', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
 
@@ -23,9 +26,12 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
+@include('Administrador/messages')
+
        <div class="form-group">
   
-      {!! Form::open(['action' => ['AdministradorController@post_store'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@post_store'], 'method' => 'POST']) !!}
 
       <div class="form-group">
        {!! Form::label('nombre', 'Nombre') !!}
@@ -50,12 +56,12 @@
 
       <div class="form-group">
         {!! Form::label('descripcion', 'Descripción') !!}
-       {!! Form::text('descripcion', '',['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
+       {!! Form::textarea('descripcion', '',['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
       </div>
 
       <div class="form-group">
         {!! Form::label('rut_encargado', 'Rut Encargado') !!}
-       {!! Form::text('rut_encargado', '',['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
+       {!! Form::select('rut_encargado', (['0' => '-- Seleccionar una encargado --'] +$encargados), null, ['class' => 'form-control'])!!}
       </div>
       
       <div align=center><button type="submit" class="btn btn-primary">Crear campus</button></div>
@@ -75,5 +81,6 @@
 
       </div>
     </div>
-
+      </div>
+   
 @stop
