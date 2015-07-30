@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Estudiante;
 use App\Models\Carrera;
 use App\Models\Rol_usuario;
+<<<<<<< HEAD
 use App\Models\User;
 use App\Models\Usuario;	
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 
@@ -37,7 +40,11 @@ class EstudianteController extends Controller {
 
 
 
+<<<<<<< HEAD
 	public function get_create()
+=======
+		public function get_create()
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	{
 
 		$carreras = Carrera::paginate()->lists('nombre','id');
@@ -54,6 +61,7 @@ class EstudianteController extends Controller {
 	public function post_store(Requests\CreateEstudianteRequest $request)
 	{
 		
+<<<<<<< HEAD
 		$rut = array(
 				'rut' => \App\RutUtils::rut($request->get('rut'))
 				);
@@ -109,6 +117,14 @@ class EstudianteController extends Controller {
 
 		Session::flash('message', 'El estudiante '.$var3->nombres.' '.$var3->apellidos.' fue ingresado exitosamente!');
 		
+=======
+		$estudiante = new Estudiante();
+		$estudiante->fill(['carrera_id' => $request->get('carrera'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
+			'apellidos' => $request->get('apellidos'), 'email' => $request->get('email')]);
+		$estudiante->save();
+
+		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue ingresado exitosamente!');
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		return redirect()->action('Administrador\EstudianteController@getIndex');
 	
 	}
@@ -117,14 +133,22 @@ class EstudianteController extends Controller {
 
 
 
+<<<<<<< HEAD
 	public function get_edit(Request $request)
+=======
+		public function get_edit(Request $request)
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	{
 		
 		$estudianteEditable = Estudiante::findOrFail($request->get('id'));
 
+<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($estudianteEditable->rut);
 	
 		$carreras = Carrera::all()->lists('nombre','id');
+=======
+		$carreras = Carrera::paginate()->lists('nombre','id');
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$id = $request->get('id');
 
@@ -133,7 +157,11 @@ class EstudianteController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
+<<<<<<< HEAD
 		return view('Administrador/estudiantes/edit', compact('estudianteEditable','rut','id','carreras','var'));
+=======
+		return view('Administrador/estudiantes/edit', compact('estudianteEditable','id','carreras','var'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -143,6 +171,7 @@ class EstudianteController extends Controller {
 	{
 
 		$estudiante = Estudiante::findOrFail($request->get('id'));
+<<<<<<< HEAD
 
 
 		$rut = array(
@@ -187,6 +216,10 @@ class EstudianteController extends Controller {
 
 		$estudiante->save();
 
+=======
+		$estudiante->fill(\Request::all());
+		$estudiante->save();
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue editado exitosamente!');
 
@@ -197,6 +230,7 @@ class EstudianteController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
+<<<<<<< HEAD
 		//elimina en cascada
 		$estudiante = Usuario::findOrFail($request->get('rut'));
 
@@ -204,6 +238,11 @@ class EstudianteController extends Controller {
 		//$estudiante = Estudiante::findOrFail($request->get('id'));
 
 		//$estudiante->delete();
+=======
+		$estudiante = Estudiante::findOrFail($request->get('id'));
+
+		$estudiante->delete();
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue eliminado exitosamente!');
@@ -212,15 +251,25 @@ class EstudianteController extends Controller {
 		
 	}
 
+<<<<<<< HEAD
 	public function get_search(Request $request)
 	{
+=======
+		public function get_search(Request $request)
+		{
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		
 			if(trim($request->get('name')) != "")
 			{
 
 			 $datos_estudiantes = Estudiante::join('carreras','estudiantes.carrera_id','=','carreras.id')
+<<<<<<< HEAD
 			->where('estudiantes.rut', '=' , (integer) $request->get('name'))
 			->orWhere('carreras.codigo','=', (integer) $request->get('name'))
+=======
+			->where('estudiantes.rut', '=' , $request->get('name'))
+			->orWhere('carreras.codigo','=', $request->get('name'))
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			->select('estudiantes.*','carreras.codigo as carrera')
 			->paginate();
 
@@ -238,10 +287,17 @@ class EstudianteController extends Controller {
 		 	return redirect()->action('Administrador\EstudianteController@getIndex');
 
 			}
+<<<<<<< HEAD
 	}
 
 
 	public function get_carrera()
+=======
+		}
+
+
+		public function get_carrera()
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	{
 		$carreras = Carrera::all()->lists('nombre','id');
 
@@ -253,8 +309,11 @@ class EstudianteController extends Controller {
 		return view('Administrador/estudiantes/upload',compact('carreras','var'));
 	}
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	public function post_upload(Request $request)
 	{
 
@@ -274,6 +333,7 @@ class EstudianteController extends Controller {
 
 				foreach($result as $key => $value)
 				{
+<<<<<<< HEAD
 					
 					$var = new Usuario();
 
@@ -305,6 +365,11 @@ class EstudianteController extends Controller {
 						]);
 
 					$var3->save();
+=======
+					$var = new Estudiante();
+					$var->fill(['carrera_id' => $carrera,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos,'email' =>$value->email]);
+					$var->save();
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 				}
 

@@ -22,7 +22,11 @@ class CreateDepartamentoRequest extends Request {
 	public function rules()
 	{
 		return [
+<<<<<<< HEAD
 			'nombre' => 'required|space',
+=======
+			'nombre' => 'required|alpha',
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			'facultad_id' => 'required|integer|not_in:0'
 
 		];

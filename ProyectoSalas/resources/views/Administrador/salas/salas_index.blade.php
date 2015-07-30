@@ -41,6 +41,7 @@
   </thead>
   <tbody>
     <tr>
+<<<<<<< HEAD
           <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Salas</b></h3></td>
       <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_salasList', 'method' => 'GET']) !!}
 
@@ -58,6 +59,25 @@
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignar Salas</b></h3></td>
       <td>             
                      {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
+=======
+    
+      <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Asignar Salas</b></h3></td>
+      <td>             
+                     {!! Form::open(['action' => 'Administrador\SalaController@get_cursos', 'method' => 'GET']) !!}
+
+
+                  <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
+                    {!! Form::close() !!}
+
+      </td>
+     
+    </tr>
+
+        <tr>
+     
+      <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Salas</b></h3></td>
+      <td>                     {!! Form::open(['action' => 'Administrador\SalaController@get_salasList', 'method' => 'GET']) !!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
                   <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>

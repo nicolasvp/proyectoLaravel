@@ -176,6 +176,7 @@ class AsignaturaController extends Controller {
 				foreach($result as $key => $value)
 				{
 					$asignatura = new Asignatura();
+<<<<<<< HEAD
 
 					$asignatura->fill([
 						'departamento_id' => $departamento,
@@ -184,6 +185,9 @@ class AsignaturaController extends Controller {
 						'descripcion' => $value->descripcion
 						]);
 					
+=======
+					$asignatura->fill(['departamento_id' => $departamento,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 					$asignatura->save();
 
 				}

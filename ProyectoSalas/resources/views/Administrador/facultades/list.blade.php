@@ -40,7 +40,11 @@
 
           {!! Form::open(['action' => 'Administrador\FacultadController@get_create', 'method' => 'GET']) !!}
    
+<<<<<<< HEAD
            <button type="submit" class="btn btn-success">Ingresar</button>
+=======
+           <button type="submit" class="btn btn-success">Ingresar facultad</button>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
          {!! Form::close() !!}
 

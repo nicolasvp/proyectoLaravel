@@ -22,7 +22,11 @@ class EditSalaAdminRequest extends Request {
 	public function rules()
 	{
 		return [
+<<<<<<< HEAD
 			'nombre' => 'required|spaceNum',
+=======
+			'nombre' => 'required|alpha_num',
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			'capacidad' => 'required|integer',
 			'campus' => 'required|integer',
 			'tipo_sala' => 'required|integer'

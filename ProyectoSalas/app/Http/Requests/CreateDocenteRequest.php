@@ -23,10 +23,16 @@ class CreateDocenteRequest extends Request {
 	{
 		return [
 			'departamento' => 'required|integer|not_in:0',
+<<<<<<< HEAD
 			'rut' => 'required|min:11|max:12|rut',
 			'nombres' => 'required|space',
 			'apellidos' => 'required|space',
 			'email' => 'required|email|valid_email'
+=======
+			'rut' => 'required|integer|between:8,9|unique:docentes,rut',
+			'nombres' => 'required|alpha',
+			'apellidos' => 'required|alpha'
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

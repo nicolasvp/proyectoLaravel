@@ -32,8 +32,13 @@
 
 
       <div class="form-group">
+<<<<<<< HEAD
        {!! Form::label('departamento', 'Departamento') !!}
        {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
+=======
+       {!! Form::label('departamento_id', 'Departamento') !!}
+       {!! Form::select('departamento_id', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
       </div>
 
 
@@ -48,23 +53,31 @@
        {!! Form::text('nombres', null,['class' => 'form-control', 'placeholder' => 'Ingresa nombres']) !!}
       </div>
 
+<<<<<<< HEAD
       <div class="form-group">
+=======
+        <div class="form-group">
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
         {!! Form::label('apellidos', 'Apellidos') !!}
        {!! Form::text('apellidos', null,['class' => 'form-control', 'placeholder' => 'Ingresa apellidos']) !!}
       </div>
 
+<<<<<<< HEAD
       <div class="form-group">
         {!! Form::label('email', 'Email') !!}
        {!! Form::text('email', null,['class' => 'form-control', 'placeholder' => 'Ingresa email']) !!}
       </div>
 
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
       <div align=center><button type="submit" class="btn btn-info">Aceptar</button></div>
 
       {!! Form::close() !!}
      
   </div>
+<<<<<<< HEAD
   
       {!! Html::script('js/jquery-2.1.4.min.js') !!}
       <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
@@ -73,6 +86,9 @@
         $("#rut").rut();
        });
       </script> 
+=======
+
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                     
 </div>
 </div>

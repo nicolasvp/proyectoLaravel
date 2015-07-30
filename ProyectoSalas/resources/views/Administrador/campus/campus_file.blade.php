@@ -5,9 +5,12 @@
 
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
     @include('Administrador/menu')
        
-
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
    <p> <h2>Lista de campus para archivar</h2></p>
@@ -38,7 +41,7 @@
                <td>{{ $campu->nombre}}</td>
                <td>{{ $campu->direccion}}</td>
                <td>
-      {!! Form::open(['action' => ['AdministradorController@delete_campus'], 'method' => 'DELETE']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@delete_campus'], 'method' => 'DELETE']) !!}
       {!! Form::hidden('id', $campu->id)!!}
        <button type="submit" onclick="return confirm('¿Seguro que desea archivar este campus?')" class="btn btn-danger btn-sm">Archivar</button>
       {!! Form::close() !!}
@@ -64,5 +67,6 @@
       </div>
     </div>
 
+      </div>
 
 @stop

@@ -15,6 +15,17 @@
    <div class="col-sm-9" >
    <p> <h2>Lista de Períodos</h2></p>
 
+<<<<<<< HEAD
+=======
+   <p>
+      {!! Form::open(['action' => 'Administrador\PeriodoController@get_create', 'method' => 'GET']) !!}
+   
+        <button type="submit" class="btn btn-success">Ingresar periodo</button>
+
+      {!! Form::close() !!}
+
+   </p>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
       @if(Session::has('message'))
 
@@ -28,6 +39,7 @@
    <div class="panel-body">
        <div class="form-group">
 
+<<<<<<< HEAD
   <p> 
       {!! Form::open(['action' => 'Administrador\PeriodoController@get_create', 'method' => 'GET']) !!}
    
@@ -36,6 +48,8 @@
       {!! Form::close() !!}
   </p>
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
           <table class="table table-striped">
             <tr> 
               <th>#</th>

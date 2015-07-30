@@ -68,14 +68,7 @@
       {!! Form::close() !!}
      
   </div>
-    
-      {!! Html::script('js/jquery-2.1.4.min.js') !!}
-      <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
-      <script type="text/javascript">
-      jQuery(document).ready(function($) {
-        $("#rut").rut();
-       });
-      </script> 
+
                     
 </div>
 </div>

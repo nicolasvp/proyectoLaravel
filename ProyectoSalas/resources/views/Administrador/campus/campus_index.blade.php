@@ -4,10 +4,12 @@
 
 @section('sideBar')
 
-
+<div class="panel panel-default" style="margin-top: 40px;">
          
    @include('Administrador/menu')
-       
+         <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
    <p> <h2>Seleccione una opción</h2></p>
@@ -41,7 +43,7 @@
     
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Crear Campus</b></h3></td>
       <td>             
-                     {!! Form::open(['action' => 'AdministradorController@get_create', 'method' => 'GET']) !!}
+                     {!! Form::open(['action' => 'Administrador\CampusController@get_create', 'method' => 'GET']) !!}
 
 
                   <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -53,7 +55,7 @@
     <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Lista de Campus</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_campusList', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\CampusController@get_list', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -65,7 +67,7 @@
         <tr>
      
       <td><h3><i class="glyphicon glyphicon-menu-right" aria-hidden="true"></i><b> Campus archivados</b></h3></td>
-      <td>                     {!! Form::open(['action' => 'AdministradorController@get_filed', 'method' => 'GET']) !!}
+      <td>                     {!! Form::open(['action' => 'Administrador\CampusController@get_filed', 'method' => 'GET']) !!}
 
 
                     <button type="submit" class="btn btn-primary btn-sm ">Ingresar</button>
@@ -78,47 +80,16 @@
 
   </tbody>
 </table> 
-
-
-
-
-
-
-      
-
-
-   
-                     
-
-
-           
-           
-                  
-
-   
+             
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
 </div>
 </div>
 </div>
-
+</div>
+</div>
+</div>
                     
-</div>
-
-
 
                  
 @stop

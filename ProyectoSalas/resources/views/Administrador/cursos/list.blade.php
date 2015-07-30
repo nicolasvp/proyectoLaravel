@@ -17,7 +17,20 @@
 
    <div class="col-sm-9" >
  
+<<<<<<< HEAD
    <p> <h2>Lista de Cursos</h2></p>
+=======
+   <p> <h2>Lista de cursos</h2></p>
+
+         <p>
+                         {!! Form::open(['action' => 'Administrador\CursoController@get_departamento', 'method' => 'GET']) !!}
+   
+                          <button type="submit" class="btn btn-success">Ingresar curso</button>
+
+                         {!! Form::close() !!}
+         </p>
+
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
       @if(Session::has('message'))
 
@@ -38,11 +51,14 @@
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
+<<<<<<< HEAD
            {!! Form::open(['action' => 'Administrador\CursoController@get_departamento', 'method' => 'GET']) !!}
    
               <button type="submit" class="btn btn-success">Ingresar</button>
 
           {!! Form::close() !!}
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
           <table class="table table-striped">
             <tr> 

@@ -38,8 +38,12 @@ class AlumnoController extends Controller {
 				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
 				->join('cursos', 'horarios.curso_id', '=','cursos.id')
 				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+<<<<<<< HEAD
 				->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
 				->where('estudiantes.rut','=',\Auth::user()->rut) 
+=======
+				->where('asignaturas_cursadas.estudiante_id', '=', '4') //debe cambiar el id del estudiante
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 				->select('salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
 				->paginate();
 				

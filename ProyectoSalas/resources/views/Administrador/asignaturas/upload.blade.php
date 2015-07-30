@@ -39,7 +39,11 @@
 
 
     <div class="form-group">
+<<<<<<< HEAD
    {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
+=======
+   {!! Form::select('departamento', ( $departamentos), null, ['class' => 'form-control'])!!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
     </div>    
  
 <div class="form-group">

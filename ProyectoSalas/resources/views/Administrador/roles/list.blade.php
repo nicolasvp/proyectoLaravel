@@ -13,7 +13,11 @@
 
    <div class="col-sm-9" >
  
+<<<<<<< HEAD
    <p> <h2>Lista de Roles</h2></p>
+=======
+   <p> <h2>Lista de roles</h2></p>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
       @if(Session::has('message'))
 
@@ -37,7 +41,11 @@
 
         {!! Form::open(['action' => 'Administrador\RolController@get_create', 'method' => 'GET']) !!}
    
+<<<<<<< HEAD
           <button type="submit" class="btn btn-success">Ingresar</button>
+=======
+          <button type="submit" class="btn btn-success">Ingresar rol</button>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
         {!! Form::close() !!}
 

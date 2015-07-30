@@ -53,7 +53,11 @@
                <td>{{ $rol->rol}}</td>
                 <td> 
       {!! Form::open(['action' => ['Administrador\PerfilController@delete_destroy'], 'method' => 'DELETE']) !!}
+<<<<<<< HEAD
       {!! Form::hidden('id', $rol->id)!!}
+=======
+      {!! Form::hidden('id', $users->id)!!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
        <button type="submit" onclick="return confirm('¿Seguro que desea eliminar?')" class="btn btn-danger btn-sm">Eliminar</button>
       {!! Form::close() !!}
 
@@ -86,7 +90,11 @@
    {!! Form::select('rol_asig', (['0' => 'Selecciona un Perfil'] + $rol_usuario), null, ['class' => 'form-control']) !!}
     </div>
 
+<<<<<<< HEAD
       <div align="center"<th><button type="submit"  class="btn btn-success">Aceptar</button></th></div>
+=======
+      <div align="center"<th><button type="submit" onclick="return confirm('¿Seguro que desea asignar este perfil?')" class="btn btn-success">Asignar perfil</button></th></div>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
       {!! Form::close() !!}
 
       </div>

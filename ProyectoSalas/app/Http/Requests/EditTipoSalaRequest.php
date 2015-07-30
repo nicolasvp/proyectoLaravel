@@ -22,7 +22,11 @@ class EditTipoSalaRequest extends Request {
 	public function rules()
 	{
 		return [
+<<<<<<< HEAD
 			'nombre' => 'required|space|unique:tipos_salas,nombre,'.$this->id
+=======
+			'nombre' => 'required|alpha|unique:tipos_salas,nombre,'.$this->id
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

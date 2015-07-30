@@ -5,10 +5,14 @@
 @section('sideBar')
 
 
+<div class="panel panel-default" style="margin-top: 40px;">
 
 
     @include('Administrador/menu')
 
+  <div class="panel-body">                  
+                  
+   <div class="row">
 
    <div class="col-sm-9" >
    <p> <h2>Lista de campus archivados</h2></p>
@@ -43,7 +47,7 @@
                <td>
 
 
-      {!! Form::open(['action' => ['AdministradorController@post_restore_campus'], 'method' => 'POST']) !!}
+      {!! Form::open(['action' => ['Administrador\CampusController@post_restore_campus'], 'method' => 'POST']) !!}
       {!! Form::hidden('id', $campu->id)!!}
        <button type="submit"  class="btn btn-success">Recuperar</button>
       {!! Form::close() !!}
@@ -68,5 +72,7 @@
       </div>
     </div>
 
+
+      </div>
 
 @stop

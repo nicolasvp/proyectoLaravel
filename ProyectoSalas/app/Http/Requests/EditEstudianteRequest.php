@@ -22,11 +22,19 @@ class EditEstudianteRequest extends Request {
 	public function rules()
 	{
 		return [
+<<<<<<< HEAD
 			'carrera' => 'required|integer|not_in:0',
 			'rut' => 'required|min:11|max:12|rut',
 			'nombres' => 'required|space',
 			'apellidos' => 'required|space',
 			'email' => 'required|email|valid_email'
+=======
+			'carrera_id' => 'required|integer|not_in:0',
+			'rut' => 'required|integer|unique:estudiantes,rut,'.$this->id,
+			'nombres' => 'required|alpha',
+			'apellidos' => 'required|alpha',
+			'email' => 'required'
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

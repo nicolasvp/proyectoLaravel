@@ -23,7 +23,11 @@ class CreateCampusRequest extends Request {
 	{
 	
 		return [
+<<<<<<< HEAD
 			'nombre' => 'required|spaceNum|unique:campus,nombre',
+=======
+			'nombre' => 'required|space|unique:campus,nombre',
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			'direccion' => 'required|spaceNum',
 			'latitud' => 'required|numeric|unique:campus,latitud',
 			'longitud' => 'required|numeric|unique:campus,longitud',

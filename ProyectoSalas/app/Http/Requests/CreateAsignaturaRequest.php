@@ -24,7 +24,11 @@ class CreateAsignaturaRequest extends Request {
 		return [
 			'departamento' => 'required|integer|not_in:0',
 			'codigo' => 'required|unique:asignaturas,codigo',
+<<<<<<< HEAD
 			'nombre' => 'required|spaceNum'
+=======
+			'nombre' => 'required|alpha'
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

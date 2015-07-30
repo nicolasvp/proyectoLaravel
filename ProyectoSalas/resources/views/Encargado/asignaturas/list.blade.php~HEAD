@@ -15,7 +15,7 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de asignaturas</h2></p>
+   <p> <h2>Lista de Asignaturas</h2></p>
 
       @if(Session::has('message'))
 
@@ -40,7 +40,7 @@
 
           {!! Form::open(['action' => 'Encargado\AsignaturaController@get_create', 'method' => 'GET']) !!}
           
-             <button type="submit" class="btn btn-success">Ingresar asignatura</button>
+             <button type="submit" class="btn btn-success">Ingresar</button>
 
           {!! Form::close() !!}
 

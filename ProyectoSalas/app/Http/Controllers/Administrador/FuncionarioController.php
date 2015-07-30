@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Funcionario;
 use App\Models\Rol_usuario;
+<<<<<<< HEAD
 use App\Models\Usuario;
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 
@@ -50,6 +53,7 @@ class FuncionarioController extends Controller {
 
 	public function post_store(Requests \CreateFuncionarioRequest $request)
 	{
+<<<<<<< HEAD
 
 		$rut = array(
 				'rut' => \App\RutUtils::rut($request->get('rut'))
@@ -101,6 +105,11 @@ class FuncionarioController extends Controller {
 				'email' => $request->get('email')
 			]);
 		
+=======
+		
+		$funcionario= new Funcionario();
+		$funcionario->fill($request->all());
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$funcionario->save();
 
 		Session::flash('message', 'El funcionario '.$funcionario->nombres.' '.$funcionario->apellidos.' fue ingresado exitosamente!');
@@ -116,8 +125,11 @@ class FuncionarioController extends Controller {
 		
 		$funcionarioEditable = Funcionario::findOrFail($request->get('id'));
 
+<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($funcionarioEditable->rut);
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -128,7 +140,11 @@ class FuncionarioController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
+<<<<<<< HEAD
 		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','rut','id','departamentos','var'));
+=======
+		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','id','departamentos','var'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -138,6 +154,7 @@ class FuncionarioController extends Controller {
 	{
 
 		$funcionario = Funcionario::findOrFail($request->get('id'));
+<<<<<<< HEAD
 
 		$rut = array(
 			'rut' => \App\RutUtils::rut($request->get('rut'))
@@ -180,6 +197,9 @@ class FuncionarioController extends Controller {
 			'email' => $request->get('email')
 						]);
 
+=======
+		$funcionario->fill(\Request::all());
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$funcionario->save();
 		
 		Session::flash('message', 'El funcionario '.$funcionario->nombres.' '.$funcionario->apellidos.' fue editado exitosamente!');
@@ -191,7 +211,11 @@ class FuncionarioController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
+<<<<<<< HEAD
 		$funcionario = Usuario::findOrFail($request->get('rut'));
+=======
+		$funcionario = Funcionario::findOrFail($request->get('id'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$funcionario->delete();
 
@@ -234,6 +258,7 @@ class FuncionarioController extends Controller {
 
 					foreach($result as $key => $value)
 					{
+<<<<<<< HEAD
 						$var = new Usuario();
 
 						$var->fill([
@@ -257,6 +282,12 @@ class FuncionarioController extends Controller {
 
 						$var2->save();
 
+=======
+						$var = new Funcionario();
+						$var->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' => $value->nombres,'apellidos' =>$value->apellidos]);
+						$var->save();
+
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 					}
 
 				})->get();

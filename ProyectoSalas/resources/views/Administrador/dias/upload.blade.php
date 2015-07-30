@@ -6,17 +6,13 @@
 @section('sideBar')
 
 
-<div class="panel panel-default" style="margin-top: 40px;">
+
 @include('Administrador/menu')
 
 
 
-  <div class="panel-body">                  
-                  
-   <div class="row">
-    
    <div class="col-sm-9" >
-   <p> <h2>Selección de departamento</h2></p>
+   <p> <h2>Subir archivo con Dias</h2></p>
 
       @if(Session::has('message'))
 
@@ -36,16 +32,8 @@
   
 
 
- {!! Form::open(['action' => 'Administrador\DocenteController@post_upload','files'=>true]) !!}
+ {!! Form::open(['action' => 'Administrador\DiaController@post_upload','files'=>true]) !!}
 
-
-    <div class="form-group">
-<<<<<<< HEAD
-   {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --']  +$departamentos), null, ['class' => 'form-control'])!!}
-=======
-   {!! Form::select('departamento', ( $departamentos), null, ['class' => 'form-control'])!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
-    </div>    
  
 <div class="form-group">
         <div class="panel-body">
@@ -53,7 +41,7 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             
             <div class="form-group">
-              <label class="col-md-4 control-label">Seleccione el archivo con los docentes</label>
+              <label class="col-md-4 control-label">Seleccione el archivo con los Dias</label>
               <div class="col-md-6">
                 <input type="file" class="form-control" name="file" >
               </div>
@@ -61,7 +49,7 @@
         </div>
  </div>
 
-     <div align="center"<th><button type="submit" class="btn btn-success">Subir Docentes</button></th></div>
+     <div align="center"<th><button type="submit" class="btn btn-success">Subir Dias</button></th></div>
 
     {!! Form::close() !!}
 
@@ -71,9 +59,7 @@
 </div>
 </div>               
 </div>
-</div>               
-</div>
-</div>
+
 
       </div>
                     

@@ -27,7 +27,7 @@
   
 
 
- {!! Form::open(['action' => 'AdministradorController@get_editSala', 'method' => 'GET']) !!}
+ {!! Form::open(['action' => 'Administrador\SalaController@get_editSala', 'method' => 'GET']) !!}
 
 
     <div class="form-group">
@@ -52,16 +52,5 @@
     </div>
 
 
-<!--
- <script src="http://localhost:8000/js/jquery-1.11.3.min.js"></script>
-      <script type="text/javascript">
-      jQuery(document).ready(function($) {
-                 $('.btn').click(function (){
-                    alert("kjsdkajsdakj");
-                 });
-       });
-      </script>
-
--->
                     
 @stop

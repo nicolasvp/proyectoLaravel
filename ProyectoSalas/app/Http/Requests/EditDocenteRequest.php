@@ -23,11 +23,18 @@ class EditDocenteRequest extends Request {
 	{
 	
 		return [
+<<<<<<< HEAD
 			'departamento' => 'required|integer|not_in:0',
 			'rut' => 'required|min:11|max:12|rut',
 			'nombres' => 'required|space',
 			'apellidos' => 'required|space',
 			'email' => 'required|email|valid_email'
+=======
+			'departamento_id' => 'required|integer|not_in:0',
+			'rut' => 'required|integer|unique:docentes,rut,'. $this->id,
+			'nombres' => 'required|alpha',
+			'apellidos' => 'required|alpha'
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

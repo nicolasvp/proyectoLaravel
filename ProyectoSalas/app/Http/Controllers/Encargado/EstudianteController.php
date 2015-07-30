@@ -11,7 +11,10 @@ use App\Models\Docente;
 use App\Models\Estudiante;
 use App\Models\Carrera;
 use App\Models\Rol_usuario;
+<<<<<<< HEAD
 use App\Models\Usuario;
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 class EstudianteController extends Controller {
@@ -49,6 +52,7 @@ class EstudianteController extends Controller {
 	}
 
 
+<<<<<<< HEAD
 	public function post_store(Requests\CreateEstudianteRequest $request)
 	{
 		
@@ -103,6 +107,15 @@ class EstudianteController extends Controller {
 			'email' => $request->get('email')
 			]);
 
+=======
+
+		public function post_store(Requests\CreateEstudianteRequest $request)
+	{
+		
+		$estudiante = new Estudiante();
+		$estudiante->fill(['carrera_id' => $request->get('carrera'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
+			'apellidos' => $request->get('apellidos'), 'email' => $request->get('email')]);
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$estudiante->save();
 
 		Session::flash('message', 'El estudiante '.$estudiante->nombre.'  '.$estudiante->apellidos.' fue creado exitosamente!');
@@ -118,8 +131,11 @@ class EstudianteController extends Controller {
 		
 		$estudianteEditable = Estudiante::findOrFail($request->get('id'));
 
+<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($estudianteEditable->rut);
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$carreras = Carrera::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -129,7 +145,11 @@ class EstudianteController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
+<<<<<<< HEAD
 		return view('Encargado/estudiantes/edit', compact('estudianteEditable','rut','id','carreras','var'));
+=======
+		return view('Encargado/estudiantes/edit', compact('estudianteEditable','id','carreras','var'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -139,6 +159,7 @@ class EstudianteController extends Controller {
 	{
 
 		$estudiante = Estudiante::findOrFail($request->get('id'));
+<<<<<<< HEAD
 
 
 		$rut = array(
@@ -180,6 +201,9 @@ class EstudianteController extends Controller {
 			'email' => $request->get('email')
 						]);
 
+=======
+		$estudiante->fill(\Request::all());
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$estudiante->save();
 		
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue editado exitosamente!');
@@ -192,7 +216,11 @@ class EstudianteController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
+<<<<<<< HEAD
 		$estudiante = Usuario::findOrFail($request->get('rut'));
+=======
+		$estudiante = Estudiante::findOrFail($request->get('id'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$estudiante->delete();
 

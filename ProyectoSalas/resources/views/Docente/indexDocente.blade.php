@@ -6,7 +6,7 @@
 
 @section('sideBar')
 
-
+<div class="panel panel-default" style="margin-top: 40px;">
 
 <div class="panel panel-default" style="margin-top: 40px;">
 
@@ -37,8 +37,15 @@
 </div>
                     
 </div>
+<<<<<<< HEAD
 </div>
 </div>
       
+=======
+
+
+      </div>
+    
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 @stop

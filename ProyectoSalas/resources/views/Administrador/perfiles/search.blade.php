@@ -17,8 +17,12 @@
  <div class="panel panel-default">
    <div class="panel-body">
 
+<<<<<<< HEAD
    @include('Administrador/messages')
    
+=======
+ 
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
       @if(Session::has('message'))
 
           <div class="alert alert-dismissible alert-success">

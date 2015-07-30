@@ -7,7 +7,11 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Docente;
 use App\Models\Departamento;
 use App\Models\Rol_usuario;
+<<<<<<< HEAD
 use App\Models\Usuario;
+=======
+
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 
@@ -48,6 +52,7 @@ class DocenteController extends Controller {
 
 	public function post_store(Requests\CreateDocenteRequest $request)
 	{
+<<<<<<< HEAD
 
 
 			$rut = array(
@@ -108,20 +113,37 @@ class DocenteController extends Controller {
 		Session::flash('message', 'El docente '.$var3->nombres.' '.$var3->apellidos.' fue creado exitosamente!');
 
 		return redirect()->action('Administrador\DocenteController@getIndex');
+=======
+		
+		$docente= new Docente();
+		$docente->fill(['departamento_id' => $request->get('departamento'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
+			'apellidos' => $request->get('apellidos')]);
+		$docente->save();
+
+		Session::flash('message', 'El docente '.$docente->nombres.' '.$docente->apellidos.' fue creado exitosamente!');
+		return redirect()->action('Administrador\DocenteController@getIndex');
+	
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	public function get_edit(Request $request)
 	{
 		
 		$docenteEditable = Docente::findOrFail($request->get('id'));
 
+<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($docenteEditable->rut);
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -131,7 +153,11 @@ class DocenteController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
+<<<<<<< HEAD
 		return view('Administrador/docentes/edit', compact('docenteEditable','rut','id','departamentos','var'));
+=======
+		return view('Administrador/docentes/edit', compact('docenteEditable','id','departamentos','var'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -140,6 +166,7 @@ class DocenteController extends Controller {
 	public function put_update(Requests \EditDocenteRequest $request)
 	{
 
+<<<<<<< HEAD
 		$docente= Docente::findOrFail($request->get('id'));
 
 		$rut = array(
@@ -186,6 +213,13 @@ class DocenteController extends Controller {
 		$docente->save();
 		
 		Session::flash('message', 'El docente '.$docente->nombres.' '.$docente->apellidos.' fue editado exitosamente!');
+=======
+		$estudiante = Docente::findOrFail($request->get('id'));
+		$estudiante->fill(\Request::all());
+		$estudiante->save();
+		
+		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue editado exitosamente!');
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		return redirect()->action('Administrador\DocenteController@getIndex');
 	}
@@ -194,7 +228,11 @@ class DocenteController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
+<<<<<<< HEAD
 		$docente = Usuario::findOrFail($request->get('rut'));
+=======
+		$docente = Docente::findOrFail($request->get('id'));
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$docente->delete();
 
@@ -251,9 +289,15 @@ class DocenteController extends Controller {
 	public function post_upload(Request $request)
 	{
 
+<<<<<<< HEAD
 	    
 		   $file = $request->file('file');
 	  
+=======
+	    // dd($request);
+		   $file = $request->file('file');
+	    //dd($file);
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	       $nombre = $file->getClientOriginalName();
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
@@ -267,6 +311,7 @@ class DocenteController extends Controller {
 
 				foreach($result as $key => $value)
 				{
+<<<<<<< HEAD
 
 					$var = new Usuario();
 
@@ -299,6 +344,11 @@ class DocenteController extends Controller {
 
 					$var3->save();
 
+=======
+					$var = new Docente();
+					$var->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos]);
+					$var->save();
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 				}
 

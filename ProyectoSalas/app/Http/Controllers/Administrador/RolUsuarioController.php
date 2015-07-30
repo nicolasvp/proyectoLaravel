@@ -17,8 +17,12 @@ class RolUsuarioController extends Controller {
 	public function getIndex()
 	{
 		$datos_roles = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+<<<<<<< HEAD
 								->join('usuarios','roles_usuarios.rut','=','usuarios.rut')
 								->select('roles_usuarios.*','roles.nombre as rol','usuarios.*')
+=======
+								->select('roles_usuarios.*','roles.nombre')
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 								->paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
@@ -74,12 +78,18 @@ class RolUsuarioController extends Controller {
 		{
 
 		$datos_roles = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+<<<<<<< HEAD
 				->join('usuarios','roles_usuarios.rut','=','usuarios.rut')
 		        ->where('roles.nombre','like','%'.$request->get('name').'%')
 				->orWhere('roles_usuarios.rut', '=' , (integer) $request->get('name'))
 				->orWhere('usuarios.nombres','like','%'.$request->get('name').'%')
 				->orWhere('usuarios.apellidos','like','%'.$request->get('name').'%')
 				->select('roles_usuarios.*','roles.nombre as rol','usuarios.*')
+=======
+		        ->where('roles.nombre','like','%'.$request->get('name').'%')
+				->orWhere('rut', '=' , (integer) $request->get('name'))
+				->select('roles_usuarios.*','roles.nombre')
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 				->paginate();	
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')

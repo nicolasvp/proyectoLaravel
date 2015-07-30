@@ -22,7 +22,11 @@ class CreateTipoSalaRequest extends Request {
 	public function rules()
 	{
 		return [
+<<<<<<< HEAD
 			'nombre' => 'required|space|unique:tipos_salas,nombre'
+=======
+			'nombre' => 'required|alpha|unique:tipos_salas,nombre'
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

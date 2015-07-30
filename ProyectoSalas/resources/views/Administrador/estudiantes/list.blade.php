@@ -37,7 +37,11 @@
 
         {!! Form::open(['action' => 'Administrador\EstudianteController@get_create', 'method' => 'GET']) !!}
    
+<<<<<<< HEAD
             <button type="submit" class="btn btn-success">Ingresar</button>
+=======
+            <button type="submit" class="btn btn-success">Ingresar estudiante</button>
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
         {!! Form::close() !!}
 
@@ -70,7 +74,11 @@
               </td>
               <td>
                   {!! Form::open(['action' => ['Administrador\EstudianteController@delete_destroy'], 'method' => 'DELETE']) !!}
+<<<<<<< HEAD
                   {!! Form::hidden('rut', $estudiante->rut)!!}
+=======
+                  {!! Form::hidden('id', $estudiante->id)!!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                    <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este estudiante?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}
 

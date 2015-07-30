@@ -10,7 +10,11 @@
          </th>
       
           <th>     
+<<<<<<< HEAD
             {!! Form::open(['action' => ['Administrador\PerfilController@get_cambioPerfil'], 'method' => 'GET', 'class' => 'pull-right']) !!}
+=======
+            {!! Form::open(['action' => ['Administrador\PerfilController@get_pichula'], 'method' => 'GET', 'class' => 'pull-right']) !!}
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
               <div class="form-group" style="margin-top: 20px">
             {!! Form::select('perfil', $var,null,['class' => 'form-control']) !!}
               </div>      

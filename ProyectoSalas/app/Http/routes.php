@@ -15,7 +15,11 @@
 
 //Route::get('home', 'HomeController@index');
 
+<<<<<<< HEAD
 Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
+=======
+Route::group(['middleware' => ['auth','is_encargado'],'prefix' => 'encargado', 'namespace' => 'Encargado'], function()
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 {
 
   	Route::get('/','EncargadoController@getIndex');
@@ -30,7 +34,11 @@ Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
 
 });
 
+<<<<<<< HEAD
 Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], function()
+=======
+Route::group(['middleware' => ['auth','is_admin'], 'prefix' => 'administrador', 'namespace' => 'Administrador'], function()
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 {
     Route::get('/','AdministradorController@getIndex');
     Route::controller('campus','CampusController');
@@ -49,7 +57,10 @@ Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], func
     Route::controller('periodos','PeriodoController');
     Route::controller('roles','RolController');
     Route::controller('roles_usuarios','RolUsuarioController'); 
+<<<<<<< HEAD
     Route::controller('usuarios','UsuarioController');
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 });
 

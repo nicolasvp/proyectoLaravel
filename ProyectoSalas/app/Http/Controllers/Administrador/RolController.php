@@ -18,6 +18,7 @@ class RolController extends Controller {
 	public function getIndex()
 	{
 
+<<<<<<< HEAD
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
 	                            ->select('roles.*','roles_usuarios.*')
@@ -30,6 +31,8 @@ class RolController extends Controller {
 	public function get_roles()
 	{
 
+=======
+>>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$datos_roles = Rol::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
