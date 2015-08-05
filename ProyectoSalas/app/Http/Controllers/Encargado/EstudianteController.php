@@ -12,7 +12,7 @@ use App\Models\Estudiante;
 use App\Models\Carrera;
 use App\Models\Rol_usuario;
 use App\Models\Usuario;
-
+use App\Models\Campus;
 
 class EstudianteController extends Controller {
 
@@ -20,9 +20,18 @@ class EstudianteController extends Controller {
 
 	public function getIndex()
 	{
+
+		$id_campus= Campus::select('id')->where('rut_encargado',\Auth::user()->rut)->first()->id;
+
+
 		$datos_estudiantes = Estudiante::join('carreras','estudiantes.carrera_id','=','carreras.id')
+									->join('escuelas','carreras.escuela_id','=','escuelas.id')
+									->join('departamentos','escuelas.departamento_id','=','departamentos.id')
+									->join('facultades','departamentos.facultad_id','=','facultades.id')
+									->where('facultades.campus_id', $id_campus) 
 									->select('estudiantes.*','carreras.codigo as carrera')
 									->paginate();
+
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -249,6 +258,13 @@ class EstudianteController extends Controller {
 
 	public function post_upload(Request $request)
 	{
+
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
 
 	    
 		   $file = $request->file('file');

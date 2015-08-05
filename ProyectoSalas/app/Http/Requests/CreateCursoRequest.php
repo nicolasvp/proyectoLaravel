@@ -27,7 +27,7 @@ class CreateCursoRequest extends Request {
 			'docente' => 'required|integer|not_in:0',
 			'semestre' => 'required|integer',
 			'año' => 'required|integer',
-			'seccion' => 'required|integer|unique:cursos,seccion,NULL,id,asignatura_id,'.$this->asignatura
+			'seccion' => 'required|integer'
 		];
 	}
 

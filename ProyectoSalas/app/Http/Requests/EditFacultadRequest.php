@@ -23,7 +23,7 @@ class EditFacultadRequest extends Request {
 	{
 	
 		return [
-			'nombre' => 'required|space|unique:facultades,nombre,'.$this->id,
+			'nombre' => 'required|spaceNum|unique:facultades,nombre,'.$this->id,
 			'campus_id' => 'required|integer|not_in:0'
 		];
 	}

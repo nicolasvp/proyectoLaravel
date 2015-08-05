@@ -22,7 +22,7 @@ class EditEscuelaRequest extends Request {
 	public function rules()
 	{
 		return [
-			'nombre' => 'required|space',
+			'nombre' => 'required|spaceNum',
 			'departamento_id' => 'required|integer|not_in:0'
 		];
 	}

@@ -79,23 +79,41 @@ class CampusController extends Controller {
 	public function get_edit(Request $request)
 	{
 		
+		$rut_encargado = Rol_usuario::where('id','=',$request->rut_encargado)->select('rut')->get();	
+
 		$campusEditable = Campus::findOrFail($request->get('id'));
+
 		$id = $request->get('id');
+
+        $encargados = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+					       	->where('roles.nombre','=','encargado')
+					       	->select('roles_usuarios.*')
+					       	->lists('roles_usuarios.rut','roles_usuarios.id');
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/campus/edit', compact('campusEditable','id','var'));
+		return view('Administrador/campus/edit', compact('campusEditable','id','encargados','var'));
 	
 	}
 
 	public function put_update(Requests \EditCampusRequest $request)
 	{
 	
+		$rut_encargado = Rol_usuario::where('id','=',$request->rut_encargado)->pluck('rut');	
+
 		$campusEditable = Campus::findOrFail($request->get('id'));
-		$campusEditable->fill(\Request::all());
+
+		$campusEditable->fill([
+				'nombre' => $request->nombre,
+				'direccion' => $request->direccion,
+				'latitud' => $request->latitud,
+				'longitud' => $request->longitud,
+				'descripcion' => $request->descripcion,
+				'rut_encargado' => $rut_encargado]);
+
 		$campusEditable->save();
 		
 		Session::flash('message','El campus '. $campusEditable->nombre. ' fue editado');
@@ -187,7 +205,13 @@ class CampusController extends Controller {
 	public function post_upload(Request $request)
 	{
 
-	     
+	     if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+
 		   $file = $request->file('file');
 	    
 	       $nombre = $file->getClientOriginalName();

@@ -317,6 +317,13 @@ class SalaController extends Controller {
 	public function post_upload(Requests \FechaHorarioUploader $request)
 	{
 
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+
 		    if(!$request->lunes && !$request->martes && !$request->miercoles && !$request->jueves && !$request->viernes && !$request->sabado)
 			{
 				Session::flash('message', 'Debe seleccionar al menos un día');

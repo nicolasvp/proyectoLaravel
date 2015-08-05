@@ -283,7 +283,14 @@ class EstudianteController extends Controller {
 	public function post_upload(Request $request)
 	{
 
-	    
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+
+
 		   $file = $request->file('file');
 	    
 	       $nombre = $file->getClientOriginalName();

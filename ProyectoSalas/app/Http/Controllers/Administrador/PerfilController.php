@@ -245,30 +245,4 @@ class PerfilController extends Controller {
 
 	}
 
-	public function get_cambioPerfil(Request $request)
-	{
-	
-
-            if($request->get('perfil') == 'administrador')
-            {
-                return redirect()->action('Administrador\AdministradorController@getIndex');
-            }
-            if($request->get('perfil') == 'encargado')
-            {
-                return redirect()->action('Encargado\EncargadoController@getIndex');
-            }
-            if($request->get('perfil') == 'estudiante')
-            {
-                return redirect()->action('Estudiante\EstudianteController@getIndex');
-            }
-            if($request->get('perfil') == 'docente')
-            {
-                return redirect()->action('Docente\DocenteController@getIndex');
-            }
-
-		return redirect()->action('Administrador\Administrador@getIndex');
-
-	}
-
-
 }

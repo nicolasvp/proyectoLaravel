@@ -22,7 +22,7 @@ class EditDepartamentoRequest extends Request {
 	public function rules()
 	{
 		return [
-			'nombre' => 'required|space',
+			'nombre' => 'required|spaceNum',
 			'facultad_id' => 'required|integer|not_in:0'
 		];
 	}

@@ -45,7 +45,26 @@ class EstudianteController extends Controller {
 				->get();
 
 
+							$datos_lunes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
+								->join('salas', 'horarios.sala_id', '=','salas.id')
+								->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+								->join('cursos', 'horarios.curso_id', '=','cursos.id')
+								->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+								->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
+								->where('estudiantes.rut','=',\Auth::user()->rut)
+								->where('horarios.fecha','=',null)
+								->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+								->get();
 
+
+		$datos_martes = $datos_lunes;
+		$datos_miercoles = $datos_lunes;
+		$datos_jueves = $datos_lunes;
+		$datos_viernes =$datos_lunes;
+		$datos_sabado = $datos_lunes;
+
+	if(!is_null($fechas))	
+	{	
 
 		foreach($fechas as $fecha)
 		{
@@ -68,6 +87,8 @@ class EstudianteController extends Controller {
 		
 				break;
 			}
+
+
 
 			
 		}
@@ -93,16 +114,6 @@ class EstudianteController extends Controller {
 			
 				break;
 			}
-							$datos_martes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
 
 			
 		}
@@ -128,18 +139,7 @@ class EstudianteController extends Controller {
 			
 				break;
 			}
-							$datos_miercoles  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
 
-			
 		}
 
 		foreach($fechas as $fecha)
@@ -163,17 +163,7 @@ class EstudianteController extends Controller {
 			
 				break;
 			}
-							$datos_jueves  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
-			
+
 		}		
 
 		foreach($fechas as $fecha)
@@ -197,17 +187,7 @@ class EstudianteController extends Controller {
 			
 				break;
 			}
-							$datos_viernes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
-			
+
 		}	
 
 		foreach($fechas as $fecha)
@@ -231,16 +211,6 @@ class EstudianteController extends Controller {
 			
 				break;
 			}
-							$datos_sabado = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
 			
 		}
 
@@ -251,6 +221,10 @@ class EstudianteController extends Controller {
                             ->lists('roles.nombre','roles.nombre');  
 
 		return view('Estudiante/horario',compact('datos_lunes','datos_martes','datos_miercoles','datos_jueves','datos_viernes','datos_sabado','var'));
+	}
+		Session::flash('message', 'No tiene cursos disponibles.');
+		return redirect()->action('Estudiante/EstudianteController@getIndex');
+	
 
 	}
 

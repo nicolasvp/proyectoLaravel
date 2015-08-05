@@ -71,7 +71,7 @@ Route::group(['prefix' => 'docente', 'namespace' => 'Docente','middleware' => ['
 
 });
 
-
+Route::get('perfil','CambioPerfilController@get_cambioPerfil');
 
 Route::Controller("/login","loginController");
 Route::Controller("/","loginController");

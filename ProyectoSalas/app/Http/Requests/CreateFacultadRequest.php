@@ -22,7 +22,7 @@ class CreateFacultadRequest extends Request {
 	public function rules()
 	{
 		return [
-			'nombre' => 'required|space|unique:facultades,nombre',
+			'nombre' => 'required|spaceNum|unique:facultades,nombre',
 			'campus_id' => 'required|integer|not_in:0'
 		];
 	}

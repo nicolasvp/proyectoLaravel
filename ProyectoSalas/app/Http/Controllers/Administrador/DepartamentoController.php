@@ -87,6 +87,7 @@ class DepartamentoController extends Controller {
 	public function put_update(Requests \EditDepartamentoRequest $request)
 	{
 
+
 		$departamento = Departamento::findOrFail($request->get('id'));
 		$departamento->fill(\Request::all());
 		$departamento->save();
@@ -167,7 +168,13 @@ class DepartamentoController extends Controller {
 	public function post_upload(Request $request)
 	{
 
-	 
+	     if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+		 	 
 		   $file = $request->file('file');
 	 
 	       $nombre = $file->getClientOriginalName();

@@ -21,9 +21,9 @@ class IsEncargado {
         $var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=',$rut)
                             ->select('roles.nombre')
-                            ->get();  
-
+                            ->get();
 		$encargado = false;
+		
 
 		foreach($var as $v)
 		{

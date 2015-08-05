@@ -13,17 +13,28 @@ use App\Models\Asignatura;
 use App\Models\Rol_usuario;
 
 
-
+use App\Models\Campus;
 class CursoController extends Controller {
 
 
 
 	public function getIndex()
 	{
-		$datos_cursos = Curso::join('asignaturas', 'cursos.asignatura_id', '=','asignaturas.id')
-				->join('docentes','cursos.docente_id','=','docentes.id')
-				->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
-				->paginate();
+
+
+		$id_campus= Campus::select('id')->where('rut_encargado',\Auth::user()->rut)->first()->id;
+
+
+        $datos_cursos =Curso::join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+		        			 ->join('docentes','cursos.docente_id','=','docentes.id')
+		                     ->join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+					         ->join('facultades','departamentos.facultad_id','=','facultades.id')
+					         ->join('campus','facultades.campus_id','=', 'campus.id')
+					         ->where('facultades.campus_id', $id_campus) 
+					         ->select('cursos.*','asignaturas.nombre','docentes.nombres','docentes.apellidos','docentes.rut')
+					         ->paginate();
+
+
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -35,7 +46,7 @@ class CursoController extends Controller {
 
 	public function get_departamento()
 	{
-		$departamentos = Departamento::paginate()->lists('nombre','id');
+		$departamentos = Departamento::all()->lists('nombre','id');
 		
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -66,14 +77,30 @@ class CursoController extends Controller {
 	public function post_store(Requests \CreateCursoRequest $request)
 	{
 	
-		$curso = new Curso();
-		$curso->fill(['asignatura_id' => $request->get('asignatura'), 'docente_id' => $request->get('docente'),
-			'semestre' => $request->get('semestre'), 'anio' => $request->get('año'), 'seccion' => $request->get('seccion')]);
-		$curso->save();
+		$tupla = Curso::where('asignatura_id','=',$request->get('asignatura'))
+						->where('docente_id','=',$request->get('docente'))
+						->where('semestre','=',$request->get('semestre'))
+						->where('anio','=',$request->get('año'))
+						->where('seccion','=',$request->get('seccion'))
+						->first();
+		
+		if(is_null($tupla))				
+		{	
+			$curso = new Curso();
+			$curso->fill(['asignatura_id' => $request->get('asignatura'), 'docente_id' => $request->get('docente'),
+				'semestre' => $request->get('semestre'), 'anio' => $request->get('año'), 'seccion' => $request->get('seccion')]);
+			$curso->save();
 
-		Session::flash('message', 'El curso fue creado exitosamente!');
+			Session::flash('message', 'El curso fue creado exitosamente!');
 
-		return redirect()->action('Encargado\CursoController@getIndex');
+			return redirect()->action('Encargado\CursoController@getIndex');
+		}
+
+		Session::flash('message', 'Ya hay un curso con esa información');
+
+		return redirect()->back()->withInput(\Request::all());
+
+
 	}
 
 
@@ -182,7 +209,13 @@ class CursoController extends Controller {
 	public function post_upload(Request $request)
 	{
 
-	     
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+		 	     
 		   $file = $request->file('file');
 	    
 	       $nombre = $file->getClientOriginalName();

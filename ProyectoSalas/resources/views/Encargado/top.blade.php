@@ -9,7 +9,7 @@
          </th>
       
           <th>     
-            {!! Form::open(['action' => ['Administrador\PerfilController@get_cambioPerfil'], 'method' => 'GET', 'class' => 'pull-right']) !!}
+           {!! Form::open(['action' => ['CambioPerfilController@get_cambioPerfil'], 'method' => 'GET', 'class' => 'pull-right']) !!}
               <div class="form-group" style="margin-top: 20px">
             {!! Form::select('perfil', $var,'encargado',['class' => 'form-control']) !!}
               </div>      

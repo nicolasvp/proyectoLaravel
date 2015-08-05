@@ -10,16 +10,23 @@ use App\Models\Departamento;
 use App\Models\Docente;
 use App\Models\Rol_usuario;
 use App\Models\Usuario;
-
+use App\Models\Campus;
 
 class DocenteController extends Controller {
 
 public function getIndex()
 	{
 			
+
+		$id_campus= Campus::select('id')->where('rut_encargado',\Auth::user()->rut)->first()->id;
+
+
 		$datos_docentes = Docente::join('departamentos','docentes.departamento_id','=','departamentos.id')
-						->select('docentes.*','departamentos.nombre as departamento')
-						->paginate();
+									->join('facultades','departamentos.facultad_id','=','facultades.id')
+									->join('campus','facultades.campus_id','=','campus.id')
+									->where('facultades.campus_id', $id_campus) 
+									->select('docentes.*','departamentos.nombre as departamento')
+									->paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -206,6 +213,16 @@ public function getIndex()
 			if(trim($request->get('name')) != "")
 			{
 
+				$id_campus= Campus::select('id')->where('rut_encargado',\Auth::user()->rut)->first()->id;
+
+
+				$datos_docentes = Docente::join('departamentos','docentes.departamento_id','=','departamentos.id')
+									->join('facultades','departamentos.facultad_id','=','facultades.id')
+									->join('campus','facultades.campus_id','=','campus.id')
+									->where('facultades.campus_id', $id_campus) 
+									->select('docentes.*','departamentos.nombre as departamento')
+									->paginate();
+
 			 $datos_docentes = Docente::join('departamentos','docentes.departamento_id','=','departamentos.id')
 			->where('docentes.rut', '=' , (integer) $request->get('name'))
 			->orWhere('departamentos.nombre','like','%'.$request->get('name').'%')
@@ -244,7 +261,13 @@ public function getIndex()
 	public function post_upload(Request $request)
 	{
 
-	    
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+		 	    
 		   $file = $request->file('file');
 	  
 	       $nombre = $file->getClientOriginalName();

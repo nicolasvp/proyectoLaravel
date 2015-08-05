@@ -9,7 +9,7 @@ use App\Models\Periodo;
 use App\Models\Campus;
 use App\Models\Curso;
 use App\Models\Rol_usuario;
-
+use App\Models\Asignatura_cursada;
 
 class DocenteController extends Controller {
 
@@ -32,19 +32,36 @@ class DocenteController extends Controller {
 	{
 
 
-		$fechas  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-				->join('salas', 'horarios.sala_id', '=','salas.id')
-				->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-				->join('cursos', 'horarios.curso_id', '=','cursos.id')
-				->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-				->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-				->where('estudiantes.rut','=',\Auth::user()->rut) 
-				->select('horarios.fecha')
-				->get();
+		$fechas  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+							->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+							->join('docentes','cursos.docente_id','=','docentes.id')
+							->where('docentes.rut','=',\Auth::user()->rut) 
+							->select('horarios.fecha')
+							->get();
 
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
 
+		$datos_lunes  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',null)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 
+		$datos_martes = $datos_lunes;
+		$datos_miercoles = $datos_lunes;
+		$datos_jueves = $datos_lunes;
+		$datos_viernes =$datos_lunes;
+		$datos_sabado = $datos_lunes;
 
+	if(!is_null($fechas))	
+	{	
 		foreach($fechas as $fecha)
 		{
 			$i = strtotime($fecha->fecha);
@@ -53,16 +70,15 @@ class DocenteController extends Controller {
 
 			if($dia == 'Monday')
 			{
-				$datos_lunes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-								->join('salas', 'horarios.sala_id', '=','salas.id')
-								->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-								->join('cursos', 'horarios.curso_id', '=','cursos.id')
-								->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-								->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-								->where('estudiantes.rut','=',\Auth::user()->rut)
-								->where('horarios.fecha','=',$fecha->fecha)
-								->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-								->get();
+				$datos_lunes  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 		
 				break;
 			}
@@ -78,31 +94,19 @@ class DocenteController extends Controller {
 
 			if($dia == 'Tuesday')
 			{
-				$datos_martes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',$fecha->fecha)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
+				$datos_martes  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 			
 				break;
 			}
-							$datos_martes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
 
-			
 		}
 
 		foreach($fechas as $fecha)
@@ -113,29 +117,18 @@ class DocenteController extends Controller {
 
 			if($dia == 'Wednesday')
 			{
-				$datos_miercoles = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',$fecha->fecha)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
+				$datos_miercoles = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 			
 				break;
 			}
-							$datos_miercoles  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
 
 			
 		}
@@ -148,30 +141,19 @@ class DocenteController extends Controller {
 
 			if($dia == 'Thursday')
 			{
-				$datos_jueves  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',$fecha->fecha)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
+				$datos_jueves  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 			
 				break;
 			}
-							$datos_jueves  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
-			
+
 		}		
 
 		foreach($fechas as $fecha)
@@ -182,30 +164,19 @@ class DocenteController extends Controller {
 
 			if($dia == 'Friday')
 			{
-				$datos_viernes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',$fecha->fecha)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
+				$datos_viernes  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 			
 				break;
 			}
-							$datos_viernes  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
-			
+
 		}	
 
 		foreach($fechas as $fecha)
@@ -216,39 +187,31 @@ class DocenteController extends Controller {
 
 			if($dia == 'Saturday')
 			{
-				$datos_sabado  = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',$fecha->fecha)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
+				$datos_sabado  = Horario::join('cursos','horarios.curso_id','=','cursos.id')
+										->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
+										->join('docentes','cursos.docente_id','=','docentes.id')
+										->join('salas', 'horarios.sala_id', '=','salas.id')
+										->join('periodos', 'horarios.periodo_id', '=','periodos.id')
+										->where('docentes.rut','=',\Auth::user()->rut) 
+										->where('horarios.fecha','=',$fecha->fecha)
+										->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
+										->get();
 			
 				break;
 			}
-							$datos_sabado = Asignatura_cursada::join('horarios', 'asignaturas_cursadas.curso_id', '=','horarios.curso_id')
-									->join('salas', 'horarios.sala_id', '=','salas.id')
-									->join('periodos', 'horarios.periodo_id', '=','periodos.id')
-									->join('cursos', 'horarios.curso_id', '=','cursos.id')
-									->join('asignaturas','cursos.asignatura_id','=','asignaturas.id')
-									->join('estudiantes','asignaturas_cursadas.estudiante_id','=','estudiantes.id')
-									->where('estudiantes.rut','=',\Auth::user()->rut)
-									->where('horarios.fecha','=',null)
-									->select('salas.nombre as sala','horarios.fecha','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre')
-									->get();
-			
+
 		}
 
 		
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre');  
+ 
 
 		return view('Docente/horario',compact('datos_lunes','datos_martes','datos_miercoles','datos_jueves','datos_viernes','datos_sabado','var'));
+	}
+
+
+		Session::flash('message', 'No tiene cursos disponibles.');
+		return redirect()->action('Docente/DocenteController@getIndex');
+
 
 	}
 

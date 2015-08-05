@@ -23,7 +23,7 @@ class CreateCarreraRequest extends Request {
 		return [
 			'escuela_id' => 'required|integer|not_in:0',
 			'codigo' => 'required|integer|unique:carreras,codigo',
-			'nombre' => 'required|space'
+			'nombre' => 'required|spaceNum'
 
 		];
 	}

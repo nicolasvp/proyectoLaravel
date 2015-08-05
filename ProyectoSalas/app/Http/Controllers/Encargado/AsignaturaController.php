@@ -20,10 +20,16 @@ class AsignaturaController extends Controller {
 
 	public function getIndex()
 	{
+
+
 		$datos_asignaturas = Asignatura::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
+										  ->join('facultades','departamentos.facultad_id','=','facultades.id')
+										  ->join('campus','facultades.campus_id','=','campus.id')
+										  ->where('campus.rut_encargado','=',\Auth::user()->rut)
 										  ->select('asignaturas.*','departamentos.nombre as departamento')
 										  ->paginate();
-
+		
+		
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
                             ->select('roles.*','roles_usuarios.*')
@@ -159,7 +165,14 @@ class AsignaturaController extends Controller {
 	public function post_upload(Request $request)
 	{
 	 
-	     
+		 if(is_null($request->file('file')))
+	     {
+	     	Session::flash('message', 'Debes seleccionar un archivo.');
+
+			return redirect()->back();
+		 }
+
+		 	     
 		   $file = $request->file('file');
 	    
 	       $nombre = $file->getClientOriginalName();

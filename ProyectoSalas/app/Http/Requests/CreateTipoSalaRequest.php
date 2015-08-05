@@ -22,7 +22,7 @@ class CreateTipoSalaRequest extends Request {
 	public function rules()
 	{
 		return [
-			'nombre' => 'required|space|unique:tipos_salas,nombre'
+			'nombre' => 'required|spaceNum|unique:tipos_salas,nombre'
 		];
 	}
 

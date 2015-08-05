@@ -50,9 +50,10 @@
        {!! Form::textarea('descripcion', null,['class' => 'form-control', 'placeholder' => 'Ingresa descripción']) !!}
       </div>
 
+
       <div class="form-group">
         {!! Form::label('rut_encargado', 'Rut Encargado') !!}
-       {!! Form::text('rut_encargado', null,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
+       {!! Form::select('rut_encargado', (['0' => '-- Seleccionar una encargado --'] +$encargados), null, ['class' => 'form-control'])!!}
       </div>
 
         {!! Form::hidden('id', $id)!!}
