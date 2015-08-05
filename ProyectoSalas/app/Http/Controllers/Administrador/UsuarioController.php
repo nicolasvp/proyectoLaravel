@@ -166,6 +166,25 @@ class UsuarioController extends Controller {
 	public function get_search(Request $request)
 	{
 		
+
+			if(is_numeric( (integer) $request->get('name')))
+			{
+				
+				$name = array('name' => (integer) $request->get('name'));
+				
+				$rules = array('name' => 'max:8');
+
+
+				$v =  \Validator::make($name,$rules);
+
+				if($v->fails())
+				 {
+				 	Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				 }
+
+			}
+
 			if(trim($request->get('name')) != "")
 			{
 
@@ -180,7 +199,18 @@ class UsuarioController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
-			return view('Administrador/usuarios/list',compact('datos_usuarios','var'));
+		
+				if(!$datos_usuarios->isEmpty())
+				{
+					return view('Administrador/usuarios/list',compact('datos_usuarios','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+
 			}
 
 			else
@@ -193,7 +223,15 @@ class UsuarioController extends Controller {
 
 	}
 
+	public function get_upload()
+	{
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
+		return view('Administrador/usuarios/upload',compact('var'));
+	}
 
 	public function post_upload(Request $request)
 	{
@@ -213,22 +251,76 @@ class UsuarioController extends Controller {
 				foreach($result as $key => $value)
 				{
 
-					$var = new Usuario();
+					$rut_valido = \App\RutUtils::isRut($value->rut);
 
-					$var->fill([
-						'rut' => $value->rut,
-						'email' => $value->email,
-						'nombres' => $value->nombres, 
-						'apellidos' => $value->apellidos
-						]);
+					if(!$rut_valido)
+					{
+						continue;
+					}
 
-					$var->save();
+					$rut = \App\RutUtils::rut($value->rut);
 
+					$usuario = Usuario::where('rut','=',$rut)->first();
+
+					if(!is_null($usuario))
+					{
+						continue;
+					}
+
+					$email = Usuario::where('email','=',$value->email)->first();
+
+					if(is_null($email))
+					{
+						$var = new Usuario();
+
+						$var->fill([
+								'rut' => $rut,
+								'email' => $value->email,
+								'nombres' => $value->nombres, 
+								'apellidos' => $value->apellidos
+								]);
+
+						$var->save();
+					}
+					
 
 				}
 
 			})->get();
-			Session::flash('message', 'Los usuarios fueron agregados exitosamente!');
+			
+
+	       return redirect()->action('Administrador\UsuarioController@getIndex');
+	}
+
+
+
+	public function get_download()
+	{
+		$var = Usuario::all();
+
+		\Excel::create('Usuarios',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('RUT','EMAIL','NOMBRES','APELLIDOS'));
+
+				foreach($var as $key => $v)
+				{
+					$a = \App\RutUtils::dv($v->rut);
+					$rut = $v->rut."-".$a;
+					
+					array_push($data, array($rut,$v->email,$v->nombres,$v->apellidos));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
 
 	       return redirect()->action('Administrador\UsuarioController@getIndex');
 	}

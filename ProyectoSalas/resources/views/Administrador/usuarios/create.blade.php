@@ -16,7 +16,7 @@
          <div class="col-sm-9" >
 
                   <p>
-                         {!! Form::open(['action' => 'Administrador\DocenteController@get_deptos', 'method' => 'GET']) !!}
+                         {!! Form::open(['action' => 'Administrador\UsuarioController@get_upload', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
 

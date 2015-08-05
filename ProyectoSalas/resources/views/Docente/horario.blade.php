@@ -5,7 +5,7 @@
 
 <div class="panel panel-default" style="margin-top: 40px;">
 
-@include('Docente/top')
+@include('Docente/menu')
 
 
  <div class="col-sm-9" >
@@ -28,7 +28,7 @@
           <table class="table table-striped">
             <tr> 
               
-              <th>Nombre</th>
+              <th>Asignatura</th>
               <th>Sala</th>
               <th>Hora</th>
                <th>Día</th>

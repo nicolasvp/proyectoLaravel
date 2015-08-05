@@ -26,13 +26,24 @@ class AsignaturaController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre');  
 
+        return view('Administrador/asignaturas/index',compact('var'));                  
+	}
+
+
+	public function get_asignaturas()
+	{
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
 		$datos_asignaturas = Asignatura::join('departamentos','asignaturas.departamento_id','=','departamentos.id')
 										  ->select('asignaturas.*','departamentos.nombre as departamento')
 										  ->paginate();
 
 		return view('Administrador/asignaturas/list',compact('datos_asignaturas','var'));
 	}
-
 
 	public function get_create()
 	{
@@ -57,7 +68,7 @@ class AsignaturaController extends Controller {
 		$asignatura->save();
 
 		Session::flash('message', 'La asignatura '.\Request::get('nombre').' fue creada exitosamente!');
-		return redirect()->action('Administrador\AsignaturaController@getIndex');
+		return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
 	
 	}
 
@@ -92,7 +103,7 @@ class AsignaturaController extends Controller {
 		
 		Session::flash('message','La asignatura '.\Request::get('nombre').' fue editada');
 
-		return redirect()->action('Administrador\AsignaturaController@getIndex');
+		return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
 	}
 
 
@@ -106,56 +117,8 @@ class AsignaturaController extends Controller {
 
 		Session::flash('message','La asignatura '.$asignatura->nombre.' fue eliminada');
 
-		return redirect()->action('Administrador\AsignaturaController@getIndex');
+		return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
 		
-	}
-
-
-	public function get_depto()
-	{
-		$departamentos = Departamento::all()->lists('nombre','id');
-
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre');  
-
-		return view('Administrador/asignaturas/upload',compact('departamentos','var'));
-	}
-
-
-	public function post_upload(Request $request)
-	{
-	 
-	     
-		   $file = $request->file('file');
-	    
-	       $nombre = $file->getClientOriginalName();
-
-	       \Storage::disk('local')->put($nombre,  \File::get($file));
-
-			$departamento = $request->get('departamento');
-
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
-			{
-
-				$result = $archivo->get();
-
-				foreach($result as $key => $value)
-				{
-					$var = new Asignatura();
-					$var->fill(['departamento_id' => $departamento,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
-					$var->save();
-
-				}
-
-			})->get();
-			Session::flash('message', 'Las asignaturas fueron agregadas exitosamente!');
-
-	       return redirect()->action('Administrador\AsignaturaController@getIndex');
-
-
-
 	}
 
 
@@ -177,16 +140,91 @@ class AsignaturaController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre');  
 
-		return view('Administrador/asignaturas/list',compact('datos_asignaturas','var'));
-		}
+	
+			if(!$datos_asignaturas->isEmpty())
+			{
+				return view('Administrador/asignaturas/list',compact('datos_asignaturas','var'));
+			}
 
-		else
-		{
+			
+				Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+		
+		}		
 
-	 	return redirect()->action('Administrador\AsignaturaController@getIndex');
+	 	return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
 
-		}
+		
 	}
+
+
+	public function get_depto()
+	{
+		$departamentos = Departamento::paginate();
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre');  
+
+		return view('Administrador/asignaturas/upload',compact('departamentos','var'));
+	}
+
+
+	public function post_upload(Request $request)
+	{
+	 
+	     
+		   $file = $request->file('file');
+	    
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
+			{
+
+				$result = $archivo->get();
+
+				foreach($result as $key => $value)
+				{
+
+					$depto_id = Departamento::where('id','=',$value->departamento)->pluck('id');
+
+					if(is_null($depto_id))
+					{
+						continue;
+					}
+
+					$codigo = Asignatura::where('codigo','=',$value->codigo)->pluck('id');
+
+					if(is_null($codigo))
+					{	
+						$var = new Asignatura();
+
+						$var->fill([
+							'departamento_id' => $value->departamento,
+							'codigo' => $value->codigo,
+							'nombre' =>$value->nombre,
+							'descripcion' => $value->descripcion
+							]);
+
+						$var->save();
+					}
+				}
+
+			})->get();
+	
+
+	       return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
+
+
+
+	}
+
+
+
 
 	public function get_download()
 	{
@@ -198,12 +236,12 @@ class AsignaturaController extends Controller {
 			{
 				$data=[];
 
-				array_push($data, array('CODIGO','NOMBRE','DESCRIPCION'));
+				array_push($data, array('DEPARTAMENTO','CODIGO','NOMBRE','DESCRIPCION'));
 
 				foreach($var as $key => $v)
 				{
 					
-					array_push($data, array($v->codigo,$v->nombre,$v->descripcion));
+					array_push($data, array($v->departamento_id,$v->codigo,$v->nombre,$v->descripcion));
 
 				}		
 				$sheet->fromArray($data,null, 'A1', false,false);
@@ -214,7 +252,7 @@ class AsignaturaController extends Controller {
 
 			
 
-	       return redirect()->action('Administrador\CampusController@get_list');
+	       return redirect()->action('Administrador\AsignaturaController@get_asignaturas');
 	}
 	
 

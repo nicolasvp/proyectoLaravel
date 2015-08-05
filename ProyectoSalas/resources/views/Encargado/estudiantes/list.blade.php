@@ -13,10 +13,15 @@
                   
    <div class="row">
    <div class="col-sm-9" >
+
+    <p>
+       {!! Form::open(['action' => 'Encargado\EstudianteController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
    <p> <h2>Lista de Estudiantes </h2></p>
-
-
-        
 
       @if(Session::has('message'))
 
@@ -42,18 +47,11 @@
           {!! Form::close() !!}
 
         {!! Form::open(['action' => 'Encargado\EstudianteController@get_create', 'method' => 'GET']) !!}
-<<<<<<< HEAD
     
             <button type="submit" class="btn btn-success">Ingresar</button>
             
            {!! Form::hidden('id', 3)!!}
             
-=======
-           <div class="form-group">
-           {!! Form::hidden('id', 3)!!}
-            </div>
-            <button type="submit" class="btn btn-success">Ingresar estudiante</button>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
         {!! Form::close() !!}
 
           <table class="table table-striped">
@@ -85,11 +83,7 @@
               </td>
               <td>
                   {!! Form::open(['action' => ['Encargado\EstudianteController@delete_destroy'], 'method' => 'DELETE']) !!}
-<<<<<<< HEAD
                   {!! Form::hidden('rut', $estudiante->rut)!!}
-=======
-                  {!! Form::hidden('id', $estudiante->id)!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                    <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este estudiante?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}
 

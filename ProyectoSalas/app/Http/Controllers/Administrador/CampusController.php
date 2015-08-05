@@ -20,20 +20,6 @@ class CampusController extends Controller {
 
 	public function getIndex()
 	{
-<<<<<<< HEAD
-=======
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre');  
-
-		return view('Administrador/campus/campus_index',compact('var'));
-	}
-
-	public function get_list()
-	{
-		
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$campus = Campus::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
@@ -52,22 +38,17 @@ class CampusController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-<<<<<<< HEAD
         $encargados = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 					       	->where('roles.nombre','=','encargado')
 					       	->select('roles_usuarios.*')
 					       	->lists('roles_usuarios.rut','roles_usuarios.id');
 
 		return view('Administrador/campus/create',compact('var','encargados'));
-=======
-		return view('Administrador/campus/create',compact('var'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 	
 	public function post_store(Requests\CreateCampusRequest $request)
 	{
-<<<<<<< HEAD
 		
 		$rut_encargado = Rol_usuario::where('id','=',$request->rut_encargado)->select('rut')->get();
 
@@ -84,20 +65,11 @@ class CampusController extends Controller {
 				'rut_encargado' => $rut->rut]);
 		}
 
-=======
-	
-		$campus = new Campus();
-		$campus->fill($request->all());
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$campus->save();
 
 		Session::flash('message', 'El campus ' .$campus->nombre.' fue creado');
 
-<<<<<<< HEAD
 		return redirect()->action('Administrador\CampusController@getIndex');
-=======
-		return redirect()->action('Administrador\CampusController@get_list');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 	
@@ -128,11 +100,7 @@ class CampusController extends Controller {
 		
 		Session::flash('message','El campus '. $campusEditable->nombre. ' fue editado');
 
-<<<<<<< HEAD
 		return redirect()->action('Administrador\CampusController@getIndex');
-=======
-		return redirect()->action('Administrador\CampusController@get_list');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 
@@ -141,19 +109,11 @@ class CampusController extends Controller {
 
 		$campusEditable = Campus::findOrFail($request->get('id'));
 
-<<<<<<< HEAD
 		$campusEditable->delete();
 
 		Session::flash('message','El campus '. $campusEditable->nombre. ' fue eliminado');
 
 		return redirect()->action('Administrador\CampusController@getIndex');
-=======
-		$campusEditable->forceDelete();
-
-		Session::flash('message','El campus '. $campusEditable->nombre. ' fue eliminado');
-
-		return redirect()->action('Administrador\CampusController@get_list');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		
 	}
 
@@ -161,95 +121,68 @@ class CampusController extends Controller {
 
 	public function get_search(Request $request)
 	{
-	
+		if(is_numeric( (integer) $request->get('name')))
+		{
+			
+			$name = array('name' => (integer) $request->get('name'));
+			
+			$rules = array('name' => 'max:8');
+
+
+			$v =  \Validator::make($name,$rules);
+
+			if($v->fails())
+			 {
+			 	Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+			 }
+
+		}
+
 		if(trim($request->get('name')) != "")
 		{
 
-		$campus = Campus::where('nombre', 'like' , '%'.$request->get('name').'%')
-				->orWhere('rut_encargado','=',(integer) $request->get('name'))
-				->select('campus.*')
-				->paginate();	
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
+			$campus = Campus::where('nombre', 'like' , '%'.$request->get('name').'%')
+					->orWhere('rut_encargado','=',(integer) $request->get('name'))
+					->select('campus.*')
+					->paginate();	
+				
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
-		return view('Administrador/campus/list',compact('campus','var'));
+			
+			if(!$campus->isEmpty())
+			{
+				return view('Administrador/campus/list',compact('campus','var'));
+			}
+
+			else
+			{
+				Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+			}
 		}
 
 		else
 		{
 
-<<<<<<< HEAD
-	 	return redirect()->action('Administrador\CampusController@getIndex');
+	 		return redirect()->action('Administrador\CampusController@getIndex');
 	 	}
 	}
 
 
 	public function get_upload()
 	{
-=======
-	 	return redirect()->action('Administrador\CampusController@get_list');
-
-		}
-	}
-
-
-
-    //ARCHIVAR CAMPUS
-
-	public function delete_campus(Request $request)
-	{
-		$file_campus = Campus::findOrFail($request->get('id'));
-
-		$file_campus->delete();	
-
-		Session::flash('message', 'El campus fue archivado exitosamente!');
-
-		return redirect()->action('Administrador\CampusController@get_list');
-
-	}
-
-
-	public function get_filed()
-	{
-
-		$filed_campus = Campus::onlyTrashed()->paginate();
-
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-<<<<<<< HEAD
-=======
-		return view('Administrador/campus/campus_filed',compact('filed_campus','var'));
-	}
-
-
-	public function post_restore_campus(Request $request)
-	{
-		$restore_campus = Campus::onlyTrashed()->where('id', $request->get('id'))->restore();
-	
-		Session::flash('message', 'El campus fue recuperado exitosamente!');
-
-		return redirect()->action('Administrador\CampusController@getIndex');
-	}
-
-
-
-
-	public function get_upload()
-	{
-				$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
-
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		return view('Administrador/campus/upload',compact('var'));
 	}
+
 
 	public function post_upload(Request $request)
 	{
@@ -261,29 +194,68 @@ class CampusController extends Controller {
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			\Excel::load('/storage/app/'.$nombre,function($archivo) 
-			{
 
+			\Excel::load('/storage/app/'.$nombre,function($archivo)
+			{
 				$result = $archivo->get();
+
 
 				foreach($result as $key => $value)
 				{
-					$var = new Campus();
-					$var->fill(['nombre' => $value->nombre,'direccion' => $value->direccion,'latitud' =>$value->latitud,'longitud' => $value->longitud,
-						'descripcion' => $value->descripcion,'rut_encargado' => $value->rut_encargado]);
-					$var->save();
+
+					$rut = $value->rut_encargado;
+
+					$encargado = Rol_usuario::where('rol_id','=','2')->where('rut','=',$rut)->pluck('rut');
+
+
+					if(!is_null($encargado))
+					{
+						
+						$nombre = Campus::where('nombre','=',$value->nombre)->pluck('nombre');
+
+						if(is_null($nombre))
+						{	
+							
+							$lat_long = Campus::where('latitud','=',$value->latitud)->where('longitud','=',$value->longitud)->first();
+
+							if(is_null($lat_long))
+							{
+								$var = new Campus();
+
+								$var->fill(['nombre' => $value->nombre,
+									'direccion' => $value->direccion,
+									'latitud' =>$value->latitud,
+									'longitud' => $value->longitud,
+									'descripcion' => $value->descripcion,
+									'rut_encargado' => $rut
+									]);
+
+								$var->save();
+							}
+						
+								continue;  				
+						
+						}
+						
+						continue;	
+	       				
+					}
+
+
+				continue;
+
 
 				}
 
 			})->get();
-			Session::flash('message', 'Los campus fueron agregados exitosamente!');
 
-<<<<<<< HEAD
-	       return redirect()->action('Administrador\CampusController@getIndex');
-=======
-	       return redirect()->action('Administrador\CampusController@get_list');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+			\Storage::delete($nombre);
+		
+		    return redirect()->action('Administrador\CampusController@getIndex');
+	
 	}
+
+
 
 	public function get_download()
 	{
@@ -311,11 +283,7 @@ class CampusController extends Controller {
 
 			
 
-<<<<<<< HEAD
 	       return redirect()->action('Administrador\CampusController@getIndex');
-=======
-	       return redirect()->action('Administrador\CampusController@get_list');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 	

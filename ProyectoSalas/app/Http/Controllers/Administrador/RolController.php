@@ -18,21 +18,18 @@ class RolController extends Controller {
 	public function getIndex()
 	{
 
-<<<<<<< HEAD
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre');
 
-		return view('Administrador/roles/roles_index',compact('var'));
+		return view('Administrador/roles/index',compact('var'));
 
 	}
 
 	public function get_roles()
 	{
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$datos_roles = Rol::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
@@ -64,7 +61,7 @@ class RolController extends Controller {
 
 		Session::flash('message', 'El rol '.$rol->nombre.' fue creado exitosamente!');
 
-		return redirect()->action('Administrador\RolController@getIndex');
+		return redirect()->action('Administrador\RolController@get_roles');
 	
 	}
 
@@ -98,7 +95,7 @@ class RolController extends Controller {
 		
 		Session::flash('message', 'El rol '.$rol->nombre.' fue editado exitosamente!');
 
-		return redirect()->action('Administrador\RolController@getIndex');
+		return redirect()->action('Administrador\RolController@get_roles');
 	}
 
 
@@ -112,9 +109,46 @@ class RolController extends Controller {
 
 		Session::flash('message', 'El rol '.$rol->nombre.' fue eliminado exitosamente!');
 
-		return redirect()->action('Administrador\RolController@getIndex');
+		return redirect()->action('Administrador\RolController@get_roles');
 		
 	}
+
+		public function get_search(Request $request)
+		{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_roles = Rol::where('roles.nombre', 'like' , '%'.$request->get('name').'%')
+						->select('roles.*')
+						->paginate();
+
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre');
+
+			
+				if(!$datos_roles->isEmpty())
+				{
+					return view('Administrador/roles/list',compact('datos_roles','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+			}
+
+			else
+			{
+
+		 	return redirect()->action('Administrador\RolController@get_roles');
+
+			}
+		}
+
 
 	public function get_upload()
 	{
@@ -144,42 +178,54 @@ class RolController extends Controller {
 
 					foreach($result as $key => $value)
 					{
-						$var = new Rol();
-						$var->fill(['nombre' => $value->nombre,'descripcion' => $value->descripcion]);
-						$var->save();
+						$nombre = Rol::where('nombre','=',$value->nombre)->pluck('id');
 
+						if(is_null($nombre))
+						{
+							$var = new Rol();
+							$var->fill(['nombre' => $value->nombre,'descripcion' => $value->descripcion]);
+							$var->save();
+						}
 					}
 
 				})->get();
-				Session::flash('message', 'Los roles fueron agregados exitosamente!');
+				
 
-		       return redirect()->action('Administrador\RolController@getIndex');
+		       return redirect()->action('Administrador\RolController@get_roles');
+
 	}
 
-		public function get_search(Request $request)
+
+
+
+	public function get_download()
+	{
+		$var = Rol::all();
+
+		\Excel::create('Roles',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_roles = Rol::where('roles.nombre', 'like' , '%'.$request->get('name').'%')
-			->select('roles.*')
-			->paginate();
+				array_push($data, array('NOMBRE','DESCRIPCION'));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre');
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->nombre,$v->descripcion));
 
-			return view('Administrador/roles/list',compact('datos_roles','var'));
-			}
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			else
-			{
+			
 
-		 	return redirect()->action('Administrador\RolController@getIndex');
+	       return redirect()->action('Administrador\RolController@get_roles');
+	}
 
-			}
-		}
 
 }

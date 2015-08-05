@@ -111,11 +111,50 @@ class DepartamentoController extends Controller {
 		
 	}
 
+	public function get_search(Request $request)
+	{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_departamentos = Departamento::join('facultades','departamentos.facultad_id','=','facultades.id')
+			->where('departamentos.nombre', 'like' ,'%'.$request->get('name').'%')
+			->orWhere('facultades.nombre','like', '%'.$request->get('name').'%')
+			->select('departamentos.*','facultades.nombre as facultad')
+			->paginate();
+
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+			
+		        if(!$datos_departamentos->isEmpty())
+				{
+					return view('Administrador/departamentos/list',compact('datos_departamentos','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+
+
+			}
+
+			else
+			{
+
+		 	return redirect()->action('Administrador\DepartamentoController@getIndex');
+
+			}
+	}
 
 	public function get_facultades()
 	{
 
-		$facultades = Facultad::all()->lists('nombre','id');
+		$facultades = Facultad::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -135,54 +174,70 @@ class DepartamentoController extends Controller {
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$facultad = $request->get('facultad');
-
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($facultad)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-					$var = new Departamento();
-					$var->fill(['nombre' => $value->nombre,'facultad_id' => $facultad,'descripcion' =>$value->descripcion]);
-					$var->save();
+					$facultad_id = Facultad::where('id','=',$value->facultad)->pluck('id');
 
+					if(is_null($facultad_id))
+					{
+						continue;
+					}
+
+					$tupla = Departamento::where('nombre','=',$value->nombre)->where('facultad_id','=',$value->facultad)->first();
+
+					if(is_null($tupla))
+					{
+						$var = new Departamento();
+						
+						$var->fill([
+							'nombre' => $value->nombre,
+							'facultad_id' => $value->facultad,
+							'descripcion' =>$value->descripcion
+							]);
+
+						$var->save();
+					}
 				}
 
 			})->get();
-			Session::flash('message', 'Los departamentos fueron agregados exitosamente!');
+	
 
 	       return redirect()->action('Administrador\DepartamentoController@getIndex');
 	}
 
 
-	public function get_search(Request $request)
+	public function get_download()
+	{
+		$var = Departamento::all();
+
+		\Excel::create('Departamentos',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_departamentos = Departamento::join('facultades','departamentos.facultad_id','=','facultades.id')
-			->where('departamentos.nombre', 'like' ,'%'.$request->get('name').'%')
-			->orWhere('facultades.nombre','like', '%'.$request->get('name').'%')
-			->select('departamentos.*','facultades.nombre as facultad')
-			->paginate();
+				array_push($data, array('NOMBRE','FACULTAD','DESCRIPCION'));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre'); 
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->nombre,$v->facultad_id,$v->descripcion));
 
-			return view('Administrador/departamentos/list',compact('datos_departamentos','var'));
-			}
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			else
-			{
+			
 
-		 	return redirect()->action('Administrador\DepartamentoController@getIndex');
-
-			}
-		}
+	       return redirect()->action('Administrador\DepartamentoController@getIndex');
+	}
 
 }

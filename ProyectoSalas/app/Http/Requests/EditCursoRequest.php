@@ -23,11 +23,11 @@ class EditCursoRequest extends Request {
 	{
 
 		return [
-			'asignatura_id' => 'required|integer|not_in:0',
-			'docente_id' => 'required|integer|not_in:0',
+			'asignatura' => 'required|integer|not_in:0',
+			'docente' => 'required|integer|not_in:0',
 			'semestre' => 'required|integer',
 			'anio' => 'required|integer',
-			'seccion' => 'required|integer|unique:cursos,seccion,NULL,id,asignatura_id,'.$this->asignatura_id
+				
 		];
 	}
 

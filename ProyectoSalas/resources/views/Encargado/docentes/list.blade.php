@@ -16,9 +16,17 @@
    <div class="row">
     
    <div class="col-sm-9" >
+
+      <p>
+       {!! Form::open(['action' => 'Encargado\DocenteController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
    <p> <h2>Lista de Docentes</h2></p>
 
-    
 
       @if(Session::has('message'))
 
@@ -41,11 +49,7 @@
 
           {!! Form::open(['action' => 'Encargado\DocenteController@get_create', 'method' => 'GET']) !!}
    
-<<<<<<< HEAD
              <button type="submit" class="btn btn-success">Ingresar</button>
-=======
-             <button type="submit" class="btn btn-success">Ingresar docente</button>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
           {!! Form::close() !!}
 
@@ -78,11 +82,7 @@
               </td>
               <td>
                   {!! Form::open(['action' => ['Encargado\DocenteController@delete_destroy'], 'method' => 'DELETE']) !!}
-<<<<<<< HEAD
                   {!! Form::hidden('rut', $docente->rut)!!}
-=======
-                  {!! Form::hidden('id', $docente->id)!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                    <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este docente?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}
 

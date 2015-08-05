@@ -14,7 +14,16 @@
    <div class="row">
 
    <div class="col-sm-9" >
-   <p> <h2>Seleccione un curso</h2></p>
+
+        <p>
+              {!! Form::open(['action' => 'Encargado\SalaController@get_upload', 'method' => 'GET']) !!}
+   
+               <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
+
+              {!! Form::close() !!}
+         </p>
+
+   <p> <h2>Lista de Cursos</h2></p>
 
       @if(Session::has('message'))
 

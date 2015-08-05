@@ -16,7 +16,7 @@
    <div class="row">
     
    <div class="col-sm-9" >
-   <p> <h2>Selección de departamento</h2></p>
+   <p> <h2>Selección de Usuarios</h2></p>
 
       @if(Session::has('message'))
 
@@ -36,12 +36,10 @@
   
 
 
- {!! Form::open(['action' => 'Administrador\DocenteController@post_upload','files'=>true]) !!}
+ {!! Form::open(['action' => 'Administrador\UsuarioController@post_upload','files'=>true]) !!}
 
 
-    <div class="form-group">
-   {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --']  +$departamentos), null, ['class' => 'form-control'])!!}
-    </div>    
+
  
 <div class="form-group">
         <div class="panel-body">
@@ -49,7 +47,7 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             
             <div class="form-group">
-              <label class="col-md-4 control-label">Seleccione el archivo con los docentes</label>
+              <label class="col-md-4 control-label">Seleccione el archivo con los usuarios</label>
               <div class="col-md-6">
                 <input type="file" class="form-control" name="file" >
               </div>
@@ -57,7 +55,7 @@
         </div>
  </div>
 
-     <div align="center"<th><button type="submit" class="btn btn-success">Subir Docentes</button></th></div>
+     <div align="center"<th><button type="submit" class="btn btn-success">Subir Usuarios</button></th></div>
 
     {!! Form::close() !!}
 

@@ -15,7 +15,7 @@
    <div class="row">
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de departamento</h2></p>
+   <p> <h2>Lista de ID de Departamentos</h2></p>
 
       @if(Session::has('message'))
 
@@ -37,14 +37,23 @@
 
  {!! Form::open(['action' => 'Administrador\AsignaturaController@post_upload','files'=>true]) !!}
 
+        <table class="table table-striped">
+            <tr> 
+              <th>ID</th>
+              <th>Departamento</th>
+            </tr>
 
-    <div class="form-group">
-<<<<<<< HEAD
-   {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
-=======
-   {!! Form::select('departamento', ( $departamentos), null, ['class' => 'form-control'])!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
-    </div>    
+            @foreach($departamentos as $departamento)
+
+            <tr>
+               <td>{{ $departamento->id}}</td>
+               <td>{{ $departamento->nombre}}</td>
+            </tr>
+             @endforeach
+
+        </table>   
+
+  {!! $departamentos->render() !!}   
  
 <div class="form-group">
         <div class="panel-body">

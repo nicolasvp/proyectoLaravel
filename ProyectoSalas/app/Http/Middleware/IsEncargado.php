@@ -23,19 +23,19 @@ class IsEncargado {
                             ->select('roles.nombre')
                             ->get();  
 
-		$admin = false;
+		$encargado = false;
 
 		foreach($var as $v)
 		{
 			if($v->nombre == 'encargado')
 			{
-				$admin = true;
+				$encargado = true;
 			}
 		
 		}
 		
 
-		if($admin != true){
+		if($encargado != true){
 
 		$this->auth->logout();
 

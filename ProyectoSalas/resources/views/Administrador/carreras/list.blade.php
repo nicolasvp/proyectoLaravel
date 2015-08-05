@@ -14,11 +14,15 @@
 
    <div class="col-sm-9" >
  
-<<<<<<< HEAD
+    <p>
+       {!! Form::open(['action' => 'Administrador\CarreraController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
    <p> <h2>Lista de Carreras</h2></p>
-=======
-   <p> <h2>Lista de carreras</h2></p>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
       @if(Session::has('message'))
@@ -33,6 +37,7 @@
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+
        <div class="form-group">
 
        {!! Form::open(['action' => ['Administrador\CarreraController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
@@ -45,11 +50,7 @@
 
         {!! Form::open(['action' => 'Administrador\CarreraController@get_create', 'method' => 'GET']) !!}
    
-<<<<<<< HEAD
             <button type="submit" class="btn btn-success">Ingresar</button>
-=======
-            <button type="submit" class="btn btn-success">Ingresar carrera</button>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
         {!! Form::close() !!}
 

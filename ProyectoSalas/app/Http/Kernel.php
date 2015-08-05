@@ -29,6 +29,8 @@ class Kernel extends HttpKernel {
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
 		'is_admin' => 'App\Http\Middleware\IsAdmin',
 		'is_encargado' => 'App\Http\Middleware\IsEncargado',
+		'is_estudiante' => 'App\Http\Middleware\IsEstudiante',
+		'is_docente' => 'App\Http\Middleware\IsDocente'
 	];
 
 }

@@ -24,23 +24,14 @@
       {!! Form::model($funcionarioEditable, ['action' => ['Administrador\FuncionarioController@put_update', $funcionarioEditable], 'method' => 'PUT']) !!}
 
       <div class="form-group">
-<<<<<<< HEAD
        {!! Form::label('departamento', 'Departamento') !!}
        {!! Form::select('departamento', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
-=======
-       {!! Form::label('departamento_id', 'Departamento') !!}
-       {!! Form::select('departamento_id', (['0' => '-- Seleccionar un departamento --'] +$departamentos), null, ['class' => 'form-control'])!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
       </div>
 
 
       <div class="form-group">
        {!! Form::label('rut', 'Rut') !!}
-<<<<<<< HEAD
        {!! Form::text('rut', $rut,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
-=======
-       {!! Form::text('rut', null,['class' => 'form-control', 'placeholder' => 'Ingresa rut']) !!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
          
       </div>
 
@@ -54,14 +45,11 @@
        {!! Form::text('apellidos', null,['class' => 'form-control', 'placeholder' => 'Ingresa apellidos']) !!}
       </div>
 
-<<<<<<< HEAD
         <div class="form-group">
         {!! Form::label('email', 'Email') !!}
        {!! Form::text('email', null,['class' => 'form-control', 'placeholder' => 'Ingresa email']) !!}
       </div>
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
         {!! Form::hidden('id', $id)!!}
@@ -73,7 +61,6 @@
   
   </div>
 
-<<<<<<< HEAD
          {!! Html::script('js/jquery-2.1.4.min.js') !!}
       <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
       <script type="text/javascript">
@@ -81,9 +68,6 @@
         $("#rut").rut();
        });
       </script>                  
-=======
-                    
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 </div>
 
 </div>

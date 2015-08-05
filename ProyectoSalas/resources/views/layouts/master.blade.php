@@ -14,6 +14,7 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('css/sticky-footer.css') }}" rel="stylesheet">
     <!-- Custom styles for this template -->
    <!-- <link href="{{ asset('css/admin.css') }}" rel="stylesheet"> -->
 
@@ -46,9 +47,9 @@
 
 	
 	</body>
-          <footer class="footer">
+    <footer class="footer">
       <div class="container">
-        <p class="text-muted">© Sistema de Salas UTEM - 2015</p>
+        <p class="text-muted" align="center">© Sistema de Salas UTEM - 2015</p>
       </div>
     </footer>
 

@@ -15,7 +15,16 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de asignaturas</h2></p>
+
+    <p>
+         {!! Form::open(['action' => 'Encargado\AsignaturaController@get_download', 'method' => 'GET']) !!}
+   
+           <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+        {!! Form::close() !!}
+    </p>
+
+   <p> <h2>Lista de Asignaturas</h2></p>
 
       @if(Session::has('message'))
 
@@ -33,14 +42,14 @@
         
           {!! Form::open(['action' => ['Encargado\AsignaturaController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Depto,Código']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Departamento,Código,Nombre']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
           {!! Form::open(['action' => 'Encargado\AsignaturaController@get_create', 'method' => 'GET']) !!}
           
-             <button type="submit" class="btn btn-success">Ingresar asignatura</button>
+             <button type="submit" class="btn btn-success">Ingresar</button>
 
           {!! Form::close() !!}
 

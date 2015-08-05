@@ -39,16 +39,25 @@ class PeriodoController extends Controller {
 	}
 
 
-	public function post_store()
+	public function post_store(Requests \CreatePeriodoRequest $request)
 	{
-		
-		$periodo= new Periodo();
-		$periodo->fill(\Request::all());
-		$periodo->save();
 
-		Session::flash('message', 'El periodo '.$periodo->bloque.' fue creado exitosamente!');
+		$tupla = Periodo::where('inicio','=',$request->get('inicio'))->where('fin','=',$request->get('fin'))->pluck('id');
 
-		return redirect()->action('Administrador\PeriodoController@getIndex');
+		if(is_null($tupla))
+		{
+			$periodo= new Periodo();
+			$periodo->fill(\Request::all());
+			$periodo->save();
+
+			Session::flash('message', 'El periodo '.$periodo->bloque.' fue creado exitosamente!');
+
+			return redirect()->action('Administrador\PeriodoController@getIndex');
+		}
+
+		Session::flash('message', 'Ya hay un periodo con ese inicio y fin');
+
+		return redirect()->back()->withInput(\Request::all());
 	
 	}
 

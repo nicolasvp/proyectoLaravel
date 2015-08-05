@@ -15,14 +15,7 @@
    <div class="col-sm-9" >
    <p> <h2>Selección de día, período y sala</h2></p>
 
-      @if(Session::has('message'))
 
-          
-          <div class="alert alert-dismissible alert-success">
-           <strong>{{ Session::get('message') }}</strong>
-          </div>
-
-      @endif
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
@@ -60,6 +53,13 @@
 
        @include('Encargado/messages')
 
+      @if(Session::has('message'))
+
+          <div class="alert alert-danger" role="alert">
+           <strong>{{ Session::get('message') }}</strong>
+          </div>
+
+      @endif
 
      <div class="form-group">
    {!! Form::open(['action' => 'Encargado\SalaController@post_store']) !!}

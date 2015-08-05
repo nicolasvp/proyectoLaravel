@@ -13,7 +13,17 @@
    <div class="row">
 
    <div class="col-sm-9" >
-   <p> <h2>Lista de horarios</h2></p>
+
+        <p>
+       {!! Form::open(['action' => 'Encargado\HorarioController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
+
+   <p> <h2>Lista de Horarios</h2></p>
 
       @if(Session::has('message'))
 
@@ -40,7 +50,7 @@
 
           {!! Form::open(['action' => 'Encargado\SalaController@get_curso', 'method' => 'GET']) !!}
    
-            <button type="submit" class="btn btn-success ">Asignar Sala</button>
+            <button type="submit" class="btn btn-success ">Asignar</button>
 
           {!! Form::close() !!}
                 
@@ -51,10 +61,11 @@
             <tr> 
               <th>Campus</th>
               <th>Curso</th>
+              <th>Docente</th>
               <th>Período</th>
               <th>Hora</th>
-              <th>Docente</th>
               <th>Sala</th>
+              <th>Fecha</th>
               <th></th>
               <th></th>
             </tr>
@@ -65,10 +76,11 @@
             <tr>
                <td>{{ $horario->campus }}</td>
                <td>{{ $horario->nombre}}</td>
+               <td>{{ $horario->nombres}} {{$horario->apellidos}}</td>
                <td>{{ $horario->bloque}}</td>
                <td>{{ $horario->inicio}} - {{$horario->fin}}</td>
-               <td>{{ $horario->nombres}} {{$horario->apellidos}}</td>
                <td>{{ $horario->sala}}</td> 
+               <td>{{ $horario->fecha}}</td>
            <td>
                  {!! Form::open(['action' => ['Encargado\HorarioController@get_edit'], 'method' => 'GET']) !!}
                  {!! Form::hidden('id', $horario->horario_id)!!}

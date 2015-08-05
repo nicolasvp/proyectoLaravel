@@ -24,11 +24,7 @@ class CreateSalaRequest extends Request {
 		return [
 			'campus' => 'required|integer|not_in:0',
 			'tipo_sala' => 'required|integer|not_in:0',
-<<<<<<< HEAD
 			'nombre' => 'required|spaceNum',
-=======
-			'nombre' => 'required|alpha_num',
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			'capacidad' => 'required|integer'
 		];
 	}

@@ -22,33 +22,40 @@
                          {!! Form::close() !!}
          </p>
 
+      @if(Session::has('message'))
+
+          <div class="alert alert-dismissible alert-success">
+           <strong>{{ Session::get('message') }}</strong>
+          </div>
+
+      @endif
+
    <p> <h2>Ingrese los datos para el período</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">
    <div class="panel-body">
+        @include('Administrador/messages')
        <div class="form-group">
   
       {!! Form::open(['action' => ['Administrador\PeriodoController@post_store'], 'method' => 'POST']) !!}
 
 
-      <div class="form-group">
-       {!! Form::label('bloque', 'Bloque') !!}
-       {!! Form::text('bloque', null,['class' => 'form-control', 'placeholder' => 'Ingresa bloque']) !!}
-         
-      </div>
+     <div class="form-group">
+  
+        <table class="table table-striped">
+        <tr>
+        <td><p>Bloque</p></td>
+        <td> {!! Form::text('bloque', null,[ 'placeholder' => 'Ejemplo: I']) !!}</td>
+        <td><p>Inicio</p></td>
+        <td> <input type="time" name="inicio" required></td>
+        <td><p>Término</p></td>
+        <td><input type="time" name="fin" required></td>
+        </tr>
 
-      <div class="form-group">
-        {!! Form::label('inicio', 'Inicio') !!}
-       {!! Form::text('inicio', null,['class' => 'form-control', 'placeholder' => 'Ingresa hora inicio']) !!}
-      </div>
-
-        <div class="form-group">
-        {!! Form::label('fin', 'Fin') !!}
-       {!! Form::text('fin', null,['class' => 'form-control', 'placeholder' => 'Ingresa hora fin']) !!}
-      </div>
+         </table>
 
 
-      <div align=center><button type="submit" class="btn btn-info">Aceptar</button></div>
+      <div align=center><button type="submit" class="btn btn-success">Aceptar</button></div>
 
       {!! Form::close() !!}
      

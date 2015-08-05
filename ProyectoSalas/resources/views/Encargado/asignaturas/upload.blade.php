@@ -16,7 +16,7 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de departamento</h2></p>
+   <p> <h2>Lista de ID de Departamentos</h2></p>
 
       @if(Session::has('message'))
 
@@ -36,12 +36,25 @@
   
 
 
- {!! Form::open(['action' => 'Encargado\AsignaturaController@post_upload','files'=>true]) !!}
+{!! Form::open(['action' => 'Encargado\AsignaturaController@post_upload','files'=>true]) !!}
 
+        <table class="table table-striped">
+            <tr> 
+              <th>ID</th>
+              <th>Departamento</th>
+            </tr>
 
-    <div class="form-group">
-   {!! Form::select('departamento', ( $departamentos), null, ['class' => 'form-control'])!!}
-    </div>    
+            @foreach($departamentos as $departamento)
+
+            <tr>
+               <td>{{ $departamento->id}}</td>
+               <td>{{ $departamento->nombre}}</td>
+            </tr>
+             @endforeach
+
+        </table>   
+
+  {!! $departamentos->render() !!}   
  
 <div class="form-group">
         <div class="panel-body">
@@ -60,7 +73,6 @@
      <div align="center"<th><button type="submit" class="btn btn-success">Subir Asignaturas</button></th></div>
 
     {!! Form::close() !!}
-
 
 
 </div>

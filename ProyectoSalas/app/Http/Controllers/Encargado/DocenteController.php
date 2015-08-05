@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Docente;
 use App\Models\Rol_usuario;
-<<<<<<< HEAD
 use App\Models\Usuario;
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 class DocenteController extends Controller {
@@ -50,7 +47,6 @@ public function getIndex()
 	public function post_store(Requests\CreateDocenteRequest $request)
 	{
 		
-<<<<<<< HEAD
 			$rut = array(
 				'rut' => \App\RutUtils::rut($request->get('rut'))
 				);
@@ -106,14 +102,6 @@ public function getIndex()
 			$var3->save();		
 
 		Session::flash('message', 'El docente '.$var3->nombres.' '.$var3->apellidos.' fue agregado exitosamente!');
-=======
-		$docente= new Docente();
-		$docente->fill(['departamento_id' => $request->get('departamento'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
-			'apellidos' => $request->get('apellidos')]);
-		$docente->save();
-
-		Session::flash('message', 'El docente '.$docente->nombres.' '.$docente->apellidos.' fue agregado exitosamente!');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		return redirect()->action('Encargado\DocenteController@getIndex');
 	
@@ -127,11 +115,8 @@ public function getIndex()
 		
 		$docenteEditable = Docente::findOrFail($request->get('id'));
 
-<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($docenteEditable->rut);
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -141,11 +126,7 @@ public function getIndex()
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-<<<<<<< HEAD
 		return view('Encargado/docentes/edit', compact('docenteEditable','rut','id','departamentos','var'));
-=======
-		return view('Encargado/docentes/edit', compact('docenteEditable','id','departamentos','var'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -154,7 +135,6 @@ public function getIndex()
 	public function put_update(Requests \EditDocenteRequest $request)
 	{
 
-<<<<<<< HEAD
 		$docente= Docente::findOrFail($request->get('id'));
 
 		$rut = array(
@@ -198,10 +178,6 @@ public function getIndex()
 			'email' => $request->get('email')
 						]);
 
-=======
-		$docente = Docente::findOrFail($request->get('id'));
-		$docente->fill(\Request::all());
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$docente->save();
 		
 		Session::flash('message', 'El docente '.$docente->nombres.' '.$docente->apellidos.' fue editado exitosamente!');
@@ -213,11 +189,7 @@ public function getIndex()
 	public function delete_destroy(Request $request)
 	{
 
-<<<<<<< HEAD
 		$docente = Usuario::findOrFail($request->get('rut'));
-=======
-		$docente = Docente::findOrFail($request->get('id'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$docente->delete();
 
@@ -257,14 +229,14 @@ public function getIndex()
 		}
 
 
-	public function get_departamentos()
+	public function get_deptos()
 	{
-		$departamentos = Departamento::all()->lists('nombre','id');
+		$departamentos = Departamento::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
 		return view('Encargado/docentes/upload',compact('departamentos','var'));
 	}
@@ -272,65 +244,111 @@ public function getIndex()
 	public function post_upload(Request $request)
 	{
 
-
+	    
 		   $file = $request->file('file');
-
+	  
 	       $nombre = $file->getClientOriginalName();
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$departamento = $request->get('departamento');
-
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-<<<<<<< HEAD
-					$var = new Usuario();
 
-					$var->fill([
-						'rut' => $value->rut,
-						'email' => $value->email,
-						'nombres' => $value->nombres, 
-						'apellidos' => $value->apellidos
-						]);
+					$rut_valido = \App\RutUtils::isRut($value->rut);
 
-					$var->save();
+					if(!$rut_valido)
+					{
+						continue;
+					}
+
+					$rut = \App\RutUtils::rut($value->rut);
+
+					$depto_id = Departamento::where('id','=',$value->departamento)->pluck('id');
 					
+					if(is_null($depto_id))
+					{
+						continue;
+					}
 
-					$var2 = new Rol_usuario();
-					$var2->fill([
-						'rol_id' => '4',
-						'rut' => $value->rut
-						]);
+					$tupla = Usuario::where('rut','=',$rut)->where('email','=',$value->email)->first();
 
-					$var2->save();
+					if(is_null($tupla))
+					{
+						$var = new Usuario();
 
-					$var3 = new Docente();
-					$var3->fill([
-						'departamento_id' => $departamento,
-						'rut' => $value->rut,
-						'nombres' =>$value->nombres,
-						'apellidos' => $value->apellidos,
-						'email' => $value->email
-						]);
+						$var->fill([
+							'rut' => $rut,
+							'email' => $value->email,
+							'nombres' => $value->nombres, 
+							'apellidos' => $value->apellidos
+							]);
 
-					$var3->save();
-=======
-					$docentes = new Docente();
-					$docentes->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos]);
-					$docentes->save();
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+						$var->save();
+						
+
+						$var2 = new Rol_usuario();
+						$var2->fill([
+							'rol_id' => '4',
+							'rut' => $rut
+							]);
+
+						$var2->save();
+
+						$var3 = new Docente();
+						$var3->fill([
+							'departamento_id' => $value->departamento,
+							'rut' => $rut,
+							'nombres' =>$value->nombres,
+							'apellidos' => $value->apellidos,
+							'email' => $value->email
+							]);
+
+						$var3->save();
+					}
 
 				}
 
 			})->get();
-			Session::flash('message', 'Los docentes fueron agregados exitosamente!');
+		
 
 	       return redirect()->action('Encargado\DocenteController@getIndex');
 	}
+
+	public function get_download()
+	{
+		$var = Docente::all();
+
+		\Excel::create('Docentes',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('DEPARTAMENTO','NOMBRES','APELLIDOS','RUT','EMAIL'));
+
+				foreach($var as $key => $v)
+				{
+					$a = \App\RutUtils::dv($v->rut);
+					$rut = $v->rut."-".$a;
+					
+					array_push($data, array($v->departamento_id,$v->nombres,$v->apellidos,$rut,$v->email));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
+
+	       return redirect()->action('Encargado\DocenteController@getIndex');
+	}
+
 
 }

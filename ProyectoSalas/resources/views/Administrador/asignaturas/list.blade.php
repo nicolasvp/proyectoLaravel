@@ -15,7 +15,6 @@
 
    <div class="col-sm-9" >
 
-<<<<<<< HEAD
      <p>
          {!! Form::open(['action' => 'Administrador\AsignaturaController@get_download', 'method' => 'GET']) !!}
    
@@ -26,25 +25,6 @@
       
    <p> <h2>Lista de Asignaturas</h2></p>
 
-=======
-          
-
-   <p> <h2>Lista de Asignaturas</h2></p>
-     <p>
-                         {!! Form::open(['action' => 'Administrador\AsignaturaController@get_download', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
-
-                         {!! Form::close() !!}
-    </p>
-            <p>
-                         {!! Form::open(['action' => 'Administrador\AsignaturaController@get_create', 'method' => 'GET']) !!}
-   
-                          <button type="submit" class="btn btn-success">Ingresar asignatura</button>
-
-                         {!! Form::close() !!}
-         </p>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
       @if(Session::has('message'))
 
@@ -61,17 +41,12 @@
         
           {!! Form::open(['action' => ['Administrador\AsignaturaController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-<<<<<<< HEAD
           {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Código,Departamento']) !!}
-=======
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Código,Depto']) !!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
 
-<<<<<<< HEAD
          {!! Form::open(['action' => 'Administrador\AsignaturaController@get_create', 'method' => 'GET']) !!}
    
             <button type="submit" class="btn btn-success">Ingresar</button>
@@ -79,14 +54,13 @@
           {!! Form::close() !!}
 
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
           <table class="table table-striped">
             <tr> 
               <th>#</th>
+              <th>Departamento</th>
               <th>Nombre</th>
               <th>Código</th>
-              <th>Departamento</th>
+              <th>Descripción</th>
                <th>Editar</th>
               <th>Eliminar</th>
             </tr>
@@ -95,9 +69,10 @@
 
             <tr>
                <td>{{ $asignatura->id}}</td>
+               <td>{{ $asignatura->departamento}}</td>
                <td>{{ $asignatura->nombre}}</td>
                <td>{{ $asignatura->codigo}}</td>
-               <td>{{ $asignatura->departamento}}</td>
+               <td>{{ $asignatura->descripcion}}</td>
               <td>
     
                   {!! Form::open(['action' => ['Administrador\AsignaturaController@get_edit'], 'method' => 'GET']) !!}

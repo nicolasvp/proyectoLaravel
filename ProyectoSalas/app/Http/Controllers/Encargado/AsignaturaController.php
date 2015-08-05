@@ -145,7 +145,7 @@ class AsignaturaController extends Controller {
 
 	public function get_depto()
 	{
-		$departamentos = Departamento::all()->lists('nombre','id');
+		$departamentos = Departamento::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -166,37 +166,80 @@ class AsignaturaController extends Controller {
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$departamento = $request->get('departamento');
 
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-					$asignatura = new Asignatura();
-<<<<<<< HEAD
 
-					$asignatura->fill([
-						'departamento_id' => $departamento,
-						'codigo' => $value->codigo,
-						'nombre' =>$value->nombre,
-						'descripcion' => $value->descripcion
-						]);
-					
-=======
-					$asignatura->fill(['departamento_id' => $departamento,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
-					$asignatura->save();
+					$depto_id = Departamento::where('id','=',$value->departamento)->pluck('id');
 
+					if(is_null($depto_id))
+					{
+						continue;
+					}
+
+					$codigo = Asignatura::where('codigo','=',$value->codigo)->pluck('id');
+
+					if(is_null($codigo))
+					{	
+						$var = new Asignatura();
+
+						$var->fill([
+							'departamento_id' => $value->departamento,
+							'codigo' => $value->codigo,
+							'nombre' =>$value->nombre,
+							'descripcion' => $value->descripcion
+							]);
+
+						$var->save();
+					}
 				}
 
 			})->get();
-			Session::flash('message', 'Las asignaturas fueron agregadas exitosamente!');
+	
+
+	       return redirect()->action('Encargado\AsignaturaController@getIndex');
+
+
+
+	}
+
+
+
+
+	public function get_download()
+	{
+		$var = Asignatura::all();
+
+		\Excel::create('Asignaturas',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('DEPARTAMENTO','CODIGO','NOMBRE','DESCRIPCION'));
+
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->departamento_id,$v->codigo,$v->nombre,$v->descripcion));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
 
 	       return redirect()->action('Encargado\AsignaturaController@getIndex');
 	}
+	
 
 
 

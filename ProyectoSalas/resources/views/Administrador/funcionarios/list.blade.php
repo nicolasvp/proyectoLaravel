@@ -12,6 +12,15 @@
    <div class="row">
 
    <div class="col-sm-9" >
+
+    <p>
+       {!! Form::open(['action' => 'Administrador\FuncionarioController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
    <p> <h2>Lista de Funcionarios</h2></p>
 
 
@@ -36,20 +45,17 @@
 
           {!! Form::open(['action' => 'Administrador\FuncionarioController@get_create', 'method' => 'GET']) !!}
          
-<<<<<<< HEAD
                <button type="submit" class="btn btn-success">Ingresar</button>
-=======
-               <button type="submit" class="btn btn-success">Ingresar funcionario</button>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
           {!! Form::close() !!}
           <table class="table table-striped">
             <tr> 
               <th>#</th>
+              <th>Departamento</th>
               <th>Rut</th>
               <th>Nombres</th>
               <th>Apellidos</th>
-              <th>Departamento</th>
+              <th>Email</th>
                <th>Editar</th>
               <th>Eliminar</th>
             </tr>
@@ -58,10 +64,11 @@
 
             <tr>
                <td>{{ $funcionario->id}}</td>
+              <td>{{ $funcionario->departamento}}</td>
                <td>{{ $funcionario->rut}}</td>
                <td>{{ $funcionario->nombres}}</td>
                <td>{{ $funcionario->apellidos}}</td>
-               <td>{{ $funcionario->departamento}}</td>
+               <td>{{ $funcionario->email}}</td>
               <td>
     
                   {!! Form::open(['action' => ['Administrador\FuncionarioController@get_edit'], 'method' => 'GET']) !!}
@@ -72,11 +79,7 @@
               </td>
               <td>
                   {!! Form::open(['action' => ['Administrador\FuncionarioController@delete_destroy'], 'method' => 'DELETE']) !!}
-<<<<<<< HEAD
                   {!! Form::hidden('rut', $funcionario->rut)!!}
-=======
-                  {!! Form::hidden('id', $funcionario->id)!!}
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                    <button type="submit" onclick="return confirm('¿Seguro que desea eliminar este funcionario?')" class="btn btn-danger btn-sm ">Eliminar</button>
                   {!! Form::close() !!}
 

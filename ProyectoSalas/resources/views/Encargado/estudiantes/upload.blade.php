@@ -15,7 +15,7 @@
    <div class="row">
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de carrera</h2></p>
+   <p> <h2>Lista de ID de Carreras</h2></p>
 
       @if(Session::has('message'))
 
@@ -38,9 +38,23 @@
  {!! Form::open(['action' => 'Encargado\EstudianteController@post_upload','files'=>true]) !!}
 
 
-    <div class="form-group">
-   {!! Form::select('carrera', ( $carreras), null, ['class' => 'form-control'])!!}
-    </div>    
+           <table class="table table-striped">
+            <tr> 
+              <th>ID</th>
+              <th>Carrera</th>
+            </tr>
+
+            @foreach($carreras as $carrera)
+
+            <tr>
+               <td>{{ $carrera->id}}</td>
+               <td>{{ $carrera->nombre}}</td>
+            </tr>
+             @endforeach
+
+        </table>   
+
+  {!! $carreras->render() !!}
  
 <div class="form-group">
         <div class="panel-body">

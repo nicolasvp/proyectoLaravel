@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Rol_usuario;
 
+use App\Models\Estudiante;
 
 
 
@@ -24,7 +25,8 @@ class AdministradorController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre');  
 
-		return view('Administrador/indexAdministrador',compact('var'));
+    
+		return view('Administrador/index',compact('var'));
 	}
 
 

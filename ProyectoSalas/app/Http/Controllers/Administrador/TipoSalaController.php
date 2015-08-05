@@ -156,7 +156,17 @@ class TipoSalaController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
-			return view('Administrador/tipos_sala/list',compact('datos_tipos','var'));
+			
+				if(!$datos_tipos->isEmpty())
+				{
+					return view('Administrador/tipos_sala/list',compact('datos_tipos','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
 			}
 
 			else

@@ -22,11 +22,7 @@ class EditCampusRequest extends Request {
 	public function rules()
 	{
 		return [
-<<<<<<< HEAD
 			'nombre' => 'required|spaceNum|unique:campus,nombre,'. $this->id,
-=======
-			'nombre' => 'required|alpha|unique:campus,nombre,'. $this->id,
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 			'direccion' => 'required',
 			'latitud' => 'required|numeric|unique:campus,latitud,'. $this->id,
 			'longitud' => 'required|numeric|unique:campus,longitud,'. $this->id,

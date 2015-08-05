@@ -14,6 +14,16 @@
    <div class="row">
              
          <div class="col-sm-9" >
+
+         <p>
+              {!! Form::open(['action' => 'Encargado\CursoController@get_upload', 'method' => 'GET']) !!}
+              {!! Form::hidden('departamento', $departamento)!!}
+              <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
+
+              {!! Form::close() !!}
+         </p>
+
+
    <p> <h2>Ingrese los datos para el curso</h2></p>
 <div class="bs-docs-section">                
  <div class="panel panel-default">

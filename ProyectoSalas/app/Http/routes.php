@@ -15,11 +15,7 @@
 
 //Route::get('home', 'HomeController@index');
 
-<<<<<<< HEAD
-Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado'], function()
-=======
-Route::group(['middleware' => ['auth','is_encargado'],'prefix' => 'encargado', 'namespace' => 'Encargado'], function()
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+Route::group(['prefix' => 'encargado', 'namespace' => 'Encargado','middleware' => ['auth','is_encargado']], function()
 {
 
   	Route::get('/','EncargadoController@getIndex');
@@ -34,11 +30,8 @@ Route::group(['middleware' => ['auth','is_encargado'],'prefix' => 'encargado', '
 
 });
 
-<<<<<<< HEAD
-Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador'], function()
-=======
-Route::group(['middleware' => ['auth','is_admin'], 'prefix' => 'administrador', 'namespace' => 'Administrador'], function()
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+/**/
+Route::group(['prefix' => 'administrador', 'namespace' => 'Administrador','middleware' => ['auth','is_admin']], function()
 {
     Route::get('/','AdministradorController@getIndex');
     Route::controller('campus','CampusController');
@@ -57,31 +50,27 @@ Route::group(['middleware' => ['auth','is_admin'], 'prefix' => 'administrador', 
     Route::controller('periodos','PeriodoController');
     Route::controller('roles','RolController');
     Route::controller('roles_usuarios','RolUsuarioController'); 
-<<<<<<< HEAD
     Route::controller('usuarios','UsuarioController');
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+    Route::controller('horarios','HorarioController');
+    Route::controller('asignar_estudiantes','AsignaturaCursadaController');
 
 });
 
 
-//Route::group(['prefix' => 'estudiante', 'namespace' => 'EstudianteController'])
-/*
-Route::group(['middleware' => ['auth']], function(){
-			Route::controllers([
-						'admin' => 'AdministradorController',
-						'alumno' => 'AlumnoController',
-					//	'encargado' => 'EncargadoController',
-						'docente' => 'DocenteController',
-						]);
+Route::group(['prefix' => 'estudiante', 'namespace' => 'Estudiante','middleware' => ['auth','is_estudiante']], function()
+{
+
+    Route::controller('/','EstudianteController');
+
 });
 
+Route::group(['prefix' => 'docente', 'namespace' => 'Docente','middleware' => ['auth','is_docente']], function()
+{
 
-*/
+    Route::controller('/','DocenteController');
 
+});
 
-Route::Controller("alumno","AlumnoController");
-Route::Controller("docente","DocenteController");
 
 
 Route::Controller("/login","loginController");

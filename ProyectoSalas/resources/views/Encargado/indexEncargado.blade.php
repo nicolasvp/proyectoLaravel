@@ -12,17 +12,21 @@
 
 @include('Encargado/top')
 
-
- <div class="panel-body">                  
-                  
-   <div class="row">
-
   <div class="col-sm-9">
-<div class="bs-docs-section">                
-<div class="panel panel-default">
+              
+<div class="panel panel-default" style="margin-top: 15px">
 <div class="panel-body">
   <div class="form-group">
   <div class="jumbotron">
+
+  <p class="lead">
+   <h3 align="center"> 
+    <b>
+    Como encargado podrá realizar la gestión de la información de las salas, cursos, asignaturas y datos académicos del sistema.
+    </b>
+    </h3>
+  </p>
+
        @if(Session::has('message'))
 
           
@@ -31,15 +35,10 @@
           </div>
 
       @endif
+      
     </div>
-  </div>
-
                     
 </div>
-</div>
-</div>
-
-                    
 </div>
 
 </div>

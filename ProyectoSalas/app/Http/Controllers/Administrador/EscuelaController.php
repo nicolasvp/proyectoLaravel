@@ -109,9 +109,49 @@ class EscuelaController extends Controller {
 		
 	}
 
+	public function get_search(Request $request)
+	{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+				 $datos_escuelas = Escuela::join('departamentos','escuelas.departamento_id','=','departamentos.id')
+					->where('escuelas.nombre', 'like' ,'%'.$request->get('name').'%')
+					->orWhere('departamentos.nombre','like', '%'.$request->get('name').'%')
+					->select('escuelas.*','departamentos.nombre as departamento')
+					->paginate();
+
+				$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+
+		        if(!$datos_escuelas->isEmpty())
+				{
+					return view('Administrador/escuelas/list',compact('datos_escuelas','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+
+			}
+
+			else
+			{
+
+		 		return redirect()->action('Administrador\EscuelaController@getIndex');
+
+			}
+	}
+
+
 	public function get_depto()
 	{
-		$departamentos = Departamento::all()->lists('nombre','id');
+		$departamentos = Departamento::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -132,54 +172,71 @@ class EscuelaController extends Controller {
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$departamento = $request->get('departamento');
-
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+			\Excel::load('/storage/app/'.$nombre,function($archivo)
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-					$var = new Escuela();
-					$var->fill(['nombre' => $value->nombre,'departamento_id' => $departamento,'descripcion' =>$value->descripcion]);
-					$var->save();
 
+					$departamento_id = Departamento::where('id','=',$value->departamento)->pluck('id');
+
+					if(is_null($departamento_id))
+					{
+						continue;
+					}
+
+					$tupla = Escuela::where('nombre','=',$value->nombre)->where('departamento_id','=',$value->departamento)->first();
+
+					if(is_null($tupla))
+					{
+						$var = new Escuela();
+
+						$var->fill([
+							'nombre' => $value->nombre,
+							'departamento_id' => $value->departamento,
+							'descripcion' =>$value->descripcion
+							]);
+
+						$var->save();
+					}
 				}
 
 			})->get();
-			Session::flash('message', 'Las escuelas fueron agregadas exitosamente!');
+			
 
 	       return redirect()->action('Administrador\EscuelaController@getIndex');
 	}
 
-	public function get_search(Request $request)
+	public function get_download()
+	{
+		$var = Escuela::all();
+
+		\Excel::create('Escuelas',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_escuelas = Escuela::join('departamentos','escuelas.departamento_id','=','departamentos.id')
-			->where('escuelas.nombre', 'like' ,'%'.$request->get('name').'%')
-			->orWhere('departamentos.nombre','like', '%'.$request->get('name').'%')
-			->select('escuelas.*','departamentos.nombre as departamento')
-			->paginate();
+				array_push($data, array('NOMBRE','DEPARTAMENTO','DESCRIPCION'));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre'); 
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->nombre,$v->departamento_id,$v->descripcion));
 
-			return view('Administrador/escuelas/list',compact('datos_escuelas','var'));
-			}
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			else
-			{
+			
 
-		 	return redirect()->action('Administrador\EscuelaController@getIndex');
-
-			}
-		}
+	       return redirect()->action('Administrador\EscuelaController@getIndex');
+	}
 
 
 }

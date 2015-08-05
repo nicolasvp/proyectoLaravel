@@ -27,7 +27,7 @@ class FacultadController extends Controller {
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
-		
+	
 		return view('Administrador/facultades/list',compact('datos_facultades','var'));
 
 	}
@@ -109,9 +109,51 @@ class FacultadController extends Controller {
 		
 	}
 
+
+	public function get_search(Request $request)
+	{
+		
+			if(trim($request->get('name')) != "")
+			{
+
+				 $datos_facultades = Facultad::join('campus','facultades.campus_id','=','campus.id')
+				->where('facultades.nombre', 'like' ,'%'.$request->get('name').'%')
+				->orWhere('campus.nombre','like', '%'.$request->get('name').'%')
+				->select('facultades.*','campus.nombre as campus')
+				->paginate();
+
+				$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+
+
+		        if(!$datos_facultades->isEmpty())
+				{
+					return view('Administrador/facultades/list',compact('datos_facultades','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+
+			}
+
+			else
+			{
+
+		 	return redirect()->action('Administrador\FacultadController@getIndex');
+
+			}
+	}
+
+
 	public function get_campus()
 	{
-		$campus = Campus::all()->lists('nombre','id');
+		$campus = Campus::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -122,7 +164,7 @@ class FacultadController extends Controller {
 	}
 
 	public function post_upload(Request $request)
-		{
+	{
 
 		 
 			   $file = $request->file('file');
@@ -131,55 +173,81 @@ class FacultadController extends Controller {
 
 		       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-				$campus = $request->get('campus');
 
-				\Excel::load('/storage/app/'.$nombre,function($archivo) use ($campus)
+				\Excel::load('/storage/app/'.$nombre,function($archivo) 
 				{
 
 					$result = $archivo->get();
 
 					foreach($result as $key => $value)
 					{
-						$var = new Facultad();
-						$var->fill(['nombre' => $value->nombre,'campus_id' => $campus,'descripcion' =>$value->descripcion]);
-						$var->save();
+
+						$nombre = Facultad::where('nombre','=',$value->nombre)->pluck('id');
+
+						if(!is_null($nombre))
+						{
+
+							continue;
+
+						}
+
+						$campus_id = Campus::where('id','=',$value->campus)->pluck('id');
+
+						if(!is_null($campus_id))
+						{
+
+							$var = new Facultad();
+
+							$var->fill([
+								'nombre' => $value->nombre,
+								'campus_id' => $value->campus,
+								'descripcion' =>$value->descripcion]);
+							
+							$var->save();
+
+						}
+
+
 
 					}
 
 				})->get();
-				Session::flash('message', 'Las facultades fueron agregadas exitosamente!');
+	
 
 		       return redirect()->action('Administrador\FacultadController@getIndex');
-		}
+	}
 
+	public function get_download()
+	{
+		$var = Facultad::all();
 
-		public function get_search(Request $request)
+		\Excel::create('Facultades',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_facultades = Facultad::join('campus','facultades.campus_id','=','campus.id')
-			->where('facultades.nombre', 'like' ,'%'.$request->get('name').'%')
-			->orWhere('campus.nombre','like', '%'.$request->get('name').'%')
-			->select('facultades.*','campus.nombre as campus')
-			->paginate();
+				array_push($data, array('NOMBRE','CAMPUS','DESCRIPCION'));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre'); 
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->nombre,$v->campus_id,$v->descripcion));
 
-			return view('Administrador/facultades/list',compact('datos_facultades','var'));
-			}
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			else
-			{
+			
 
-		 	return redirect()->action('Administrador\FacultadController@getIndex');
+	       return redirect()->action('Administrador\FacultadController@getIndex');
+	}
 
-			}
-		}
+
+
 
 
 }

@@ -11,10 +11,7 @@ use App\Models\Docente;
 use App\Models\Estudiante;
 use App\Models\Carrera;
 use App\Models\Rol_usuario;
-<<<<<<< HEAD
 use App\Models\Usuario;
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 class EstudianteController extends Controller {
@@ -52,7 +49,6 @@ class EstudianteController extends Controller {
 	}
 
 
-<<<<<<< HEAD
 	public function post_store(Requests\CreateEstudianteRequest $request)
 	{
 		
@@ -107,15 +103,6 @@ class EstudianteController extends Controller {
 			'email' => $request->get('email')
 			]);
 
-=======
-
-		public function post_store(Requests\CreateEstudianteRequest $request)
-	{
-		
-		$estudiante = new Estudiante();
-		$estudiante->fill(['carrera_id' => $request->get('carrera'), 'rut' => $request->get('rut'), 'nombres' => $request->get('nombres'),
-			'apellidos' => $request->get('apellidos'), 'email' => $request->get('email')]);
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$estudiante->save();
 
 		Session::flash('message', 'El estudiante '.$estudiante->nombre.'  '.$estudiante->apellidos.' fue creado exitosamente!');
@@ -131,11 +118,8 @@ class EstudianteController extends Controller {
 		
 		$estudianteEditable = Estudiante::findOrFail($request->get('id'));
 
-<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($estudianteEditable->rut);
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$carreras = Carrera::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -145,11 +129,7 @@ class EstudianteController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-<<<<<<< HEAD
 		return view('Encargado/estudiantes/edit', compact('estudianteEditable','rut','id','carreras','var'));
-=======
-		return view('Encargado/estudiantes/edit', compact('estudianteEditable','id','carreras','var'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -159,7 +139,6 @@ class EstudianteController extends Controller {
 	{
 
 		$estudiante = Estudiante::findOrFail($request->get('id'));
-<<<<<<< HEAD
 
 
 		$rut = array(
@@ -201,9 +180,6 @@ class EstudianteController extends Controller {
 			'email' => $request->get('email')
 						]);
 
-=======
-		$estudiante->fill(\Request::all());
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$estudiante->save();
 		
 		Session::flash('message', 'El estudiante '.$estudiante->nombres.' '.$estudiante->apellidos.' fue editado exitosamente!');
@@ -216,11 +192,7 @@ class EstudianteController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
-<<<<<<< HEAD
 		$estudiante = Usuario::findOrFail($request->get('rut'));
-=======
-		$estudiante = Estudiante::findOrFail($request->get('id'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$estudiante->delete();
 
@@ -261,47 +233,130 @@ class EstudianteController extends Controller {
 		}
 
 
-	public function get_carreras()
+	public function get_carrera()
 	{
-		$carreras = Carrera::all()->lists('nombre','id');
+		$carreras = Carrera::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
 
 		return view('Encargado/estudiantes/upload',compact('carreras','var'));
 	}
 
 
+
 	public function post_upload(Request $request)
 	{
 
+	    
 		   $file = $request->file('file');
-
+	    
 	       $nombre = $file->getClientOriginalName();
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$carrera = $request->get('carrera');
-
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($carrera)
+	
+			\Excel::load('/storage/app/'.$nombre,function($archivo) 
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-					$estudiantes = new Estudiante();
-					$estudiantes->fill(['carrera_id' => $carrera,'rut' => $value->rut,'nombres' =>$value->nombres,'apellidos' => $value->apellidos,'email' =>$value->email]);
-					$estudiantes->save();
+					
+					$rut_valido = \App\RutUtils::isRut($value->rut);
+
+					if(!$rut_valido)
+					{
+						continue;
+					}
+
+					$rut = \App\RutUtils::rut($value->rut);
+
+					$carrera_id = Carrera::where('id','=',$value->carrera)->pluck('id');
+					
+					if(is_null($carrera_id))
+					{
+						continue;
+					}
+
+					$tupla = Usuario::where('rut','=',$rut)->where('email','=',$value->email)->first();
+
+					if(is_null($tupla))
+					{
+
+						$var = new Usuario();
+
+						$var->fill([
+							'rut' => $rut,
+							'email' => $value->email,
+							'nombres' => $value->nombres, 
+							'apellidos' => $value->apellidos
+							]);
+
+						$var->save();
+						
+
+						$var2 = new Rol_usuario();
+						$var2->fill([
+							'rol_id' => '3',
+							'rut' => $rut
+							]);
+
+						$var2->save();
+
+						$var3 = new Estudiante();
+						$var3->fill([
+							'carrera_id' => $value->carrera,
+							'rut' => $rut,
+							'nombres' =>$value->nombres,
+							'apellidos' => $value->apellidos,
+							'email' =>$value->email
+							]);
+
+						$var3->save();
+					}
 
 				}
 
 			})->get();
-			Session::flash('message', 'Los alumnos fueron agregados exitosamente!');
+		
+
+	       return redirect()->action('Encargado\EstudianteController@getIndex');
+	}	
+
+
+	public function get_download()
+	{
+		$var = Estudiante::all();
+
+		\Excel::create('Estudiantes',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('CARRERA','NOMBRES','APELLIDOS','RUT','EMAIL'));
+
+				foreach($var as $key => $v)
+				{
+					$a = \App\RutUtils::dv($v->rut);
+					$rut = $v->rut."-".$a;
+					array_push($data, array($v->carrera_id,$v->nombres,$v->apellidos,$rut,$v->email));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
 
 	       return redirect()->action('Encargado\EstudianteController@getIndex');
 	}
+
 
 }

@@ -7,10 +7,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Departamento;
 use App\Models\Funcionario;
 use App\Models\Rol_usuario;
-<<<<<<< HEAD
 use App\Models\Usuario;
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 
@@ -53,7 +50,6 @@ class FuncionarioController extends Controller {
 
 	public function post_store(Requests \CreateFuncionarioRequest $request)
 	{
-<<<<<<< HEAD
 
 		$rut = array(
 				'rut' => \App\RutUtils::rut($request->get('rut'))
@@ -105,11 +101,6 @@ class FuncionarioController extends Controller {
 				'email' => $request->get('email')
 			]);
 		
-=======
-		
-		$funcionario= new Funcionario();
-		$funcionario->fill($request->all());
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$funcionario->save();
 
 		Session::flash('message', 'El funcionario '.$funcionario->nombres.' '.$funcionario->apellidos.' fue ingresado exitosamente!');
@@ -125,11 +116,8 @@ class FuncionarioController extends Controller {
 		
 		$funcionarioEditable = Funcionario::findOrFail($request->get('id'));
 
-<<<<<<< HEAD
 		$rut = \App\RutUtils::formatear($funcionarioEditable->rut);
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$departamentos = Departamento::paginate()->lists('nombre','id');
 
 		$id = $request->get('id');
@@ -140,11 +128,7 @@ class FuncionarioController extends Controller {
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
 
-<<<<<<< HEAD
 		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','rut','id','departamentos','var'));
-=======
-		return view('Administrador/funcionarios/edit', compact('funcionarioEditable','id','departamentos','var'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	
 	}
 
@@ -154,7 +138,6 @@ class FuncionarioController extends Controller {
 	{
 
 		$funcionario = Funcionario::findOrFail($request->get('id'));
-<<<<<<< HEAD
 
 		$rut = array(
 			'rut' => \App\RutUtils::rut($request->get('rut'))
@@ -197,9 +180,6 @@ class FuncionarioController extends Controller {
 			'email' => $request->get('email')
 						]);
 
-=======
-		$funcionario->fill(\Request::all());
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$funcionario->save();
 		
 		Session::flash('message', 'El funcionario '.$funcionario->nombres.' '.$funcionario->apellidos.' fue editado exitosamente!');
@@ -211,11 +191,7 @@ class FuncionarioController extends Controller {
 	public function delete_destroy(Request $request)
 	{
 
-<<<<<<< HEAD
 		$funcionario = Usuario::findOrFail($request->get('rut'));
-=======
-		$funcionario = Funcionario::findOrFail($request->get('id'));
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 		$funcionario->delete();
 
@@ -226,9 +202,69 @@ class FuncionarioController extends Controller {
 		
 	}
 
+	public function get_search(Request $request)
+	{
+		
+		if(is_numeric( (integer) $request->get('name')))
+		{
+			
+			$name = array('name' => (integer) $request->get('name'));
+			
+			$rules = array('name' => 'max:8');
+
+
+			$v =  \Validator::make($name,$rules);
+
+			if($v->fails())
+			 {
+			 	Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+			 }
+
+		}
+
+			if(trim($request->get('name')) != "")
+			{
+
+			 $datos_funcionarios = Funcionario::join('departamentos','funcionarios.departamento_id','=','departamentos.id')
+								->where('funcionarios.rut', '=' , (integer) $request->get('name'))
+								->orWhere('departamentos.nombre','like','%'.$request->get('name').'%')
+								->select('funcionarios.*','departamentos.nombre as departamento')
+								->paginate();
+
+
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+		
+	         if(!$datos_funcionarios->isEmpty())
+				{
+					return view('Administrador/funcionarios/list',compact('datos_funcionarios','var'));
+				}
+
+				else
+				{
+					Session::flash('message', 'No se encontraron resultados.');
+					return redirect()->back();
+				}
+
+
+			
+			}
+
+			else
+			{
+
+		 	return redirect()->action('Administrador\FuncionarioController@getIndex');
+
+			}
+		}
+
+
 	public function get_depto()
 	{
-		$departamentos = Departamento::all()->lists('nombre','id');
+		$departamentos = Departamento::paginate();
 
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
@@ -249,79 +285,97 @@ class FuncionarioController extends Controller {
 
 		       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-				$departamento = $request->get('departamento');
 
-				\Excel::load('/storage/app/'.$nombre,function($archivo) use ($departamento)
+				\Excel::load('/storage/app/'.$nombre,function($archivo)
 				{
 
 					$result = $archivo->get();
 
 					foreach($result as $key => $value)
 					{
-<<<<<<< HEAD
-						$var = new Usuario();
 
-						$var->fill([
-							'rut' => $value->rut,
-							'email' => $value->email,
-							'nombres' => $value->nombres, 
-							'apellidos' => $value->apellidos
-							]);
+						$rut_valido = \App\RutUtils::isRut($value->rut);
 
-						$var->save();
+						if(!$rut_valido)
+						{
+							continue;
+						}
 
-						$var2 = new Funcionario();
+						$rut = \App\RutUtils::rut($value->rut);
 
-						$var2->fill([
-							'departamento_id' => $departamento,
-							'rut' => $value->rut,
-							'nombres' => $value->nombres,
-							'apellidos' =>$value->apellidos,
-							'email' => $value->email
-							]);
+						$depto_id = Departamento::where('id','=',$value->departamento)->pluck('id');
+						
+						if(is_null($depto_id))
+						{
+							continue;
+						}
 
-						$var2->save();
+						$tupla = Usuario::where('rut','=',$rut)->where('email','=',$value->email)->first();
 
-=======
-						$var = new Funcionario();
-						$var->fill(['departamento_id' => $departamento,'rut' => $value->rut,'nombres' => $value->nombres,'apellidos' =>$value->apellidos]);
-						$var->save();
+						if(is_null($tupla))
+						{
 
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+							$var = new Usuario();
+
+							$var->fill([
+								'rut' => $rut,
+								'email' => $value->email,
+								'nombres' => $value->nombres, 
+								'apellidos' => $value->apellidos
+								]);
+
+							$var->save();
+
+							$var2 = new Funcionario();
+
+							$var2->fill([
+								'departamento_id' => $value->departamento,
+								'rut' => $rut,
+								'nombres' => $value->nombres,
+								'apellidos' =>$value->apellidos,
+								'email' => $value->email
+								]);
+
+							$var2->save();
+						}
 					}
 
 				})->get();
-				Session::flash('message', 'Las funcionarios fueron agregados exitosamente!');
+			
 
 		       return redirect()->action('Administrador\FuncionarioController@getIndex');
 	}
-	public function get_search(Request $request)
+
+	public function get_download()
+	{
+		$var = Funcionario::all();
+
+		\Excel::create('Funcionarios',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_funcionarios = Funcionario::join('departamentos','funcionarios.departamento_id','=','departamentos.id')
-			->where('funcionarios.rut', '=' , (integer) $request->get('name'))
-			->orWhere('departamentos.nombre','like','%'.$request->get('name').'%')
-			->select('funcionarios.*','departamentos.nombre as departamento')
-			->paginate();
+				array_push($data, array('DEPARTAMENTO','NOMBRES','APELLIDOS','RUT','EMAIL'));
 
+				foreach($var as $key => $v)
+				{
+					$a = \App\RutUtils::dv($v->rut);
+					$rut = $v->rut."-".$a;
+					
+					array_push($data, array($v->departamento_id,$v->nombres,$v->apellidos,$rut,$v->email));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre'); 
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			return view('Administrador/funcionarios/list',compact('datos_funcionarios','var'));
-			}
+			
 
-			else
-			{
+	       return redirect()->action('Administrador\FuncionarioController@getIndex');
+	}
 
-		 	return redirect()->action('Administrador\FuncionarioController@getIndex');
-
-			}
-		}
 
 }

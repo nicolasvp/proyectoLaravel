@@ -40,18 +40,13 @@ class loginController extends Controller
 
         if ($this->auth->attempt($credenciales, $request->has('remember')))
         { // Login exitoso
-<<<<<<< HEAD
         
-=======
-            
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
             $rut = $this->auth->user()->rut;
             
             $var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=',$rut)
                             ->select('roles.nombre')
                             ->get();         
-<<<<<<< HEAD
 
             if($var->first()->nombre == 'administrador')
             {
@@ -63,43 +58,20 @@ class loginController extends Controller
             }
             if($var->first()->nombre == 'estudiante')
             {
-
-=======
-
-            if($var->first()->nombre == 'administrador')
-            {
-                return redirect()->action('Administrador\AdministradorController@getIndex');
-            }
-            if($var->first()->nombre == 'encargado')
-            {
-                return redirect()->action('Encargado\EncargadoController@getIndex');
-            }
-            if($var->first()->nombre == 'estudiante')
-            {
-
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
-                return redirect()->action('AlumnoController@getIndex');
+                return redirect()->action('Estudiante\EstudianteController@getIndex');
             }
             if($var->first()->nombre == 'docente')
             {
-                return redirect()->action('DocenteController@getIndex');
+                return redirect()->action('Docente\DocenteController@getIndex');
             }
 
-<<<<<<< HEAD
            // return redirect()->action('Administrador\AdministradorController@getIndex');
-=======
-            //return redirect()->action('Administrador\AdministradorController@getIndex');
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
         }
     
         
         return redirect()->action('loginController@getIndex')
                 ->with('login_errors', true);
-<<<<<<< HEAD
        
-=======
-        
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
         //    ->withInput($request->only(['rut', 'remember']))
           //  ->withErrors(['rut' => 'Sus credenciales no son válidas, intente nuevamente!']);
     }

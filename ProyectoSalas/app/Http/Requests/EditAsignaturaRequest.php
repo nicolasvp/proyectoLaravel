@@ -24,11 +24,7 @@ class EditAsignaturaRequest extends Request {
 		return [
 			'departamento_id' => 'required|integer|not_in:0',
 			'codigo' => 'required|unique:asignaturas,codigo,'. $this->id,
-<<<<<<< HEAD
 			'nombre' => 'required|spaceNum'
-=======
-			'nombre' => 'required|alpha'
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		];
 	}
 

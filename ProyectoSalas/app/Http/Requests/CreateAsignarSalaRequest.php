@@ -23,9 +23,9 @@ class CreateAsignarSalaRequest extends Request {
 	{
 		return [
 			'periodo' => 'required|integer|not_in:0',
-			'sala' => 'required|integer|not_in:0'
-
-
+			'sala' => 'required|integer|not_in:0',
+			'inicio' => 'required|different:termino',
+			'termino' => 'required|after:inicio'
 
 		];
 	}

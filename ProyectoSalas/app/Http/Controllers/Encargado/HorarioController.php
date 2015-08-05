@@ -21,7 +21,7 @@ class HorarioController extends Controller {
 
 
 
-public function getIndex()
+	public function getIndex()
 	{
 
 		$datos_horarios  = Horario::join('salas','horarios.sala_id','=','salas.id')
@@ -55,7 +55,7 @@ public function getIndex()
 				->join('docentes','cursos.docente_id','=','docentes.id')
 				->join('campus','salas.campus_id','=','campus.id')
 				->where('asignaturas.nombre', 'like' , '%'.$request->get('name').'%')
-				->select('campus.nombre as campus','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
+				->select('campus.nombre as campus','horarios.fecha','salas.nombre as sala','periodos.bloque','periodos.inicio','periodos.fin','asignaturas.nombre','horarios.id as horario_id','docentes.*')
 				->paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
@@ -132,6 +132,35 @@ public function getIndex()
 		Session::flash('message', 'El horario fue eliminado exitosamente!');
 
 		return redirect()->action('Encargado\HorarioController@getIndex');
+	}
+
+	public function get_download()
+	{
+		$var = Horario::all();
+
+		\Excel::create('Horarios',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('FECHA','SALA','PERIODO','CURSO'));
+
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->fecha,$v->sala_id,$v->periodo_id,$v->curso_id));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
+
+	       return redirect()->action('Encargado\HorarioController@getIndex');
 	}
 
 

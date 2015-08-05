@@ -15,7 +15,7 @@
 
 
    <div class="col-sm-9" >
-   <p> <h2>Selección de facultad</h2></p>
+   <p> <h2>Lista de ID de Facultades</h2></p>
 
       @if(Session::has('message'))
 
@@ -38,9 +38,21 @@
  {!! Form::open(['action' => 'Administrador\DepartamentoController@post_upload','files'=>true]) !!}
 
 
-    <div class="form-group">
-   {!! Form::select('facultad', ( $facultades), null, ['class' => 'form-control'])!!}
-    </div>    
+           <table class="table table-striped">
+            <tr> 
+              <th>ID</th>
+              <th>Facultad</th>
+            </tr>
+
+            @foreach($facultades as $facu)
+
+            <tr>
+               <td>{{ $facu->id}}</td>
+               <td>{{ $facu->nombre}}</td>
+            </tr>
+             @endforeach
+
+          </table>   
  
 <div class="form-group">
         <div class="panel-body">

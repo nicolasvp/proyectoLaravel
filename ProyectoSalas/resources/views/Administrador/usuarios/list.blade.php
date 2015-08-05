@@ -14,6 +14,17 @@
    <div class="row">
 
    <div class="col-sm-9" >
+
+
+        <p>
+       {!! Form::open(['action' => 'Administrador\UsuarioController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
+
    <p> <h2>Lista de Usuarios del Sistema</h2></p>
 
 

@@ -14,7 +14,7 @@ class AddCapacidadSalas extends Migration {
 	{
 		Schema::table('salas', function (Blueprint $table) {
 
-    	$table->integer('capacidad')->nullable();
+    	$table->integer('capacidad');
 
 		});
 	}

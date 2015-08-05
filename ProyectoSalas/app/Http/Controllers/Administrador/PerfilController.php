@@ -7,14 +7,11 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Rol_usuario;
 use App\Models\Rol;
-<<<<<<< HEAD
 use App\Models\Usuario;
 use App\Models\Docente;
 use App\Models\Estudiante;
 use App\Models\Departamento;
 use App\Models\Carrera;
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
 
 
@@ -33,58 +30,65 @@ class PerfilController extends Controller {
 	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
 	                            ->select('roles.*','roles_usuarios.*')
 	                            ->lists('roles.nombre','roles.nombre'); 
-			
+		
 		return view('Administrador/perfiles/search',compact('var'));
 	}
 
-<<<<<<< HEAD
 	public function get_show(Request $request)
 	{
 		
-		$rules = array(
-			'rut' => 'integer'
-		);	
+			if(!is_numeric($request->get('rut')))
+			{
+					Session::flash('message', 'Debe ingresar solo números.');
+					return redirect()->back();
+			}
+			
+			$name = array('name' => (integer) $request->get('rut'));
+			
+			$rules = array('name' => 'max:8');
 
-		$this->validate($request, $rules);
+
+			$v =  \Validator::make($name,$rules);
+
+			if($v->fails())
+			 {
+			 	Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+			 }
+
+		
 
 		if(trim($request->get('rut')) != "")
 		{
 		
-		$roles_usuario = Rol_usuario::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
-				->join('usuarios','roles_usuarios.rut','=','usuarios.rut')
-				->where('roles_usuarios.rut', '=', $request->get('rut'))
-				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre as rol','usuarios.nombres','usuarios.apellidos','usuarios.email')
-				->get();
+			$datos_usuario = Usuario::where('rut','=',$request->get('rut'))->get();
 
-		$datos_usuario = Usuario::where('rut','=',$request->get('rut'))->get();
+			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+		                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+		                            ->select('roles.*','roles_usuarios.*')
+		                            ->lists('roles.nombre','roles.nombre'); 
+		
+			if(!$datos_usuario->isEmpty())
+			{
 
-=======
-		public function get_show(Request $request)
-	{
-			
+				$roles_usuario = Rol_usuario::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
+						->join('usuarios','roles_usuarios.rut','=','usuarios.rut')
+						->where('roles_usuarios.rut', '=', $request->get('rut'))
+						->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre as rol','usuarios.nombres','usuarios.apellidos','usuarios.email')
+						->get();
 
-		$datos_usuario = Rol_usuario::join('roles', 'roles_usuarios.rol_id', '=','roles.id')
-				->where('roles_usuarios.rut', '=', $request->get('rut'))
-				->select('roles_usuarios.id','roles_usuarios.rut','roles.nombre')
-				->get();
+				$rut = $request->get('rut');
 
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
-		$rut = $request->get('rut');
+				$rol_usuario = Rol::paginate()->lists('nombre', 'id');
 
-		$rol_usuario = Rol::paginate()->lists('nombre', 'id');
 
-<<<<<<< HEAD
-=======
-		//$rol_usuario = ['' => ''] + Roles::lists('nombre', 'id');	//agrega un null al principio
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
+				return view('Administrador/perfiles/show',compact('roles_usuario','rol_usuario','rut','datos_usuario','var'));
+			}
 
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-	                            ->select('roles.*','roles_usuarios.*')
-	                            ->lists('roles.nombre','roles.nombre'); 
+			Session::flash('message', 'No existe ningún usuario con ese rut.');
 
-<<<<<<< HEAD
-		return view('Administrador/perfiles/show',compact('roles_usuario','rol_usuario','rut','datos_usuario','var'));
+			return redirect()->action('Administrador\PerfilController@getIndex');
+
 		}
 
 		else
@@ -93,10 +97,6 @@ class PerfilController extends Controller {
 		 return redirect()->action('Administrador\PerfilController@getIndex');
 
 		}
-=======
-		return view('Administrador/perfiles/show',compact('datos_usuario','rol_usuario','rut','var'));
-			
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 	}
 
 
@@ -104,7 +104,6 @@ class PerfilController extends Controller {
 	{
 	
 
-<<<<<<< HEAD
 		$rut = $request->get('rut');
 		$rol = $request->get('rol_asig');
 
@@ -196,15 +195,10 @@ class PerfilController extends Controller {
 
 		$perfil = new Rol_usuario();
 		$perfil->fill(['rut' => $request->get('rut'), 'rol_id' => $request->get('rol')]);
-=======
-		$perfil = new Rol_usuario();
-		$perfil->fill(['rut' => $request->get('rut'), 'rol_id' => $request->get('rol_asig')]);
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$perfil->save();
 
 		Session::flash('message', 'El Perfil fue asignado exitosamente!');
 
-<<<<<<< HEAD
 		return redirect()->action('Administrador\RolUsuarioController@getIndex');
 	}
 
@@ -239,20 +233,10 @@ class PerfilController extends Controller {
 			}
 		}
 
-=======
-		return redirect()->action('Administrador\PerfilController@getIndex');
-	}
-
-	public function delete_destroy(Request $request)
-	{
-
-		
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 		$profile = Rol_usuario::findOrFail($request->get('id'));
 
 		$profile->delete();
 
-<<<<<<< HEAD
 
 
 		Session::flash('message', 'El Perfil fue removido exitosamente');
@@ -264,19 +248,6 @@ class PerfilController extends Controller {
 	public function get_cambioPerfil(Request $request)
 	{
 	
-=======
-		Session::flash('message', 'El Perfil fue removido exitosamente');
-
-		return redirect()->action('Administrador\PerfilController@getIndex');
-
-	}
-
-
-	public function get_pichula(Request $request)
-	{
-		//dd(\Request::all());		
-
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
             if($request->get('perfil') == 'administrador')
             {
@@ -288,12 +259,11 @@ class PerfilController extends Controller {
             }
             if($request->get('perfil') == 'estudiante')
             {
-
-                return redirect()->action('AlumnoController@getIndex');
+                return redirect()->action('Estudiante\EstudianteController@getIndex');
             }
             if($request->get('perfil') == 'docente')
             {
-                return redirect()->action('DocenteController@getIndex');
+                return redirect()->action('Docente\DocenteController@getIndex');
             }
 
 		return redirect()->action('Administrador\Administrador@getIndex');

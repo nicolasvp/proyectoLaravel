@@ -66,7 +66,6 @@
      
   </div>
 
-<<<<<<< HEAD
     
       {!! Html::script('js/jquery-2.1.4.min.js') !!}
       <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
@@ -76,8 +75,6 @@
        });
       </script> 
 
-=======
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
                     
 </div>
 </div>

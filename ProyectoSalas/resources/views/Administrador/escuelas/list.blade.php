@@ -11,10 +11,15 @@
    <div class="row">
 
    <div class="col-sm-9" >
+         <p>
+       {!! Form::open(['action' => 'Administrador\EscuelaController@get_download', 'method' => 'GET']) !!}
+   
+         <button type="submit" class="btn btn-info pull-right">Descargar archivo</button>
+
+      {!! Form::close() !!}
+    </p>
+
    <p> <h2>Lista de Escuelas</h2></p>
-
-
-
 
       @if(Session::has('message'))
 
@@ -30,18 +35,14 @@
 
           {!! Form::open(['action' => ['Administrador\EscuelaController@get_search'], 'method' => 'GET','class' => 'navbar-form navbar-left pull-right','role' => 'search']) !!}
             <div class="form-group">
-          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Depto']) !!}
+          {!! Form::text('name',null,['class' => 'form-control','placeholder' => 'Nombre,Departamento']) !!}
           </div>
           <button type="submit" class="btn btn-info">Buscar</button>
           {!! Form::close() !!}
 
           {!! Form::open(['action' => 'Administrador\EscuelaController@get_create', 'method' => 'GET']) !!}
    
-<<<<<<< HEAD
              <button type="submit" class="btn btn-success">Ingresar</button>
-=======
-             <button type="submit" class="btn btn-success">Ingresar escuela</button>
->>>>>>> d54c8fa948ab220500fe59fd7e40157631c5a416
 
            {!! Form::close() !!}
 

@@ -16,18 +16,6 @@ use App\Models\Rol_usuario;
 
 class CursoController extends Controller {
 
-	public function get_departamento()
-	{
-		$departamentos = Departamento::paginate()->lists('nombre','id');
-		
-		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
-
-		return view('Encargado/cursos/departamento',compact('departamentos','var'));
-	}
-
 
 
 	public function getIndex()
@@ -45,10 +33,23 @@ class CursoController extends Controller {
 		return view('Encargado/cursos/list',compact('datos_cursos','var'));
 	}
 
+	public function get_departamento()
+	{
+		$departamentos = Departamento::paginate()->lists('nombre','id');
+		
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/cursos/departamento',compact('departamentos','var'));
+	}
+
 
 	public function get_create(Requests \SelectDeptoRequest $request)
 	{
 
+			$departamento = $request->get('departamento');
 		    $asignaturas = Asignatura::where('departamento_id', '=', $request->get('departamento'))->lists('nombre','id');
 			
 			$docentes = Docente::where('departamento_id', '=', $request->get('departamento'))->lists('apellidos','id');
@@ -58,7 +59,7 @@ class CursoController extends Controller {
                             ->select('roles.*','roles_usuarios.*')
                             ->lists('roles.nombre','roles.nombre'); 
 
-			return view('Encargado/cursos/create',compact('asignaturas','docentes','var'));
+			return view('Encargado/cursos/create',compact('asignaturas','docentes','departamento','var'));
 	}
 	
 
@@ -103,7 +104,15 @@ class CursoController extends Controller {
 	{
 	
 		$curso = Curso::findOrFail($request->get('id'));
-		$curso->fill(\Request::all());
+		
+		$curso->fill([
+			'asignatura_id' => $request->get('asignatura'),
+			'docente_id' => $request->get('docente'),
+			'semestre' => $request->get('semestre'),
+			'anio' => $request->get('anio'),
+			'seccion' => $request->get('seccion')
+			]);
+
 		$curso->save();
 
 		Session::flash('message','El curso fue editado exitosamente');
@@ -126,7 +135,7 @@ class CursoController extends Controller {
 	}
 
 	public function get_search(Request $request)
-		{
+	{
 		
 			if(trim($request->get('name')) != "")
 			{
@@ -154,5 +163,120 @@ class CursoController extends Controller {
 		 	return redirect()->action('Encargado\CursoController@getIndex');
 
 			}
-		}
+	}
+
+	public function get_upload(Request $request)
+	{
+
+		$asignaturas = Asignatura::where('departamento_id', '=', $request->get('departamento'))->paginate();
+
+		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+	                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+	                            ->select('roles.*','roles_usuarios.*')
+	                            ->lists('roles.nombre','roles.nombre'); 
+
+		return view('Encargado/cursos/upload',compact('asignaturas','var'));
+	}
+
+
+	public function post_upload(Request $request)
+	{
+
+	     
+		   $file = $request->file('file');
+	    
+	       $nombre = $file->getClientOriginalName();
+
+	       \Storage::disk('local')->put($nombre,  \File::get($file));
+
+
+			\Excel::load('/storage/app/'.$nombre,function($archivo)
+			{
+				$result = $archivo->get();
+
+
+				foreach($result as $key => $value)
+				{
+
+
+					$asignatura_id = Asignatura::where('id','=',$value->asignatura)->pluck('id');
+
+					if(is_null($asignatura_id))
+					{
+						continue;
+					}
+
+					$docente_id = Docente::where('id','=',$value->docente)->pluck('id');
+
+					if(is_null($docente_id))
+					{
+						continue;
+					}
+
+					$tupla = Curso::where('asignatura_id','=',$value->asignatura)
+									->where('docente_id','=',$value->docente)
+									->where('semestre','=',$value->semestre)
+									->where('anio','=',$value->anio)
+									->where('seccion','=',$value->seccion)
+									->first();
+
+					if(is_null($tupla))
+					{
+						$var = new Curso();
+
+						$var->fill([
+							'asignatura_id' => $value->asignatura,
+							'docente_id' => $value->docente,
+							'semestre' => $value->semestre,
+							'anio' => $value->anio,
+							'seccion' => $value->seccion
+							]);
+
+						$var->save();
+					}
+
+				}
+						
+	
+	       				
+
+			})->get();
+
+			\Storage::delete($nombre);
+		
+		    return redirect()->action('Encargado\CursoController@getIndex');
+	
+	}
+
+
+
+	public function get_download()
+	{
+		$var = Curso::all();
+
+		\Excel::create('Cursos',function($excel) use ($var)
+		{
+			$excel->sheet('Sheetname',function($sheet) use ($var)
+			{
+				$data=[];
+
+				array_push($data, array('ASIGNATURA','DOCENTE','SEMESTRE','ANIO','SECCION'));
+
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->asignatura_id,$v->docente_id,$v->semestre,$v->anio,$v->seccion));
+
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
+
+			
+
+	       return redirect()->action('Encargado\CursoController@getIndex');
+	}
+
 }

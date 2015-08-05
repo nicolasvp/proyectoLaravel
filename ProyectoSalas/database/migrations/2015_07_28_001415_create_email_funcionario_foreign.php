@@ -14,7 +14,7 @@ class CreateEmailFuncionarioForeign extends Migration {
 	{
 		Schema::table('funcionarios', function ($table) {
 
-		    $table->string('email')->unique();	
+		    $table->string('email')->nullable()->unique();	
 
 		    $table->foreign('email')->references('email')->on('usuarios')->onDelete('cascade')->onUpdate('cascade');
 		});

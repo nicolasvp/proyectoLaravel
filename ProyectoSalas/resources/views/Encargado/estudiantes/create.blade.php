@@ -15,8 +15,9 @@
    <div class="row">
 
          <div class="col-sm-9" >
-                      <p>
-                         {!! Form::open(['action' => 'Encargado\EstudianteController@get_carreras', 'method' => 'GET']) !!}
+
+          <p>
+                         {!! Form::open(['action' => 'Encargado\EstudianteController@get_carrera', 'method' => 'GET']) !!}
    
                           <button type="submit" class="btn btn-info pull-right">Subir archivo</button>
 
@@ -68,7 +69,14 @@
       {!! Form::close() !!}
      
   </div>
-
+    
+      {!! Html::script('js/jquery-2.1.4.min.js') !!}
+      <script src="http://localhost:8000/js/jquery.rut.min.js"></script>
+      <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#rut").rut();
+       });
+      </script> 
                     
 </div>
 </div>

@@ -109,9 +109,68 @@ class CarreraController extends Controller {
 		
 	}
 
+	public function get_search(Request $request)
+	{
+
+		if(is_numeric((integer) $request->get('name')))
+		{
+			
+			$name = array('name' => (integer) $request->get('name'));
+			
+			$rules = array('name' => 'max:8');
+
+			$v =  \Validator::make($name,$rules);
+
+			if($v->fails())
+			 {
+			 	
+			 	Session::flash('message', 'No se encontraron resultados.');
+				return redirect()->back();
+				
+			 }
+
+		}
+
+		
+		if(trim($request->get('name')) != "")
+		{
+
+				$datos_carreras = Carrera::join('escuelas','carreras.escuela_id','=','escuelas.id')
+									->where('carreras.nombre', 'like' , '%'.$request->get('name').'%')
+									->orWhere('carreras.codigo','=',  (integer) $request->get('name'))
+									->orWhere('escuelas.nombre','like', '%'.$request->get('name').'%')
+									->select('carreras.*','escuelas.nombre as escuela')
+									->paginate();
+
+				$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
+                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
+                            ->select('roles.*','roles_usuarios.*')
+                            ->lists('roles.nombre','roles.nombre'); 
+
+ 		        if(!is_null($datos_carreras))
+				{
+
+					return view('Administrador/carreras/list',compact('datos_carreras','var'));
+				}
+
+				
+					Session::flash('message', 'No se encontraron resultados.');
+
+					return redirect()->back();
+	
+
+		}
+
+		 	return redirect()->action('Administrador\CarreraController@getIndex');
+
+		
+
+	}
+
+
 	public function get_escuela()
 	{
-		$escuelas = Escuela::all()->lists('nombre','id');
+		$escuelas = Escuela::paginate();
 
 		$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
                             ->where('roles_usuarios.rut','=', \Auth::user()->rut)
@@ -131,54 +190,83 @@ class CarreraController extends Controller {
 
 	       \Storage::disk('local')->put($nombre,  \File::get($file));
 
-			$escuela = $request->get('escuela');
 
-			\Excel::load('/storage/app/'.$nombre,function($archivo) use ($escuela)
+			\Excel::load('/storage/app/'.$nombre,function($archivo)
 			{
 
 				$result = $archivo->get();
 
 				foreach($result as $key => $value)
 				{
-					$var = new Carrera();
-					$var->fill(['escuela_id' => $escuela,'codigo' => $value->codigo,'nombre' =>$value->nombre,'descripcion' => $value->descripcion]);
-					$var->save();
+
+					$escuela_id = Escuela::where('id','=',$value->escuela)->pluck('id');
+
+					if(is_null($escuela_id))
+					{
+						continue;
+					}
+
+					$codigo = Carrera::where('codigo','=',$value->codigo)->pluck('id');
+
+					if(!is_null($codigo))
+					{
+						continue;
+					}
+
+					$tupla = Carrera::where('codigo','=',$value->codigo)->where('nombre','=',$value->nombre)->pluck('id');
+
+					if(is_null($tupla))
+					{
+						$var = new Carrera();
+
+						$var->fill([
+							'escuela_id' => $value->escuela,
+							'codigo' => $value->codigo,
+							'nombre' =>$value->nombre,
+							'descripcion' => $value->descripcion
+							]);
+
+						$var->save();
+					}
 
 				}
 
 			})->get();
-			Session::flash('message', 'Las carreras fueron agregadas exitosamente!');
+	
 
 	       return redirect()->action('Administrador\CarreraController@getIndex');
 	}
 
-	public function get_search(Request $request)
+	public function get_download()
+	{
+		$var = Carrera::all();
+
+		\Excel::create('Carreras',function($excel) use ($var)
 		{
-		
-			if(trim($request->get('name')) != "")
+			$excel->sheet('Sheetname',function($sheet) use ($var)
 			{
+				$data=[];
 
-			 $datos_carreras = Carrera::join('escuelas','carreras.escuela_id','=','escuelas.id')
-			->where('carreras.nombre', '=' ,  $request->get('name'))
-			->orWhere('carreras.codigo','=',  (integer) $request->get('name'))
-			->orWhere('escuelas.nombre','=', $request->get('name'))
-			->select('carreras.*','escuelas.nombre as escuela')
-			->paginate();
+				array_push($data, array('ESCUELA','CODIGO','NOMBRE','DESCRIPCION'));
 
-			$var = Rol_usuario::join('roles','roles_usuarios.rol_id','=','roles.id')
-                            ->where('roles_usuarios.rut','=', \Auth::user()->rut)
-                            ->select('roles.*','roles_usuarios.*')
-                            ->lists('roles.nombre','roles.nombre'); 
+				foreach($var as $key => $v)
+				{
+					
+					array_push($data, array($v->escuela_id,$v->codigo,$v->nombre,$v->descripcion));
 
-			return view('Administrador/carreras/list',compact('datos_carreras','var'));
-			}
+				}		
+				$sheet->fromArray($data,null, 'A1', false,false);
+			
+			});
+			
+		})->download('xlsx');
 
-			else
-			{
+			
 
-		 	return redirect()->action('Administrador\CarreraController@getIndex');
+	       return redirect()->action('Administrador\CarreraController@getIndex');
+	}
 
-			}
-		}
+
+
 
 }
