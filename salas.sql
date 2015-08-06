@@ -6,10 +6,12 @@ CREATE TABLE usuarios (
         email varchar(255),
         nombres varchar(255),
         apellidos varchar(255),
+	remember_token character varying(100),
+	created_at timestamp NOT NULL DEFAULT NOW(),
+	updated_at timestamp NOT NULL DEFAULT NOW(),
 	UNIQUE (email),
         PRIMARY KEY (rut)
 );
-
 
 
 
@@ -39,6 +41,11 @@ CREATE TABLE roles (
 );
 
 
+INSERT INTO roles VALUES (1,'administrador','administrador del sistema','2015-06-04 01:18:54.078048','2015-06-04 01:18:54.078048');
+INSERT INTO roles VALUES (2,'encargado','encargado de asignar salas,cursos,etc','2015-06-04 01:19:17.00295','2015-06-04 01:19:17.00295');
+INSERT INTO roles VALUES (3,'estudiante','estudiante beneficiario del sistema','2015-06-05 15:22:46.589891','2015-06-05 15:22:46.589891');
+INSERT INTO roles VALUES (4,'docente','docente beneficiario del sistema','2015-06-05 15:23:01.908492','2015-06-05 15:23:01.908492');
+
 DROP TABLE IF EXISTS roles_usuarios CASCADE;
 CREATE TABLE roles_usuarios (
 	id serial NOT NULL,
@@ -50,7 +57,14 @@ CREATE TABLE roles_usuarios (
 	PRIMARY KEY (id)
 );
 
+INSERT INTO usuarios VALUES (18117925,'nicolas.vera@ceinf.cl','Nicolás','Vera Palominos','','2015-06-05 15:23:01.908492','2015-06-05 15:23:01.908492');
+INSERT INTO usuarios VALUES (15997886,'ssalazar@gmail.com','Sebastián','Salazar Molina','','2015-06-05 15:23:02.908492','2015-06-05 15:23:02.908492');
 
+INSERT INTO roles_usuarios VALUES (1,'18117925','1','2015-06-05 15:22:46.589891','2015-06-05 15:22:46.589891');
+INSERT INTO roles_usuarios VALUES (2,'18117925','2','2015-06-05 15:22:46.589891','2015-06-05 15:22:46.589891');
+
+INSERT INTO roles_usuarios VALUES (3,'15997886','1','2015-06-05 15:23:01.908492','2015-06-05 15:23:01.908492');
+INSERT INTO roles_usuarios VALUES (4,'15997886','2','2015-06-05 15:23:01.908492','2015-06-05 15:23:01.908492');
 
 
 DROP TABLE IF EXISTS campus CASCADE;
@@ -170,6 +184,7 @@ CREATE TABLE estudiantes (
 	UNIQUE (email),
 	PRIMARY KEY (id)
 );
+
 
 
 DROP TABLE IF EXISTS tipos_salas CASCADE;

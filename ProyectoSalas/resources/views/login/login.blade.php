@@ -44,7 +44,7 @@
       <div class="container" style="width: 350px;">
         <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-heading">
-        <form class="form-signin" method="post" action="/">
+         <form class="form-signin" method="post" action="{{ action('loginController@post_index') }}">
 
         <h2 class="form-signin-heading"><div align=center>Inicio de Sesión</div></h2>
         
@@ -61,7 +61,7 @@
       
 
          <form class="Inicio de sesion">
-    <div class="panel-body">  
+      <div class="panel-body">  
         <input name="rut" type="text" class="form-control" placeholder="Rut" id="rut" style="margin-top:10px;" required rut>
         <input name="password" type="password" class="form-control" placeholder="Contrase&#xF1;a" style="margin-top: 10px;" required>
         </br>
